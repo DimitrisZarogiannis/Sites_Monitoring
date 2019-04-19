@@ -43,7 +43,7 @@ class ArticleSpider1(scrapy.Spider):
                 yield response.follow(next_page_link, callback=self.parse)
             else:
                 included_posts = {'post_urls_repo1': self.post_urls}
-                self.url_repository.insert(included_posts)
+                self.url_repository.insert_one(included_posts)
 
         else:
             self.post_urls = local_item['post_urls_repo1']
@@ -56,7 +56,7 @@ class ArticleSpider1(scrapy.Spider):
                         self.new_content_flag = 0
 
                 url_repo_id = local_item['_id']
-                self.url_repository.update({'_id': url_repo_id}, {'$set': {'post_urls_repo1': self.post_urls}})
+                self.url_repository.update_one({'_id': url_repo_id}, {'$set': {'post_urls_repo1': self.post_urls}})
                 next_page = requests.get(self.core_link + str(self.page_id))
 
                 if next_page.status_code == 200:
@@ -67,7 +67,7 @@ class ArticleSpider1(scrapy.Spider):
 
                 else:
                     url_repo_id = local_item['_id']
-                    self.url_repository.update({'_id': url_repo_id}, {'$set': {'post_urls_repo1': self.post_urls}})
+                    self.url_repository.update_one({'_id': url_repo_id}, {'$set': {'post_urls_repo1': self.post_urls}})
 
     def parse_article(self, response):
         title = response.css('h1::text').extract()
@@ -83,7 +83,7 @@ class ArticleSpider1(scrapy.Spider):
                 'date': ''.join(date_after_format),
                 'article': ''.join(article),
                 'post-link': post_link}
-        self.articles.insert(post)
+        self.articles.insert_one(post)
 
 
 # Spider class for http://thump.vice.com/ domain monitoring
@@ -121,7 +121,7 @@ class ArticleSpider2(scrapy.Spider):
                         self.new_content_flag = 0
 
                 url_repo_id = local_item['_id']
-                self.url_repository.update({'_id': url_repo_id}, {'$set': {'post_urls_repo2': self.post_urls}})
+                self.url_repository.update_one({'_id': url_repo_id}, {'$set': {'post_urls_repo2': self.post_urls}})
 
                 next_page = requests.get(self.core_link + str(self.page_id))
                 if next_page.status_code == 200:
@@ -131,7 +131,7 @@ class ArticleSpider2(scrapy.Spider):
                     yield response.follow(next_page_link, callback=self.parse)
                 else:
                     url_repo_id = local_item['_id']
-                    self.url_repository.update({'_id': url_repo_id},{'$set': {'post_urls_repo2': self.post_urls}})
+                    self.url_repository.update_one({'_id': url_repo_id},{'$set': {'post_urls_repo2': self.post_urls}})
         else:
             for article_url in response.css('.grid__wrapper a::attr("href")').extract():
                 self.post_urls.append(article_url)
@@ -145,7 +145,7 @@ class ArticleSpider2(scrapy.Spider):
                 yield response.follow(next_page_link, callback=self.parse)
             else:
                 included_posts = {'post_urls_repo2': self.post_urls}
-                self.url_repository.insert(included_posts)
+                self.url_repository.insert_one(included_posts)
 
     def parse_article(self, response):
         title = response.css('h1::text').extract()
@@ -161,7 +161,7 @@ class ArticleSpider2(scrapy.Spider):
                 'date': ''.join(date_after_format),
                 'article': ''.join(article),
                 'post-link': post_link}
-        self.articles.insert(post)
+        self.articles.insert_one(post)
 
 
 # Spider class for https://consequenceofsound.net/ domain monitoring
@@ -198,7 +198,7 @@ class ArticleSpider3(scrapy.Spider):
                         self.new_content_flag = 0
 
                 url_repo_id = local_item['_id']
-                self.url_repository.update({'_id': url_repo_id},{'$set': {'post_urls_repo3': self.post_urls}})
+                self.url_repository.update_one({'_id': url_repo_id},{'$set': {'post_urls_repo3': self.post_urls}})
 
         else:
             for article_url in response.css('.modules-grid section::attr("data-href")').extract():
@@ -207,7 +207,7 @@ class ArticleSpider3(scrapy.Spider):
                     yield response.follow(article_url, callback=self.parse_article)
 
             included_posts = {'post_urls_repo3': self.post_urls}
-            self.url_repository.insert(included_posts)
+            self.url_repository.insert_one(included_posts)
 
     def parse_article(self, response):
         title = response.css('.post-title::text').extract()
@@ -223,7 +223,7 @@ class ArticleSpider3(scrapy.Spider):
                 'date': ''.join(date_after_format),
                 'article': ''.join(article),
                 'post-link': post_link}
-        self.articles.insert(post)
+        self.articles.insert_one(post)
 
 # Spider Class for https://pitchfork.com domain monitoring
 
@@ -265,7 +265,7 @@ class ArticleSpider4(scrapy.Spider):
                 yield response.follow(next_page_link, callback=self.parse)
             else:
                 included_posts = {'post_urls_repo4': self.post_urls}
-                self.url_repository.insert(included_posts)
+                self.url_repository.insert_one(included_posts)
 
         else:
             self.post_urls = local_item['post_urls_repo4']
@@ -280,7 +280,7 @@ class ArticleSpider4(scrapy.Spider):
                             self.new_content_flag = 0
 
                 url_repo_id = local_item['_id']
-                self.url_repository.update({'_id': url_repo_id}, {'$set': {'post_urls_repo4': self.post_urls}})
+                self.url_repository.update_one({'_id': url_repo_id}, {'$set': {'post_urls_repo4': self.post_urls}})
 
                 next_page = requests.get(self.core_link + str(self.page_id))
                 if next_page.status_code == 200:
@@ -290,7 +290,7 @@ class ArticleSpider4(scrapy.Spider):
                     yield response.follow(next_page_link, callback=self.parse)
                 else:
                     url_repo_id = local_item['_id']
-                    self.url_repository.update({'_id': url_repo_id}, {'$set': {'post_urls_repo4': self.post_urls}})
+                    self.url_repository.update_one({'_id': url_repo_id}, {'$set': {'post_urls_repo4': self.post_urls}})
 
     def parse_article(self, response):
         title = response.css('h1::text ,h1 em::text').extract()
@@ -310,7 +310,7 @@ class ArticleSpider4(scrapy.Spider):
                     'date': ''.join(date_after_format),
                     'article': ''.join(article),
                     'post-link': post_link}
-            self.articles.insert(post)
+            self.articles.insert_one(post)
 
 # Spider Class for https://djmag.com domain monitoring
 
@@ -339,8 +339,9 @@ class ArticleSpider5(scrapy.Spider):
 
         if self.repo_existence_check == 0:
             for article_url in response.css('.typography--HEADING-TERTIARY a::attr("href")').extract():
-                self.post_urls.append(article_url)
-                yield response.follow(article_url, callback=self.parse_article)
+                if not (article_url in self.post_urls):
+                    self.post_urls.append(article_url)
+                    yield response.follow(article_url, callback=self.parse_article)
 
             next_page = requests.get(self.core_link + str(self.page_id))
             if next_page.status_code == 200:
@@ -350,7 +351,7 @@ class ArticleSpider5(scrapy.Spider):
                 yield response.follow(next_page_link, callback=self.parse)
             else:
                 included_posts = {'post_urls_repo5': self.post_urls}
-                self.url_repository.insert(included_posts)
+                self.url_repository.insert_one(included_posts)
 
         else:
             self.post_urls = local_item['post_urls_repo5']
@@ -364,7 +365,7 @@ class ArticleSpider5(scrapy.Spider):
                         self.new_content_flag = 0
 
                 url_repo_id = local_item['_id']
-                self.url_repository.update({'_id': url_repo_id}, {'$set': {'post_urls_repo5': self.post_urls}})
+                self.url_repository.update_one({'_id': url_repo_id}, {'$set': {'post_urls_repo5': self.post_urls}})
 
                 next_page = requests.get(self.core_link + str(self.page_id))
                 if next_page.status_code == 200:
@@ -374,7 +375,7 @@ class ArticleSpider5(scrapy.Spider):
                     yield response.follow(next_page_link, callback=self.parse)
                 else:
                     url_repo_id = local_item['_id']
-                    self.url_repository.update({'_id': url_repo_id}, {'$set': {'post_urls_repo5': self.post_urls}})
+                    self.url_repository.update_one({'_id': url_repo_id}, {'$set': {'post_urls_repo5': self.post_urls}})
 
     def parse_article(self, response):
         title = response.css('.typography--HEADING-PRIMARY::text').extract()
@@ -392,7 +393,7 @@ class ArticleSpider5(scrapy.Spider):
                 'date': ''.join(date_after_format),
                 'article': ''.join(article),
                 'post-link': post_link}
-        self.articles.insert(post)
+        self.articles.insert_one(post)
 
 # Spider Class for https://www.youredm.com domain monitoring
 
@@ -421,8 +422,9 @@ class ArticleSpider6(scrapy.Spider):
 
         if self.repo_existence_check == 0:
             for article_url in response.css('.cb-post-title a::attr("href")').extract():
-                self.post_urls.append(article_url)
-                yield response.follow(article_url, callback=self.parse_article)
+                if not (article_url in self.post_urls):
+                    self.post_urls.append(article_url)
+                    yield response.follow(article_url, callback=self.parse_article)
 
             next_page = requests.get(self.core_link + str(self.page_id))
             if next_page.status_code == 200:
@@ -432,7 +434,7 @@ class ArticleSpider6(scrapy.Spider):
                 yield response.follow(next_page_link, callback=self.parse)
             else:
                 included_posts = {'post_urls_repo6': self.post_urls}
-                self.url_repository.insert(included_posts)
+                self.url_repository.insert_one(included_posts)
 
         else:
             self.post_urls = local_item['post_urls_repo6']
@@ -446,7 +448,7 @@ class ArticleSpider6(scrapy.Spider):
                         self.new_content_flag = 0
 
                 url_repo_id = local_item['_id']
-                self.url_repository.update({'_id': url_repo_id}, {'$set': {'post_urls_repo6': self.post_urls}})
+                self.url_repository.update_one({'_id': url_repo_id}, {'$set': {'post_urls_repo6': self.post_urls}})
 
                 next_page = requests.get(self.core_link + str(self.page_id))
                 if next_page.status_code == 200:
@@ -456,7 +458,7 @@ class ArticleSpider6(scrapy.Spider):
                     yield response.follow(next_page_link, callback=self.parse)
                 else:
                     url_repo_id = local_item['_id']
-                    self.url_repository.update({'_id': url_repo_id}, {'$set': {'post_urls_repo6': self.post_urls}})
+                    self.url_repository.update_one({'_id': url_repo_id}, {'$set': {'post_urls_repo6': self.post_urls}})
 
     def parse_article(self, response):
         title = response.css('h1::text').extract()
@@ -470,7 +472,7 @@ class ArticleSpider6(scrapy.Spider):
                 'date': ''.join(date_after_format),
                 'article': ''.join(article),
                 'post-link': post_link}
-        self.articles.insert(post)
+        self.articles.insert_one(post)
 
 # Spider Class for https://mixmag.net domain monitoring
 
@@ -496,8 +498,9 @@ class ArticleSpider7(scrapy.Spider):
 
         if self.repo_existence_check == 0:
             for article_url in response.css('.story-block a::attr("href")').extract():
-                self.post_urls.append(article_url)
-                yield response.follow(article_url, callback=self.parse_article)
+                if not (article_url in self.post_urls):
+                    self.post_urls.append(article_url)
+                    yield response.follow(article_url, callback=self.parse_article)
 
             included_posts = {'post_urls_repo7': self.post_urls}
             self.url_repository.insert(included_posts)
@@ -506,8 +509,7 @@ class ArticleSpider7(scrapy.Spider):
             self.post_urls = local_item['post_urls_repo7']
 
             if self.new_content_flag == 1:
-                for article_url in response.css('.story-block story-block--focal a::attr("href"),'
-                                                '.story-block story-block--third a::attr("href")').extract():
+                for article_url in response.css('.story-block a::attr("href")').extract():
                     if not (article_url in self.post_urls):
                         self.post_urls.append(article_url)
                         yield response.follow(article_url, callback=self.parse_article)
@@ -521,8 +523,6 @@ class ArticleSpider7(scrapy.Spider):
     def parse_article(self, response):
         title = response.css('h1::text').extract()
         date = response.css('.article-header__meta li::text').extract()
-        # date_after_format = date[1]
-        # print(date_after_format)
         article = response.xpath('//*[@id="js-infinity"]/article/div[2]/div[1]/div[1]/div[1]//text()').extract()
         if not article:
             article = response.xpath('//*[@class="copy rich-text__block"]//text()').extract()
@@ -537,14 +537,176 @@ class ArticleSpider7(scrapy.Spider):
                 'post-link': post_link}
         self.articles.insert(post)
 
+# Spider class for https://www.tinymixtapes.com domain monitoring
+
+
+class ArticleSpider8(scrapy.Spider):
+    name = "article"
+    allowed_domains = ['www.tinymixtapes.com']
+    start_urls = ['https://www.tinymixtapes.com/news']
+    post_urls = []
+    page_id = 1
+    new_content_flag = 1
+    core_link = 'https://www.tinymixtapes.com/news?page='
+    client = MongoClient('mongodb://localhost:27017')
+    db = client['Articles_DB']
+    articles = db.articles8
+    url_repository = db.urls
+    repo_existence_check = 0
+    links_xpath = '/html/body/div[2]/div[2]/section[1]/section[2]/div[1]/div/article/div/a[@class="tile__link"]/@href'
+
+    def parse(self, response):
+        urls_repo_cursor = self.url_repository.find()
+        for item in urls_repo_cursor:
+            if '_id' and 'post_urls_repo8' in item:
+                self.repo_existence_check += 1
+                local_item = item
+
+        if self.repo_existence_check == 0:
+            for article_url in response.xpath(self.links_xpath).extract():
+                if not (article_url in self.post_urls):
+                    self.post_urls.append(article_url)
+                    yield response.follow(article_url, callback=self.parse_article)
+
+            next_page = requests.get(self.core_link + str(self.page_id))
+            if next_page.status_code == 200:
+                print('Web site exists')
+                next_page_link = (self.core_link + str(self.page_id))
+                self.page_id += 1
+                self.links_xpath = '/ html / body / div[2] / div[2] / section[1] / section / div[1] / div[2] / article / div / a[@class="tile__link"]/@href'
+                yield response.follow(next_page_link, callback=self.parse)
+            else:
+                included_posts = {'post_urls_repo8': self.post_urls}
+                self.url_repository.insert(included_posts)
+
+        else:
+            self.post_urls = local_item['post_urls_repo8']
+
+            if self.new_content_flag == 1:
+                for article_url in response.xpath(self.links_xpath).extract().extract():
+                    if not (article_url in self.post_urls):
+                        self.post_urls.append(article_url)
+                        yield response.follow(article_url, callback=self.parse_article)
+                    else:
+                        self.new_content_flag = 0
+
+                url_repo_id = local_item['_id']
+                self.url_repository.update({'_id': url_repo_id}, {'$set': {'post_urls_repo8': self.post_urls}})
+
+                next_page = requests.get(self.core_link + str(self.page_id))
+                if next_page.status_code == 200:
+                    print('Web site exists')
+                    next_page_link = (self.core_link + str(self.page_id))
+                    self.page_id += 1
+                    self.links_xpath = '/ html / body / div[2] / div[2] / section[1] / section / div[1] / div[2] / article / div / a[@class="tile__link"]/@href'
+                    yield response.follow(next_page_link, callback=self.parse)
+                else:
+                    url_repo_id = local_item['_id']
+                    self.url_repository.update({'_id': url_repo_id}, {'$set': {'post_urls_repo8': self.post_urls}})
+
+
+    def parse_article(self, response):
+        title = response.xpath('//*/header/h1/span[2]/text()').extract()
+        date = response.xpath('//*/header/p[2]/time/text()').extract()
+        article = response.xpath('//*/div/div/p/text()').extract()
+        post_link = str(response)
+        post_link = post_link.strip('<200 ')
+        post_link = post_link.strip('>')
+        post = {'title': ''.join(title),
+                'date': ''.join(date),
+                'article': ''.join(article),
+                'post-link': post_link}
+        self.articles.insert_one(post)
+
+# Spider class for https://www.edmsauce.com/ domain monitoring
+
+
+class ArticleSpider9(scrapy.Spider):
+    name = "article"
+    allowed_domains = ['www.edmsauce.com']
+    start_urls = ['https://www.edmsauce.com/news/']
+    post_urls = []
+    page_id = 2
+    new_content_flag = 1
+    core_link = 'https://www.edmsauce.com/news/page/'
+    client = MongoClient('mongodb://localhost:27017')
+    db = client['Articles_DB']
+    articles = db.articles9
+    url_repository = db.urls
+    repo_existence_check = 0
+    link_xpath = '//*[@id="td-outer-wrap"]/div/div/div/div[1]/div/div/div/h3/a/@href'
+
+    def parse(self, response):
+        urls_repo_cursor = self.url_repository.find()
+        for item in urls_repo_cursor:
+            if '_id' and 'post_urls_repo9' in item:
+                self.repo_existence_check += 1
+                local_item = item
+
+        if self.repo_existence_check == 0:
+            for article_url in response.xpath(self.link_xpath).extract():
+                if not (article_url in self.post_urls):
+                    self.post_urls.append(article_url)
+                    yield response.follow(article_url, callback=self.parse_article)
+
+            next_page = requests.get(self.core_link + str(self.page_id))
+            if next_page.status_code == 200:
+                print('Web site exists')
+                next_page_link = (self.core_link + str(self.page_id))
+                self.page_id += 1
+                yield response.follow(next_page_link, callback=self.parse)
+            else:
+                included_posts = {'post_urls_repo9': self.post_urls}
+                self.url_repository.insert_one(included_posts)
+
+        else:
+            self.post_urls = local_item['post_urls_repo9']
+
+            if self.new_content_flag == 1:
+                for article_url in response.xpath(self.link_xpath).extract():
+                    if not (article_url in self.post_urls):
+                        self.post_urls.append(article_url)
+                        yield response.follow(article_url, callback=self.parse_article)
+                    else:
+                        self.new_content_flag = 0
+
+                url_repo_id = local_item['_id']
+                self.url_repository.update_one({'_id': url_repo_id}, {'$set': {'post_urls_repo9': self.post_urls}})
+
+                next_page = requests.get(self.core_link + str(self.page_id))
+                if next_page.status_code == 200:
+                    print('Web site exists')
+                    next_page_link = (self.core_link + str(self.page_id))
+                    self.page_id += 1
+                    yield response.follow(next_page_link, callback=self.parse)
+                else:
+                    url_repo_id = local_item['_id']
+                    self.url_repository.update_one({'_id': url_repo_id}, {'$set': {'post_urls_repo9': self.post_urls}})
+
+    def parse_article(self, response):
+        title = response.xpath('//*/div[1]/div[2]/header/h1/text()').extract()
+        date = response.xpath('//*/div[1]/div[2]/header/div/span/time/text()').extract()
+        article = response.css('.td-post-content p::text,.td-post-content p a::attr("title"),.td-post-content p b::text,'
+                               '.td-post-content p i::text,.td-post-content p strong::text').extract()
+        post_link = str(response)
+        post_link = post_link.strip('<200 ')
+        post_link = post_link.strip('>')
+        post = {'title': ''.join(title),
+                'date': ''.join(date),
+                'article': ''.join(article),
+                'post-link': post_link}
+        self.articles.insert_one(post)
+
 if __name__ == "__main__":
     process = CrawlerProcess()
-    process.crawl(ArticleSpider1)
+    # process.crawl(ArticleSpider1)
     # process.crawl(ArticleSpider2)
     # process.crawl(ArticleSpider3)
     # process.crawl(ArticleSpider4)
     # process.crawl(ArticleSpider5)
     # process.crawl(ArticleSpider6)
     # process.crawl(ArticleSpider7)
+    # process.crawl(ArticleSpider8)
+    # process.crawl(ArticleSpider9)
     process.start()
 
