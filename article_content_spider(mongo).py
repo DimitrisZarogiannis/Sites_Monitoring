@@ -919,7 +919,480 @@ class ArticleSpider12(scrapy.Spider):
                 'post-link': post_link}
         self.articles.insert_one(post)
 
+# Spider class for https://wundergroundmusic.com domain monitoring
 
+
+class ArticleSpider13(scrapy.Spider):
+    name = "article"
+    allowed_domains = ['wundergroundmusic.com']
+    start_urls = ['https://wundergroundmusic.com/category/wunderground-2-0/music-news/']
+    post_urls = []
+    page_id = 2
+    new_content_flag = 1
+    core_link = 'https://wundergroundmusic.com/category/wunderground-2-0/music-news/page/'
+    client = MongoClient('mongodb://localhost:27017')
+    db = client['Articles_DB']
+    articles = db.articles13
+    url_repository = db.urls
+    repo_existence_check = 0
+    link_xpath = '//*/div[2]/header/h2/a/@href'
+    max_pages = 400
+
+    def parse(self, response):
+        urls_repo_cursor = self.url_repository.find()
+        for item in urls_repo_cursor:
+            if '_id' and 'post_urls_repo13' in item:
+                self.repo_existence_check += 1
+                local_item = item
+
+        if self.repo_existence_check == 0:
+            for article_url in response.xpath(self.link_xpath).extract():
+                if not (article_url in self.post_urls):
+                    self.post_urls.append(article_url)
+                    yield response.follow(article_url, callback=self.parse_article)
+
+            next_page = requests.get(self.core_link + str(self.page_id))
+
+            if next_page.status_code == 200 and self.page_id <= self.max_pages:
+                next_page_link = (self.core_link + str(self.page_id))
+                self.page_id += 1
+                yield response.follow(next_page_link, callback=self.parse)
+            else:
+                included_posts = {'post_urls_repo13': self.post_urls}
+                self.url_repository.insert_one(included_posts)
+
+        else:
+            self.post_urls = local_item['post_urls_repo13']
+
+            if self.new_content_flag == 1:
+                for article_url in response.xpath(self.link_xpath).extract():
+                    if not (article_url in self.post_urls):
+                        self.post_urls.append(article_url)
+                        yield response.follow(article_url, callback=self.parse_article)
+                    else:
+                        self.new_content_flag = 0
+
+                url_repo_id = local_item['_id']
+                self.url_repository.update_one({'_id': url_repo_id}, {'$set': {'post_urls_repo13': self.post_urls}})
+
+                next_page = requests.get(self.core_link + str(self.page_id))
+
+                if next_page.status_code == 200 and self.page_id <= self.max_pages:
+                    next_page_link = (self.core_link + str(self.page_id))
+                    self.page_id += 1
+                    yield response.follow(next_page_link, callback=self.parse)
+                else:
+                    url_repo_id = local_item['_id']
+                    self.url_repository.update_one({'_id': url_repo_id}, {'$set': {'post_urls_repo13': self.post_urls}})
+
+    def parse_article(self, response):
+        title = response.xpath('//*/header/h1/text()').extract()
+        date = ''
+        article = response.xpath('//*/div[3]/p//text()').extract()
+        post_link = str(response)
+        post_link = post_link.strip('<200 ')
+        post_link = post_link.strip('>')
+        post = {'title': ''.join(title),
+                'date': ''.join(date),
+                'article': ''.join(article),
+                'post-link': post_link}
+        self.articles.insert_one(post)
+
+# Spider class for http://noiseprn.com/ domain monitoring
+
+
+class ArticleSpider14(scrapy.Spider):
+    name = "article"
+    allowed_domains = ['noiseprn.com']
+    start_urls = ['http://noiseprn.com/']
+    post_urls = []
+    page_id = 2
+    new_content_flag = 1
+    core_link = 'http://noiseprn.com/page/'
+    client = MongoClient('mongodb://localhost:27017')
+    db = client['Articles_DB']
+    articles = db.articles14
+    url_repository = db.urls
+    repo_existence_check = 0
+    link_xpath = '//*/div/div[1]/div/div/div/div/h2/a/@href'
+    max_pages = 400
+
+    def parse(self, response):
+        urls_repo_cursor = self.url_repository.find()
+        for item in urls_repo_cursor:
+            if '_id' and 'post_urls_repo14' in item:
+                self.repo_existence_check += 1
+                local_item = item
+
+        if self.repo_existence_check == 0:
+            for article_url in response.xpath(self.link_xpath).extract():
+                if not (article_url in self.post_urls):
+                    self.post_urls.append(article_url)
+                    yield response.follow(article_url, callback=self.parse_article)
+
+            next_page = requests.get(self.core_link + str(self.page_id))
+
+            if next_page.status_code == 200 and self.page_id <= self.max_pages:
+                next_page_link = (self.core_link + str(self.page_id))
+                self.page_id += 1
+                yield response.follow(next_page_link, callback=self.parse)
+            else:
+                included_posts = {'post_urls_repo14': self.post_urls}
+                self.url_repository.insert_one(included_posts)
+
+        else:
+            self.post_urls = local_item['post_urls_repo14']
+
+            if self.new_content_flag == 1:
+                for article_url in response.xpath(self.link_xpath).extract():
+                    if not (article_url in self.post_urls):
+                        self.post_urls.append(article_url)
+                        yield response.follow(article_url, callback=self.parse_article)
+                    else:
+                        self.new_content_flag = 0
+
+                url_repo_id = local_item['_id']
+                self.url_repository.update_one({'_id': url_repo_id}, {'$set': {'post_urls_repo14': self.post_urls}})
+                next_page = requests.get(self.core_link + str(self.page_id))
+
+                if next_page.status_code == 200 and self.page_id <= self.max_pages:
+                    next_page_link = (self.core_link + str(self.page_id))
+                    self.page_id += 1
+                    yield response.follow(next_page_link, callback=self.parse)
+                else:
+                    url_repo_id = local_item['_id']
+                    self.url_repository.update_one({'_id': url_repo_id}, {'$set': {'post_urls_repo14': self.post_urls}})
+
+    def parse_article(self, response):
+        title = response.xpath('// *[ @ id = "sitecontainer"] / div[1] / div[1] / div / '
+                               'div[3] / div / div / div / h1//text()').extract()
+        date = response.xpath('// *[ @ id = "sitecontainer"] / div[1] / div[1] / div / div[4] // span//text()').extract()
+        article = response.xpath('//*[@id="sitecontainer"]/div[1]/div[2]/div[1]/div//p//text()').extract()
+        post_link = str(response)
+        post_link = post_link.strip('<200 ')
+        post_link = post_link.strip('>')
+        post = {'title': ''.join(title),
+                'date': ''.join(date),
+                'article': ''.join(article),
+                'post-link': post_link}
+        self.articles.insert_one(post)
+
+# Spider class for https://www.theuntz.com domain monitoring
+
+
+class ArticleSpider15(scrapy.Spider):
+    name = "article"
+    allowed_domains = ['www.theuntz.com']
+    start_urls = ['https://www.theuntz.com/news/']
+    post_urls = []
+    page_id = 2
+    new_content_flag = 1
+    core_link = 'https://www.theuntz.com/news/?page='
+    client = MongoClient('mongodb://localhost:27017')
+    db = client['Articles_DB']
+    articles = db.articles15
+    url_repository = db.urls
+    repo_existence_check = 0
+    link_xpath = '/html/body/div[1]/div[4]/div[1]/div/div[2]/div[2]/div/div[2]/h4/a[2]/@href'
+    max_pages = 150
+
+    def parse(self, response):
+        urls_repo_cursor = self.url_repository.find()
+        for item in urls_repo_cursor:
+            if '_id' and 'post_urls_repo15' in item:
+                self.repo_existence_check += 1
+                local_item = item
+
+        if self.repo_existence_check == 0:
+            for article_url in response.xpath(self.link_xpath).extract():
+                if not (article_url in self.post_urls):
+                    self.post_urls.append(article_url)
+                    yield response.follow(article_url, callback=self.parse_article)
+
+            next_page = requests.get(self.core_link + str(self.page_id))
+
+            if next_page.status_code == 200 and self.page_id <= self.max_pages:
+                next_page_link = (self.core_link + str(self.page_id))
+                self.page_id += 1
+                yield response.follow(next_page_link, callback=self.parse)
+            else:
+                included_posts = {'post_urls_repo15': self.post_urls}
+                self.url_repository.insert_one(included_posts)
+
+        else:
+            self.post_urls = local_item['post_urls_repo15']
+
+            if self.new_content_flag == 1:
+                for article_url in response.xpath(self.link_xpath).extract():
+                    if not (article_url in self.post_urls):
+                        self.post_urls.append(article_url)
+                        yield response.follow(article_url, callback=self.parse_article)
+                    else:
+                        self.new_content_flag = 0
+
+                url_repo_id = local_item['_id']
+                self.url_repository.update_one({'_id': url_repo_id}, {'$set': {'post_urls_repo15': self.post_urls}})
+
+                next_page = requests.get(self.core_link + str(self.page_id))
+
+                if next_page.status_code == 200 and self.page_id <= self.max_pages:
+                    next_page_link = (self.core_link + str(self.page_id))
+                    self.page_id += 1
+                    yield response.follow(next_page_link, callback=self.parse)
+                else:
+                    url_repo_id = local_item['_id']
+                    self.url_repository.update_one({'_id': url_repo_id}, {'$set': {'post_urls_repo15': self.post_urls}})
+
+    def parse_article(self, response):
+        title = response.xpath('/html/body/div[1]/div[4]/div[1]/div/div[1]/div[1]/h2/text()').extract()
+        date = response.xpath('/html/body/div[1]/div[4]/div[1]/div/div[1]/div[3]/text()').extract()
+        date_after_format = date[0].replace('Published: ', '')
+        article = response.xpath('//*[@id = "news_body"]/p//text()').extract()
+        post_link = str(response)
+        post_link = post_link.strip('<200 ')
+        post_link = post_link.strip('>')
+        post = {'title': ''.join(title),
+                'date': ''.join(date_after_format),
+                'article': ''.join(article),
+                'post-link': post_link}
+        self.articles.insert_one(post)
+
+# Spider class for https://electronicgroove.com domain monitoring
+
+
+class ArticleSpider16(scrapy.Spider):
+    name = "article"
+    allowed_domains = ['electronicgroove.com']
+    start_urls = ['https://electronicgroove.com/category/news/']
+    post_urls = []
+    page_id = 2
+    new_content_flag = 1
+    core_link = 'https://electronicgroove.com/category/news/page/'
+    client = MongoClient('mongodb://localhost:27017')
+    db = client['Articles_DB']
+    articles = db.articles16
+    url_repository = db.urls
+    repo_existence_check = 0
+    link_xpath = '//*/div/header/h2/a/@href'
+    max_pages = 400
+
+    def parse(self, response):
+        urls_repo_cursor = self.url_repository.find()
+        for item in urls_repo_cursor:
+            if '_id' and 'post_urls_repo16' in item:
+                self.repo_existence_check += 1
+                local_item = item
+
+        if self.repo_existence_check == 0:
+            for article_url in response.xpath(self.link_xpath).extract():
+                if not (article_url in self.post_urls):
+                    self.post_urls.append(article_url)
+                    yield response.follow(article_url, callback=self.parse_article)
+
+            next_page = requests.get(self.core_link + str(self.page_id))
+
+            if next_page.status_code == 200 and self.page_id <= self.max_pages:
+                next_page_link = (self.core_link + str(self.page_id))
+                self.page_id += 1
+                yield response.follow(next_page_link, callback=self.parse)
+            else:
+                included_posts = {'post_urls_repo16': self.post_urls}
+                self.url_repository.insert_one(included_posts)
+
+        else:
+            self.post_urls = local_item['post_urls_repo16']
+
+            if self.new_content_flag == 1:
+                for article_url in response.xpath(self.link_xpath).extract():
+                    if not (article_url in self.post_urls):
+                        self.post_urls.append(article_url)
+                        yield response.follow(article_url, callback=self.parse_article)
+                    else:
+                        self.new_content_flag = 0
+
+                url_repo_id = local_item['_id']
+                self.url_repository.update_one({'_id': url_repo_id}, {'$set': {'post_urls_repo16': self.post_urls}})
+                next_page = requests.get(self.core_link + str(self.page_id))
+
+                if next_page.status_code == 200 and self.page_id <= self.max_pages:
+                    next_page_link = (self.core_link + str(self.page_id))
+                    self.page_id += 1
+                    yield response.follow(next_page_link, callback=self.parse)
+                else:
+                    url_repo_id = local_item['_id']
+                    self.url_repository.update_one({'_id': url_repo_id}, {'$set': {'post_urls_repo16': self.post_urls}})
+
+    def parse_article(self, response):
+        title = response.xpath('//*[ @ id = "single-blocks"]/header/h1/text()').extract()
+        date = response.xpath('//*[@id="single-blocks"]/ul/li[1]/time//text()').extract()
+        article = response.xpath('// *[ @ id = "single-blocks"] / div[2] //text()').extract()
+        post_link = str(response)
+        post_link = post_link.strip('<200 ')
+        post_link = post_link.strip('>')
+        post = {'title': ''.join(title),
+                'date': ''.join(date),
+                'article': ''.join(article),
+                'post-link': post_link}
+        self.articles.insert_one(post)
+
+# Spider class for https://electronicmidwest.com domain monitoring
+
+
+class ArticleSpider17(scrapy.Spider):
+    name = "article"
+    allowed_domains = ['electronicmidwest.com']
+    start_urls = ['https://electronicmidwest.com/category/news/']
+    post_urls = []
+    page_id = 2
+    new_content_flag = 1
+    core_link = 'https://electronicmidwest.com/category/news/page/'
+    client = MongoClient('mongodb://localhost:27017')
+    db = client['Articles_DB']
+    articles = db.articles17
+    url_repository = db.urls
+    repo_existence_check = 0
+    link_xpath = '//*/div/h2/a/@href'
+    max_pages = 400
+
+    def parse(self, response):
+        urls_repo_cursor = self.url_repository.find()
+        for item in urls_repo_cursor:
+            if '_id' and 'post_urls_repo17' in item:
+                self.repo_existence_check += 1
+                local_item = item
+
+        if self.repo_existence_check == 0:
+            for article_url in response.xpath(self.link_xpath).extract():
+                if not (article_url in self.post_urls):
+                    self.post_urls.append(article_url)
+                    yield response.follow(article_url, callback=self.parse_article)
+
+            next_page = requests.get(self.core_link + str(self.page_id))
+
+            if next_page.status_code == 200 and self.page_id <= self.max_pages:
+                next_page_link = (self.core_link + str(self.page_id))
+                self.page_id += 1
+                yield response.follow(next_page_link, callback=self.parse)
+            else:
+                included_posts = {'post_urls_repo17': self.post_urls}
+                self.url_repository.insert_one(included_posts)
+
+        else:
+            self.post_urls = local_item['post_urls_repo17']
+
+            if self.new_content_flag == 1:
+                for article_url in response.xpath(self.link_xpath).extract():
+                    if not (article_url in self.post_urls):
+                        self.post_urls.append(article_url)
+                        yield response.follow(article_url, callback=self.parse_article)
+                    else:
+                        self.new_content_flag = 0
+
+                url_repo_id = local_item['_id']
+                self.url_repository.update_one({'_id': url_repo_id}, {'$set': {'post_urls_repo17': self.post_urls}})
+                next_page = requests.get(self.core_link + str(self.page_id))
+
+                if next_page.status_code == 200 and self.page_id <= self.max_pages:
+                    next_page_link = (self.core_link + str(self.page_id))
+                    self.page_id += 1
+                    yield response.follow(next_page_link, callback=self.parse)
+                else:
+                    url_repo_id = local_item['_id']
+                    self.url_repository.update_one({'_id': url_repo_id}, {'$set': {'post_urls_repo17': self.post_urls}})
+
+    def parse_article(self, response):
+        title = response.xpath('//*[@id="page"]/div/div/div/section/div[2]/div[1]/h1//text()').extract()
+        date = response.xpath('//*[@id="page"]/div/div/div/section/div[2]/div[1]/p/text()[2]').extract()
+        article = response.xpath('//*[@id="page"]/div/div/div/section/div[2]/div[1]'
+                                 '/div[3]/div[1]/article/p//text()').extract()
+        regex = r'(.+?)(?=\s\d+[:]\d+\s[a-z]+)'
+        date_after_format = re.match(regex, str(date[0]))
+        date_after_format = str(date_after_format.group(0))
+        post_link = str(response)
+        post_link = post_link.strip('<200 ')
+        post_link = post_link.strip('>')
+        post = {'title': ''.join(title),
+                'date': ''.join(date_after_format),
+                'article': ''.join(article),
+                'post-link': post_link}
+        self.articles.insert_one(post)
+
+# Spider class for http://www.feelmybicep.com/ domain monitoring
+
+
+class ArticleSpider18(scrapy.Spider):
+    name = "article"
+    allowed_domains = ['www.feelmybicep.com']
+    start_urls = ['http://www.feelmybicep.com/']
+    post_urls = []
+    page_id = 2
+    new_content_flag = 1
+    core_link = 'http://www.feelmybicep.com/page/'
+    client = MongoClient('mongodb://localhost:27017')
+    db = client['Articles_DB']
+    articles = db.articles18
+    url_repository = db.urls
+    repo_existence_check = 0
+    link_xpath = '//*/h2/a/@href'
+    max_pages = 400
+
+    def parse(self, response):
+        urls_repo_cursor = self.url_repository.find()
+        for item in urls_repo_cursor:
+            if '_id' and 'post_urls_repo18' in item:
+                self.repo_existence_check += 1
+                local_item = item
+
+        if self.repo_existence_check == 0:
+            for article_url in response.xpath(self.link_xpath).extract():
+                if not (article_url in self.post_urls):
+                    self.post_urls.append(article_url)
+                    yield response.follow(article_url, callback=self.parse_article)
+
+            if self.page_id <= self.max_pages:
+                next_page_link = (self.core_link + str(self.page_id))
+                self.page_id += 1
+                yield response.follow(next_page_link, callback=self.parse)
+            else:
+                included_posts = {'post_urls_repo18': self.post_urls}
+                self.url_repository.insert_one(included_posts)
+
+        else:
+            self.post_urls = local_item['post_urls_repo18']
+
+            if self.new_content_flag == 1:
+                for article_url in response.xpath(self.link_xpath).extract():
+                    if not (article_url in self.post_urls):
+                        self.post_urls.append(article_url)
+                        yield response.follow(article_url, callback=self.parse_article)
+                    else:
+                        self.new_content_flag = 0
+
+                url_repo_id = local_item['_id']
+                self.url_repository.update_one({'_id': url_repo_id}, {'$set': {'post_urls_repo18': self.post_urls}})
+
+                if self.page_id <= self.max_pages:
+                    next_page_link = (self.core_link + str(self.page_id))
+                    self.page_id += 1
+                    yield response.follow(next_page_link, callback=self.parse)
+                else:
+                    url_repo_id = local_item['_id']
+                    self.url_repository.update_one({'_id': url_repo_id}, {'$set': {'post_urls_repo18': self.post_urls}})
+
+    def parse_article(self, response):
+        title = response.xpath('//*/h1//text()').extract()
+        date = response.xpath('//*/div[1]/a/span/text()').extract()
+        article = response.xpath('//*/div[2]/p//text()').extract()
+        date_after_format = str(date[1])
+        date_after_format = date_after_format.strip('←')
+        post_link = str(response)
+        post_link = post_link.strip('<200 ')
+        post_link = post_link.strip('>')
+        post = {'title': ''.join(title),
+                'date': ''.join(date_after_format),
+                'article': ''.join(article),
+                'post-link': post_link}
+        self.articles.insert_one(post)
 
 
 if __name__ == "__main__":
@@ -936,5 +1409,11 @@ if __name__ == "__main__":
     # process.crawl(ArticleSpider10)
     # process.crawl(ArticleSpider11)
     # process.crawl(ArticleSpider12)
+    # process.crawl(ArticleSpider13)
+    # process.crawl(ArticleSpider14)
+    # process.crawl(ArticleSpider15)
+    # process.crawl(ArticleSpider16)
+    # process.crawl(ArticleSpider17)
+    # process.crawl(ArticleSpider18)
     process.start()
 
