@@ -2,6 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="4e328230-ec0f-47bf-ab15-9d59ae0f2bbe" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/Sites_Monitoring.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/Sites_Monitoring.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/article_content_spider(mongo).py" beforeDir="false" afterPath="$PROJECT_DIR$/article_content_spider(mongo).py" afterDir="false" />
     </list>
@@ -12,6 +14,7 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="CoverageDataManager">
+    <SUITE FILE_PATH="coverage/Sites_Monitoring$article_content_spider_mongo_.coverage" NAME="article_content_spider(mongo) Coverage Results" MODIFIED="1556211052534" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/Git_Sites_Monitoring$article_content_spider_mongo_.coverage" NAME="article_content_spider(mongo) Coverage Results" MODIFIED="1555668841244" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
   </component>
   <component name="FileEditorManager">
@@ -19,8 +22,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/article_content_spider(mongo).py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="4423">
-              <caret line="1362" column="42" lean-forward="true" selection-start-line="1362" selection-start-column="42" selection-end-line="1362" selection-end-column="42" />
+            <state relative-caret-position="1001">
+              <caret line="1656" column="6" selection-start-line="1656" selection-start-column="6" selection-end-line="1656" selection-end-column="6" />
               <folding>
                 <element signature="e#0#13#0" expanded="true" />
               </folding>
@@ -64,17 +67,7 @@
     </navigator>
     <panes>
       <pane id="Scope" />
-      <pane id="ProjectPane">
-        <subPane>
-          <expand>
-            <path>
-              <item name="Git_Sites_Monitoring" type="b2602c69:ProjectViewProjectNode" />
-              <item name="Git_Sites_Monitoring" type="462c0819:PsiDirectoryNode" />
-            </path>
-          </expand>
-          <select />
-        </subPane>
-      </pane>
+      <pane id="ProjectPane" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -84,7 +77,7 @@
     <property name="last_opened_file_path" value="$USER_HOME$/PycharmProjects/testmong/test.py" />
     <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
     <property name="nodejs_npm_path_reset_for_default_project" value="true" />
-    <property name="settings.editor.selected.configurable" value="reference.settingsdialog.IDE.editor.colors" />
+    <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
   </component>
   <component name="RunDashboard">
     <option name="ruleStates">
@@ -202,17 +195,19 @@
       <workItem from="1556020347463" duration="4124000" />
       <workItem from="1556093371339" duration="11315000" />
       <workItem from="1556180173570" duration="9482000" />
+      <workItem from="1556205343511" duration="4592000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="122035000" />
+    <option name="totallyTimeSpent" value="126627000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-7" y="-7" width="1550" height="838" extended-state="6" />
+    <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
+    <editor active="true" />
     <layout>
       <window_info id="Favorites" order="0" side_tool="true" />
-      <window_info content_ui="combo" id="Project" order="1" visible="true" weight="0.20268457" />
+      <window_info content_ui="combo" id="Project" order="1" visible="true" weight="0.20415778" />
       <window_info id="Structure" order="2" side_tool="true" weight="0.24966443" />
       <window_info anchor="bottom" id="Database Changes" order="0" />
       <window_info anchor="bottom" id="Terminal" order="1" />
@@ -222,7 +217,7 @@
       <window_info anchor="bottom" id="Docker" order="5" show_stripe_button="false" />
       <window_info anchor="bottom" id="Message" order="6" />
       <window_info anchor="bottom" id="Find" order="7" />
-      <window_info anchor="bottom" id="Run" order="8" weight="0.4141844" />
+      <window_info anchor="bottom" id="Run" order="8" weight="0.41386783" />
       <window_info anchor="bottom" id="Debug" order="9" weight="0.4" />
       <window_info anchor="bottom" id="Cvs" order="10" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="11" weight="0.4" />
@@ -251,8 +246,8 @@
     <entry file="file://$PROJECT_DIR$/article_content_spider(txt).py" />
     <entry file="file://$PROJECT_DIR$/article_content_spider(mongo).py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="4423">
-          <caret line="1362" column="42" lean-forward="true" selection-start-line="1362" selection-start-column="42" selection-end-line="1362" selection-end-column="42" />
+        <state relative-caret-position="1001">
+          <caret line="1656" column="6" selection-start-line="1656" selection-start-column="6" selection-end-line="1656" selection-end-column="6" />
           <folding>
             <element signature="e#0#13#0" expanded="true" />
           </folding>
