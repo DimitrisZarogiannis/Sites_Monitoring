@@ -9,7 +9,6 @@ from scrapy.crawler import CrawlerProcess
 
 # Spider class for https://noisey.vice.com/ domain monitoring
 
-
 class ArticleSpider1(scrapy.Spider):
     name = "article"
     allowed_domains = ['noisey.vice.com']
@@ -164,7 +163,7 @@ class ArticleSpider2(scrapy.Spider):
 
 
 # Spider class for https://consequenceofsound.net/ domain monitoring(pagination trouble)
-
+# pagination trouble
 
 class ArticleSpider3(scrapy.Spider):
     name = "article"
@@ -470,6 +469,7 @@ class ArticleSpider6(scrapy.Spider):
         self.articles.insert_one(post)
 
 # Spider Class for https://mixmag.net domain monitoring(Pagination Trouble)
+# pagination trouble
 
 
 class ArticleSpider7(scrapy.Spider):
@@ -2671,7 +2671,7 @@ class ArticleSpider34(scrapy.Spider):
 
 # Spider class for http://www.edmlounge.com/ domain monitoring
 
-# Date reg ex needed
+
 class ArticleSpider35(scrapy.Spider):
     name = "article"
     allowed_domains = ['www.edmlounge.com']
@@ -2738,11 +2738,16 @@ class ArticleSpider35(scrapy.Spider):
         title = response.xpath('//*/div[3]/h2/a//text()').extract()
         date = response.xpath('//*/div[4]/div[3]/span[1]/text()[2]').extract()
         article = response.xpath('//*/div[3]/div[2]/p//text()').extract()
+        regex = r'(.+?)(?= [a-z]{2})'
+        date_after_format = date[0]
+        date_after_format = re.match(regex, date_after_format).group(0)
+        date_after_format = date_after_format.split(',')
+        date_after_format = ','.join(date_after_format[1:3]).strip(' ')
         post_link = str(response)
         post_link = post_link.strip('<200 ')
         post_link = post_link.strip('>')
         post = {'title': ''.join(title),
-                'date': ''.join(date),
+                'date': ''.join(date_after_format),
                 'article': ''.join(article),
                 'post-link': post_link}
         self.articles.insert_one(post)
@@ -2793,14 +2798,15 @@ class ArticleSpider36(scrapy.Spider):
                 self.url_repository.update_one({'_id': url_repo_id}, {'$set': {'post_urls_repo36': self.post_urls}})
 
     def parse_article(self, response):
-        title = response.xpath('//*/header/h1//text()').extract()
-        date = response.css('time::text').extract()
-        article = response.xpath('//*/div[2]/p//text()').extract()
+        title = response.css('h1::text,h2::text').extract_first()
+        date = response.css('time::text,.date span::text').extract_first()
+        article = response.css('p::text, p a::text, p b::text ,p i::text ,'
+                               'p strong::text,span::text').extract()
         post_link = str(response)
         post_link = post_link.strip('<200 ')
         post_link = post_link.strip('>')
         post = {'title': ''.join(title),
-                'date': ''.join(date),
+                'date': date,
                 'article': ''.join(article),
                 'post-link': post_link}
         self.articles.insert_one(post)
@@ -2885,6 +2891,84 @@ class ArticleSpider37(scrapy.Spider):
                 'post-link': post_link}
         self.articles.insert_one(post)
 
+# Spider class for https://runthetrap.com/ domain monitoring
+# pagination trouble 403
+
+class ArticleSpider38(scrapy.Spider):
+    name = "article"
+    allowed_domains = ['runthetrap.com']
+    start_urls = ['https://runthetrap.com/category/news/']
+    post_urls = []
+    page_id = 2
+    new_content_flag = 1
+    core_link = 'http://runthetrap.com/category/news/page/'
+    client = MongoClient('mongodb://localhost:27017')
+    db = client['Articles_DB']
+    articles = db.articles38
+    url_repository = db.urls
+    repo_existence_check = 0
+    link_xpath = '    // *[ @ id = "cmn_wrap"] /div/div[1]/div/main/article/header/h2/a/@href'
+    max_pages = 300
+
+    def parse(self, response):
+        urls_repo_cursor = self.url_repository.find()
+        for item in urls_repo_cursor:
+            if '_id' and 'post_urls_repo38' in item:
+                self.repo_existence_check += 1
+                local_item = item
+
+        if self.repo_existence_check == 0:
+            for article_url in response.xpath(self.link_xpath).extract():
+                if not (article_url in self.post_urls):
+                    self.post_urls.append(article_url)
+                    yield response.follow(article_url, callback=self.parse_article)
+
+            next_page = requests.get(self.core_link + str(self.page_id))
+
+            if next_page.status_code == 200 and self.page_id <= self.max_pages:
+                next_page_link = (self.core_link + str(self.page_id))
+                self.page_id += 1
+                yield response.follow(next_page_link, callback=self.parse)
+            else:
+                included_posts = {'post_urls_repo38': self.post_urls}
+                self.url_repository.insert_one(included_posts)
+
+        else:
+            self.post_urls = local_item['post_urls_repo38']
+
+            if self.new_content_flag == 1:
+                for article_url in response.xpath(self.link_xpath).extract():
+                    if not (article_url in self.post_urls):
+                        self.post_urls.append(article_url)
+                        yield response.follow(article_url, callback=self.parse_article)
+                    else:
+                        self.new_content_flag = 0
+
+                url_repo_id = local_item['_id']
+                self.url_repository.update_one({'_id': url_repo_id}, {'$set': {'post_urls_repo38': self.post_urls}})
+                next_page = requests.get(self.core_link + str(self.page_id))
+
+                if next_page.status_code == 200 and self.page_id <= self.max_pages:
+                    next_page_link = (self.core_link + str(self.page_id))
+                    self.page_id += 1
+                    yield response.follow(next_page_link, callback=self.parse)
+                else:
+                    url_repo_id = local_item['_id']
+                    self.url_repository.update_one({'_id': url_repo_id}, {'$set': {'post_urls_repo38': self.post_urls}})
+
+    def parse_article(self, response):
+        title = response.xpath('//*[@id="cmn_wrap"]/div/div[1]/div/main/article/header/h1//text()').extract()
+        date = response.xpath('//*[@id="cmn_wrap"]/div/div[1]/div/main/article/header/p/time/text()').extract()
+        article = response.xpath('//*[@id="cmn_wrap"]/div/div[1]/div/main/article/div/p//text()').extract()
+        post_link = str(response)
+        post_link = post_link.strip('<200 ')
+        post_link = post_link.strip('>')
+        post = {'title': ''.join(title),
+                'date': ''.join(date),
+                'article': ''.join(article),
+                'post-link': post_link}
+        self.articles.insert_one(post)
+
 
 if __name__ == "__main__":
     process = CrawlerProcess()
@@ -2924,6 +3008,7 @@ if __name__ == "__main__":
     # process.crawl(ArticleSpider34)
     # process.crawl(ArticleSpider35)
     # process.crawl(ArticleSpider36)
-    process.crawl(ArticleSpider37)
+    # process.crawl(ArticleSpider37)
+    process.crawl(ArticleSpider38)
     process.start()
 
