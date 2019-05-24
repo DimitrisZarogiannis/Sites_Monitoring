@@ -6,6 +6,7 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import TimeoutException
+import time
 
 # Selenium Class for https://ukf.com domain monitoring
 
@@ -20,6 +21,8 @@ class ArticleSelenium:
     start_url = "https://ukf.com/news"
     option = webdriver.ChromeOptions()
     option.add_argument("--incognito")
+    prefs = {'profile.managed_default_content_settings.images': 2}
+    option.add_experimental_option("prefs", prefs)
     post_urls = []
     bool_flag = True
 
@@ -220,7 +223,7 @@ class ArticleSelenium2:
 
         # Parse and extract all posts that haven't been extracted
         if len(page_urls) > 0:
-            print(page_urls)
+
             for article_link in page_urls:
 
                 # Get article title,date and content
@@ -254,9 +257,177 @@ class ArticleSelenium2:
             self.new_content_flag = 0
             self.bool_flag = False
 
+# Selenium Class for https://mixmag.net domain monitoring
+
+
+class ArticleSelenium3:
+    client = MongoClient('mongodb://localhost:27017')
+    db = client['Articles_DB']
+    articles = db.articles7
+    url_repository = db.urls
+    repo_existence_check = 0
+    new_content_flag = 1
+    start_url = "https://mixmag.net/music"
+    option = webdriver.ChromeOptions()
+    option.add_argument("--incognito")
+    prefs = {'profile.managed_default_content_settings.images': 2}
+    option.add_experimental_option("prefs", prefs)
+    post_urls = []
+    bool_flag = True
+    scraped_articles = 0
+
+    def parse(self):
+        browser = webdriver.Chrome(executable_path='chromedriver.exe', options=self.option)
+        browser.get(self.start_url)
+
+        urls_repo_cursor = self.url_repository.find()
+        for item in urls_repo_cursor:
+            if '_id' and 'post_urls_repo7' in item:
+                self.repo_existence_check += 1
+                local_item = item
+
+        if self.repo_existence_check == 0:
+
+            # Parse and extract page articles function call
+            self.parse_articles(browser)
+
+            # Check if there more posts available and parse them
+            try:
+                scroll_pause_time = 2
+                # Get scroll height
+                last_height = browser.execute_script("return document.body.scrollHeight")
+
+                while True:
+                    # Scroll down to bottom
+                    browser.execute_script("window.scrollTo(0, document.body.scrollHeight);")
+
+                    # Wait to load page
+                    time.sleep(scroll_pause_time)
+
+                    self.parse_articles(browser)
+
+                    # Calculate new scroll height and compare with last scroll height
+                    new_height = browser.execute_script("return document.body.scrollHeight")
+                    if new_height == last_height:
+                        break
+                    last_height = new_height
+            except:
+                self.bool_flag = False
+                browser.quit()
+                included_posts = {'post_urls_repo7': self.post_urls}
+                self.url_repository.insert_one(included_posts)
+        else:
+            self.post_urls = local_item['post_urls_repo7']
+
+            # Parse and extract page articles function call
+            self.parse_articles(browser)
+
+            while self.new_content_flag == 1:
+
+                # Check if there more posts available and parse them
+                try:
+                    scroll_pause_time = 2
+                    # Get scroll height
+                    last_height = browser.execute_script("return document.body.scrollHeight")
+
+                    while True:
+                        # Scroll down to bottom
+                        browser.execute_script("window.scrollTo(0, document.body.scrollHeight);")
+
+                        # Wait to load page
+                        time.sleep(scroll_pause_time)
+
+                        self.parse_articles(browser)
+
+                        # Calculate new scroll height and compare with last scroll height
+                        new_height = browser.execute_script("return document.body.scrollHeight")
+                        if new_height == last_height:
+                            break
+                        last_height = new_height
+
+                        url_repo_id = local_item['_id']
+                        self.url_repository.update_one({'_id': url_repo_id},
+                                                       {'$set': {'post_urls_repo7': self.post_urls}})
+                except:
+                    self.bool_flag = False
+                    browser.quit()
+                    url_repo_id = local_item['_id']
+                    self.url_repository.update_one({'_id': url_repo_id},
+                                                   {'$set': {'post_urls_repo7': self.post_urls}})
+
+    # Parse and extract articles per page function
+    def parse_articles(self, browser):
+        articles_urls_element = browser.find_elements_by_xpath('//*[ @ id = "js-infinity"]/div/div/article/a')
+        page_urls = []
+
+        # Gather all articles links in a temp list
+        for url_elem in articles_urls_element:
+            page_urls.append(url_elem.get_attribute('href'))
+
+        # Insert every link at the mongo db posts urls dict/Filter out duplicates caused from the click event
+        for link in page_urls:
+            self.post_urls.append(link)
+
+        for url in self.post_urls:
+            if self.post_urls.count(url) > 1 and url in page_urls:
+                page_urls.remove(url)
+                self.post_urls.remove(url)
+
+        # Parse and extract all posts that haven't been extracted
+        if len(page_urls) > 0:
+
+            for article_link in page_urls:
+
+                # Get article title,date and content
+                browser_next_post = webdriver.Chrome(executable_path='chromedriver.exe', options=self.option)
+                browser_next_post.get(article_link)
+
+                try:
+                    # Get article title
+                    title_element = browser_next_post.find_element_by_css_selector('.article-header__title')
+                    title = title_element.text
+
+                    # Get article date
+                    date_element = browser_next_post.find_element_by_css_selector('.article-header__meta li:nth-child(2)')
+                    date = date_element.text
+
+                    # Get article content
+                    article_element = browser_next_post.find_elements_by_xpath('//*[@id="js-infinity"]/article/div[2]/'
+                                                                               'div[1]/div[1]/div[1]/p')
+                    article = str()
+                    for paragraph in article_element:
+                        article += paragraph.text
+                    if len(article) > 2:
+                        post = {'title': ''.join(title),
+                                'date': ''.join(date),
+                                'article': ''.join(article),
+                                'post-link': article_link}
+                        self.articles.insert_one(post)
+                        print(post)
+                        browser_next_post.quit()
+                    else:
+                        article_element = browser_next_post.find_elements_by_xpath('//*/div/div /p')
+                        article = str()
+                        for paragraph in article_element:
+                            article += paragraph.text
+                        post = {'title': ''.join(title),
+                                'date': ''.join(date),
+                                'article': ''.join(article),
+                                'post-link': article_link}
+                        self.articles.insert_one(post)
+                        print(post)
+                        browser_next_post.quit()
+                except:
+                    browser_next_post.quit()
+        else:
+            self.new_content_flag = 0
+            self.bool_flag = False
+
 
 if __name__ == '__main__':
     # selenium_domain_1 = ArticleSelenium()
     # selenium_domain_1.parse()
-    selenium_domain_2 = ArticleSelenium2()
-    selenium_domain_2.parse()
+    # selenium_domain_2 = ArticleSelenium2()
+    # selenium_domain_2.parse()
+    selenium_domain_3 = ArticleSelenium3()
+    selenium_domain_3.parse()

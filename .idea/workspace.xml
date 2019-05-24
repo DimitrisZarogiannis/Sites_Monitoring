@@ -3,6 +3,7 @@
   <component name="ChangeListManager">
     <list default="true" id="4e328230-ec0f-47bf-ab15-9d59ae0f2bbe" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/article_content_selenium(mongo).py" beforeDir="false" afterPath="$PROJECT_DIR$/article_content_selenium(mongo).py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/article_content_spider(mongo).py" beforeDir="false" afterPath="$PROJECT_DIR$/article_content_spider(mongo).py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -31,11 +32,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/article_content_spider(mongo).py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="55590">
-              <caret line="2957" column="87" selection-start-line="2957" selection-start-column="33" selection-end-line="2957" selection-end-column="87" />
+            <state relative-caret-position="583">
+              <caret line="2799" column="36" selection-start-line="2799" selection-start-column="36" selection-end-line="2799" selection-end-column="36" />
               <folding>
                 <element signature="e#0#13#0" expanded="true" />
               </folding>
@@ -43,11 +44,11 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/article_content_selenium(mongo).py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1703">
-              <caret line="261" column="4" lean-forward="true" selection-start-line="261" selection-start-column="4" selection-end-line="261" selection-end-column="4" />
+            <state relative-caret-position="-1923">
+              <caret line="253" column="1" lean-forward="true" selection-start-line="253" selection-start-column="1" selection-end-line="253" selection-end-column="1" />
               <folding>
                 <element signature="e#22#52#0" expanded="true" />
               </folding>
@@ -73,12 +74,12 @@
         <option value="$PROJECT_DIR$/article_content_spider.py" />
         <option value="$PROJECT_DIR$/article_content_spider(txt).py" />
         <option value="$PROJECT_DIR$/article_content_selenium.py" />
-        <option value="$PROJECT_DIR$/article_content_spider(mongo).py" />
         <option value="$PROJECT_DIR$/article_content_selenium(mongo).py" />
+        <option value="$PROJECT_DIR$/article_content_spider(mongo).py" />
       </list>
     </option>
   </component>
-  <component name="ProjectFrameBounds" extendedState="6">
+  <component name="ProjectFrameBounds" extendedState="7">
     <option name="x" value="880" />
     <option name="y" value="60" />
     <option name="width" value="1020" />
@@ -264,18 +265,21 @@
       <workItem from="1558080020049" duration="1097000" />
       <workItem from="1558426347303" duration="1389000" />
       <workItem from="1558429792684" duration="4571000" />
+      <workItem from="1558512330728" duration="4137000" />
+      <workItem from="1558598176644" duration="2857000" />
+      <workItem from="1558685181895" duration="7045000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="156151000" />
+    <option name="totallyTimeSpent" value="170190000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-7" y="-7" width="1550" height="838" extended-state="6" />
     <editor active="true" />
     <layout>
       <window_info id="Favorites" order="0" side_tool="true" />
-      <window_info content_ui="combo" id="Project" order="1" visible="true" weight="0.23825504" />
+      <window_info content_ui="combo" id="Project" order="1" visible="true" weight="0.24832214" />
       <window_info id="Structure" order="2" side_tool="true" weight="0.24966443" />
       <window_info anchor="bottom" id="Database Changes" order="0" />
       <window_info anchor="bottom" id="Terminal" order="1" />
@@ -306,7 +310,7 @@
     <SUITE FILE_PATH="coverage/Sites_Monitoring$article_content_spider_txt_.coverage" NAME="article_content_spider(txt) Coverage Results" MODIFIED="1554968776761" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/Sites_Monitoring$test.coverage" NAME="test Coverage Results" MODIFIED="1554795483324" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$USER_HOME$/PycharmProjects/testmong" />
     <SUITE FILE_PATH="coverage/Git_Sites_Monitoring$article_content_spider_mongo_.coverage" NAME="article_content_spider(mongo) Coverage Results" MODIFIED="1556189448330" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
-    <SUITE FILE_PATH="coverage/Sites_Monitoring$article_content_selenium_mongo_.coverage" NAME="article_content_selenium(mongo) Coverage Results" MODIFIED="1558434813303" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/Sites_Monitoring$article_content_selenium_mongo_.coverage" NAME="article_content_selenium(mongo) Coverage Results" MODIFIED="1558692049200" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
   </component>
   <component name="editorHistoryManager">
     <entry file="file://$USER_HOME$/PycharmProjects/testmongo/testmongo.py" />
@@ -314,22 +318,29 @@
     <entry file="file://$PROJECT_DIR$/article_content_spider.py" />
     <entry file="file://$PROJECT_DIR$/article_content_spider(txt).py" />
     <entry file="file://$PROJECT_DIR$/article_content_selenium.py" />
-    <entry file="file://$PROJECT_DIR$/article_content_selenium(mongo).py">
+    <entry file="file://C:/Program Files (x86)/Python37-32/Lib/site-packages/selenium/webdriver/remote/errorhandler.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1703">
-          <caret line="261" column="4" lean-forward="true" selection-start-line="261" selection-start-column="4" selection-end-line="261" selection-end-column="4" />
-          <folding>
-            <element signature="e#22#52#0" expanded="true" />
-          </folding>
+        <state relative-caret-position="189">
+          <caret line="241" selection-start-line="241" selection-end-line="241" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/article_content_spider(mongo).py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="55590">
-          <caret line="2957" column="87" selection-start-line="2957" selection-start-column="33" selection-end-line="2957" selection-end-column="87" />
+        <state relative-caret-position="583">
+          <caret line="2799" column="36" selection-start-line="2799" selection-start-column="36" selection-end-line="2799" selection-end-column="36" />
           <folding>
             <element signature="e#0#13#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/article_content_selenium(mongo).py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-1923">
+          <caret line="253" column="1" lean-forward="true" selection-start-line="253" selection-start-column="1" selection-end-line="253" selection-end-column="1" />
+          <folding>
+            <element signature="e#22#52#0" expanded="true" />
           </folding>
         </state>
       </provider>
