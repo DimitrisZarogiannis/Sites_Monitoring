@@ -5,8 +5,6 @@ from pymongo import MongoClient
 from scrapy.crawler import CrawlerProcess
 
 
-
-
 # Spider class for https://noisey.vice.com/ domain monitoring
 
 class ArticleSpider1(scrapy.Spider):
@@ -162,66 +160,66 @@ class ArticleSpider2(scrapy.Spider):
         self.articles.insert_one(post)
 
 
-# Spider class for https://consequenceofsound.net/ domain monitoring(pagination trouble)
-# pagination trouble
-
-class ArticleSpider3(scrapy.Spider):
-    name = "article"
-    allowed_domains = ['consequenceofsound.net']
-    start_urls = ['https://consequenceofsound.net/category/check-out/']
-    post_urls = []
-    new_content_flag = 1
-    client = MongoClient('mongodb://localhost:27017')
-    db = client['Articles_DB']
-    articles = db.articles3
-    url_repository = db.urls
-    repo_existence_check = 0
-
-    def parse(self, response):
-        urls_repo_cursor = self.url_repository.find()
-        for item in urls_repo_cursor:
-            if '_id' and 'post_urls_repo3' in item:
-                self.repo_existence_check += 1
-                local_item = item
-
-        if self.repo_existence_check > 0:
-
-            self.post_urls = local_item['post_urls_repo3']
-            if self.new_content_flag == 1:
-                for article_url in response.css('.modules-grid section::attr("data-href")').extract():
-                    if not (article_url in self.post_urls):
-                        self.post_urls.append(article_url)
-                        yield response.follow(article_url, callback=self.parse_article)
-                    else:
-                        self.new_content_flag = 0
-
-                url_repo_id = local_item['_id']
-                self.url_repository.update_one({'_id': url_repo_id},{'$set': {'post_urls_repo3': self.post_urls}})
-
-        else:
-            for article_url in response.css('.modules-grid section::attr("data-href")').extract():
-                if not (article_url in self.post_urls):
-                    self.post_urls.append(article_url)
-                    yield response.follow(article_url, callback=self.parse_article)
-
-            included_posts = {'post_urls_repo3': self.post_urls}
-            self.url_repository.insert_one(included_posts)
-
-    def parse_article(self, response):
-        title = response.css('.post-title::text').extract()
-        date = response.css('.localtime::text').extract()
-        date_after_format = str(date[0])
-        date_after_format = re.match(r'(.+?)(?=,\s\d+[:])', date_after_format)
-        date_after_format = date_after_format.group(0)
-        article = response.css('.post-content p::text, .post-content a::text, .post-content b::text,.post-content i::text,.post-content strong::text').extract()
-        post_link = str(response)
-        post_link = post_link.strip('<200 ')
-        post_link = post_link.strip('>')
-        post = {'title': ''.join(title),
-                'date': ''.join(date_after_format),
-                'article': ''.join(article),
-                'post-link': post_link}
-        self.articles.insert_one(post)
+# # Spider class for https://consequenceofsound.net/ domain monitoring(pagination trouble)
+# # pagination trouble
+#
+# class ArticleSpider3(scrapy.Spider):
+#     name = "article"
+#     allowed_domains = ['consequenceofsound.net']
+#     start_urls = ['https://consequenceofsound.net/category/check-out/']
+#     post_urls = []
+#     new_content_flag = 1
+#     client = MongoClient('mongodb://localhost:27017')
+#     db = client['Articles_DB']
+#     articles = db.articles3
+#     url_repository = db.urls
+#     repo_existence_check = 0
+#
+#     def parse(self, response):
+#         urls_repo_cursor = self.url_repository.find()
+#         for item in urls_repo_cursor:
+#             if '_id' and 'post_urls_repo3' in item:
+#                 self.repo_existence_check += 1
+#                 local_item = item
+#
+#         if self.repo_existence_check > 0:
+#
+#             self.post_urls = local_item['post_urls_repo3']
+#             if self.new_content_flag == 1:
+#                 for article_url in response.css('.modules-grid section::attr("data-href")').extract():
+#                     if not (article_url in self.post_urls):
+#                         self.post_urls.append(article_url)
+#                         yield response.follow(article_url, callback=self.parse_article)
+#                     else:
+#                         self.new_content_flag = 0
+#
+#                 url_repo_id = local_item['_id']
+#                 self.url_repository.update_one({'_id': url_repo_id},{'$set': {'post_urls_repo3': self.post_urls}})
+#
+#         else:
+#             for article_url in response.css('.modules-grid section::attr("data-href")').extract():
+#                 if not (article_url in self.post_urls):
+#                     self.post_urls.append(article_url)
+#                     yield response.follow(article_url, callback=self.parse_article)
+#
+#             included_posts = {'post_urls_repo3': self.post_urls}
+#             self.url_repository.insert_one(included_posts)
+#
+#     def parse_article(self, response):
+#         title = response.css('.post-title::text').extract()
+#         date = response.css('.localtime::text').extract()
+#         date_after_format = str(date[0])
+#         date_after_format = re.match(r'(.+?)(?=,\s\d+[:])', date_after_format)
+#         date_after_format = date_after_format.group(0)
+#         article = response.css('.post-content p::text, .post-content a::text, .post-content b::text,.post-content i::text,.post-content strong::text').extract()
+#         post_link = str(response)
+#         post_link = post_link.strip('<200 ')
+#         post_link = post_link.strip('>')
+#         post = {'title': ''.join(title),
+#                 'date': ''.join(date_after_format),
+#                 'article': ''.join(article),
+#                 'post-link': post_link}
+#         self.articles.insert_one(post)
 
 # Spider Class for https://pitchfork.com domain monitoring
 
@@ -408,7 +406,6 @@ class ArticleSpider6(scrapy.Spider):
     repo_existence_check = 0
     max_pages = 400
 
-
     def parse(self, response):
         urls_repo_cursor = self.url_repository.find()
         for item in urls_repo_cursor:
@@ -514,7 +511,6 @@ class ArticleSpider7(scrapy.Spider):
                 url_repo_id = local_item['_id']
                 self.url_repository.update({'_id': url_repo_id}, {'$set': {'post_urls_repo7': self.post_urls}})
 
-
     def parse_article(self, response):
         title = response.css('h1::text').extract()
         date = response.css('.article-header__meta li::text').extract()
@@ -596,7 +592,6 @@ class ArticleSpider8(scrapy.Spider):
                 else:
                     url_repo_id = local_item['_id']
                     self.url_repository.update({'_id': url_repo_id}, {'$set': {'post_urls_repo8': self.post_urls}})
-
 
     def parse_article(self, response):
         title = response.xpath('//*/header/h1/span[2]/text()').extract()
@@ -2894,6 +2889,7 @@ class ArticleSpider37(scrapy.Spider):
 # Spider class for https://runthetrap.com/ domain monitoring
 # pagination trouble 403
 
+
 class ArticleSpider38(scrapy.Spider):
     name = "article"
     allowed_domains = ['runthetrap.com']
@@ -2974,7 +2970,6 @@ if __name__ == "__main__":
     process = CrawlerProcess()
     # process.crawl(ArticleSpider1)
     # process.crawl(ArticleSpider2)
-    # process.crawl(ArticleSpider3)
     # process.crawl(ArticleSpider4)
     # process.crawl(ArticleSpider5)
     # process.crawl(ArticleSpider6)
@@ -3009,6 +3004,6 @@ if __name__ == "__main__":
     # process.crawl(ArticleSpider35)
     # process.crawl(ArticleSpider36)
     # process.crawl(ArticleSpider37)
-    process.crawl(ArticleSpider38)
+    # process.crawl(ArticleSpider38)
     process.start()
 
