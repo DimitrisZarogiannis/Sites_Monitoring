@@ -2761,6 +2761,7 @@ class ArticleSpider37(scrapy.Spider):
                 'post-link': post_link}
         self.articles.insert_one(post)
 
+
 if __name__ == "__main__":
     process = CrawlerProcess()
     # process.crawl(ArticleSpider1)
@@ -2795,7 +2796,7 @@ if __name__ == "__main__":
     # process.crawl(ArticleSpider32)
     # process.crawl(ArticleSpider33)
     # process.crawl(ArticleSpider34)
-    # process.crawl(ArticleSpider35)
+    process.crawl(ArticleSpider35)
     # process.crawl(ArticleSpider36)
     # process.crawl(ArticleSpider37)
     process.start()
