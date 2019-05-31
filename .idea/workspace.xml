@@ -4,7 +4,7 @@
     <list default="true" id="4e328230-ec0f-47bf-ab15-9d59ae0f2bbe" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/article_content_selenium(mongo).py" beforeDir="false" afterPath="$PROJECT_DIR$/article_content_selenium(mongo).py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/article_content_spider(mongo).py" beforeDir="false" afterPath="$PROJECT_DIR$/article_content_spider(mongo).py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/debug.log" beforeDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -35,8 +35,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/article_content_spider(mongo).py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="4923">
-              <caret line="2798" column="4" selection-start-line="2798" selection-start-column="4" selection-end-line="2798" selection-end-column="4" />
+            <state relative-caret-position="55200">
+              <caret line="2764" selection-start-line="2764" selection-end-line="2764" selection-end-column="26" />
               <folding>
                 <element signature="e#0#13#0" expanded="true" />
               </folding>
@@ -44,13 +44,25 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/article_content_selenium(mongo).py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="723">
-              <caret line="611" column="16" lean-forward="true" selection-start-line="611" selection-start-column="16" selection-end-line="611" selection-end-column="16" />
+            <state relative-caret-position="480">
+              <caret line="30" column="35" selection-start-line="30" selection-start-column="35" selection-end-line="30" selection-end-column="35" />
               <folding>
                 <element signature="e#22#52#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/statistical_analysis_1.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="280">
+              <caret line="14" column="33" selection-start-line="14" selection-start-column="33" selection-end-line="14" selection-end-column="33" />
+              <folding>
+                <element signature="e#18#49#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -74,8 +86,9 @@
         <option value="$PROJECT_DIR$/article_content_spider.py" />
         <option value="$PROJECT_DIR$/article_content_spider(txt).py" />
         <option value="$PROJECT_DIR$/article_content_selenium.py" />
-        <option value="$PROJECT_DIR$/article_content_selenium(mongo).py" />
         <option value="$PROJECT_DIR$/article_content_spider(mongo).py" />
+        <option value="$PROJECT_DIR$/article_content_selenium(mongo).py" />
+        <option value="$PROJECT_DIR$/statistical_analysis_1.py" />
       </list>
     </option>
   </component>
@@ -125,7 +138,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Python.article_content_spider(mongo)">
+  <component name="RunManager" selected="Python.statistical_analysis_1">
     <configuration name="article_content_selenium(mongo)" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <module name="Sites_Monitoring" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -192,6 +205,28 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
+    <configuration name="statistical_analysis_1" type="PythonConfigurationType" factoryName="Python" temporary="true">
+      <module name="Sites_Monitoring" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/statistical_analysis_1.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
     <configuration name="test" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <module name="Sites_Monitoring" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -216,6 +251,7 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Python.statistical_analysis_1" />
         <item itemvalue="Python.article_content_spider(mongo)" />
         <item itemvalue="Python.article_content_selenium(mongo)" />
         <item itemvalue="Python.article_content_spider(txt)" />
@@ -270,17 +306,19 @@
       <workItem from="1558685181895" duration="7455000" />
       <workItem from="1558942940448" duration="15167000" />
       <workItem from="1559031198255" duration="5248000" />
+      <workItem from="1559207647956" duration="7059000" />
+      <workItem from="1559290011095" duration="10086000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="191015000" />
+    <option name="totallyTimeSpent" value="208160000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-7" y="-7" width="1550" height="838" extended-state="6" />
     <layout>
       <window_info id="Favorites" order="0" side_tool="true" />
-      <window_info content_ui="combo" id="Project" order="1" visible="true" weight="0.25503355" />
+      <window_info content_ui="combo" id="Project" order="1" visible="true" weight="0.26174498" />
       <window_info id="Structure" order="2" side_tool="true" weight="0.24966443" />
       <window_info anchor="bottom" id="Database Changes" order="0" />
       <window_info anchor="bottom" id="Terminal" order="1" />
@@ -290,7 +328,7 @@
       <window_info anchor="bottom" id="Docker" order="5" show_stripe_button="false" />
       <window_info anchor="bottom" id="Message" order="6" />
       <window_info anchor="bottom" id="Find" order="7" />
-      <window_info anchor="bottom" id="Run" order="8" sideWeight="0.4986577" weight="0.41276595" />
+      <window_info anchor="bottom" id="Run" order="8" sideWeight="0.4986577" weight="0.40141845" />
       <window_info anchor="bottom" id="Debug" order="9" weight="0.4" />
       <window_info anchor="bottom" id="Cvs" order="10" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="11" weight="0.4" />
@@ -309,6 +347,7 @@
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/Sites_Monitoring$article_content_spider_mongo_.coverage" NAME="article_content_spider(mongo) Coverage Results" MODIFIED="1559036302971" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/Sites_Monitoring$article_content_spider_txt_.coverage" NAME="article_content_spider(txt) Coverage Results" MODIFIED="1554968776761" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/Sites_Monitoring$statistical_analysis_1.coverage" NAME="statistical_analysis_1 Coverage Results" MODIFIED="1559300758164" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/Sites_Monitoring$test.coverage" NAME="test Coverage Results" MODIFIED="1554795483324" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$USER_HOME$/PycharmProjects/testmong" />
     <SUITE FILE_PATH="coverage/Git_Sites_Monitoring$article_content_spider_mongo_.coverage" NAME="article_content_spider(mongo) Coverage Results" MODIFIED="1556189448330" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/Sites_Monitoring$article_content_selenium_mongo_.coverage" NAME="article_content_selenium(mongo) Coverage Results" MODIFIED="1559036120752" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
@@ -328,8 +367,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/article_content_spider(mongo).py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="4923">
-          <caret line="2798" column="4" selection-start-line="2798" selection-start-column="4" selection-end-line="2798" selection-end-column="4" />
+        <state relative-caret-position="55200">
+          <caret line="2764" selection-start-line="2764" selection-end-line="2764" selection-end-column="26" />
           <folding>
             <element signature="e#0#13#0" expanded="true" />
           </folding>
@@ -338,10 +377,20 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/article_content_selenium(mongo).py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="723">
-          <caret line="611" column="16" lean-forward="true" selection-start-line="611" selection-start-column="16" selection-end-line="611" selection-end-column="16" />
+        <state relative-caret-position="480">
+          <caret line="30" column="35" selection-start-line="30" selection-start-column="35" selection-end-line="30" selection-end-column="35" />
           <folding>
             <element signature="e#22#52#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/statistical_analysis_1.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="280">
+          <caret line="14" column="33" selection-start-line="14" selection-start-column="33" selection-end-line="14" selection-end-column="33" />
+          <folding>
+            <element signature="e#18#49#0" expanded="true" />
           </folding>
         </state>
       </provider>
