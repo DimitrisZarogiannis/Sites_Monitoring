@@ -14,6 +14,8 @@ import re
 class StatisticalAnalysis:
     client = MongoClient('mongodb://localhost:27017')
     db = client['Articles_DB']
+    genres_term_frequency = db.genres
+    blogs_activity = db.blogs_activity
     articles_conn = list()
     articles_count = 0
     term_freq = {}
@@ -24,6 +26,10 @@ class StatisticalAnalysis:
         collections = self.db.list_collection_names()
         if 'urls' in collections:
             collections.remove('urls')
+        if 'genres' in collections:
+            collections.remove('genres')
+        if 'blogs_activity' in collections:
+            collections.remove('blogs_activity')
         self.articles_conn = collections
 
     # Calculate the desired article metrics
@@ -69,19 +75,22 @@ class StatisticalAnalysis:
 
     # Calculate number of articles per day
     def analyse_site_activity(self):
-        articles = list(self.articles_conn.find())
-        self.articles_count = len(articles)
-        dates_dict = {}
+        for collection in self.articles_conn:
+            articles = list(self.db.get_collection(collection).find())
+            dates_dict = {}
 
-        for article in articles:
-            article_date = article['date']
-            try:
-                posts_on_date = int(dates_dict.get(article_date))
-                posts_on_date += 1
-                dates_dict.update({article_date: posts_on_date})
-            except:
-                dates_dict[article_date] = 1
-        print(dates_dict)
+            for article in articles:
+                article_date = article['date']
+
+                try:
+                    posts_on_date = int(dates_dict.get(article_date))
+                    posts_on_date += 1
+                    dates_dict.update({article_date: posts_on_date})
+
+                except:
+                    dates_dict[article_date] = 1
+
+            self.blogs_activity.insert_one({'site_activity': [dates_dict, collection]})
 
     # Calculate the frequency of appearance for the different music genres
     def calculate_genres_frequency(self):
@@ -93,15 +102,16 @@ class StatisticalAnalysis:
                 genres_list[index] = re.sub(r'[\n\r]+$', '', gen)
 
         # Load all articles and calculate term appearance frequency
-        articles = list(self.articles_conn.find())
-        self.articles_count = len(articles)
+        for collection in self.articles_conn:
+            articles = list(self.db.get_collection(collection).find())
 
-        for article in articles:
-            article_body = article['article']
-            words_list = article_body.split(' ')
-            self.populate_term_freq_dict(words_list, genres_list)
+            for article in articles:
+                article_body = article['article']
+                words_list = article_body.split(' ')
+                self.populate_term_freq_dict(words_list, genres_list)
 
         print(self.term_freq)
+        self.genres_term_frequency.insert_one(self.term_freq)
 
     # Fill the term freq dictionary function
     def populate_term_freq_dict(self, wordslist, termslist):
@@ -134,7 +144,7 @@ class StatisticalAnalysis:
         for listitem in self.metrics_data:
             Average_title_words.append(listitem[1])
         Average_title_words = np.asarray(Average_title_words)
-        n, bins, patches = ax2.hist(Average_title_words, histtype='bar', label=['Words'])
+        n, bins, patches = ax2.hist(Average_title_words, histtype='bar', label=['Words'], color='orange')
         ax2.set_ylabel('Frequency')
         ax2.set_xlabel('Average article title words distribution')
         ax2.legend(loc="upper right")
@@ -152,7 +162,7 @@ class StatisticalAnalysis:
         for listitem in self.metrics_data:
             Average_article_words.append(listitem[3])
         Average_article_words = np.asarray(Average_article_words)
-        n, bins, patches = ax4.hist(Average_article_words, histtype='bar', label=['Words'])
+        n, bins, patches = ax4.hist(Average_article_words, histtype='bar', label=['Words'], color='orange')
         ax4.set_ylabel('Frequency')
         ax4.set_xlabel('Average article words distribution')
         ax4.legend(loc="upper right")
