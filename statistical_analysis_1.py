@@ -115,6 +115,8 @@ class StatisticalAnalysis:
             if gen.endswith('\n'):
                 genres_list[index] = re.sub(r'[\n\r]+$', '', gen)
 
+        total_articles = self.count_articles()
+
         # Load all articles and calculate term appearance frequency
         for collection in self.articles_conn:
             articles = list(self.db.get_collection(collection).find())
@@ -124,7 +126,8 @@ class StatisticalAnalysis:
                 words_list = article_body.split(' ')
                 self.populate_term_freq_dict(words_list, genres_list)
 
-        print(self.term_freq)
+        for key in self.term_freq:
+            self.term_freq[key] = (self.term_freq[key],round((self.term_freq[key]/total_articles)*100,2))
         self.genres_term_frequency.insert_one(self.term_freq)
 
     # Fill the term freq dictionary function
@@ -230,12 +233,18 @@ class StatisticalAnalysis:
 
         plt.show()
 
+    def count_articles(self):
+        total_articles = int()
+        for collection in self.articles_conn:
+            articles = list(self.db.get_collection(collection).find())
+            total_articles += len(articles)
 
+        return total_articles
 
 if __name__ == "__main__":
     stat = StatisticalAnalysis()
     stat.find_all_article_collections()
-    stat.calculate_article_metrics()
-    stat.create_histograms()
+    # stat.calculate_article_metrics()
+    # stat.create_histograms()
     # stat.analyse_site_activity()
-    # stat.calculate_genres_frequency()
+    stat.calculate_genres_frequency()

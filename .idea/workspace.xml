@@ -2,11 +2,6 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="4e328230-ec0f-47bf-ab15-9d59ae0f2bbe" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/Sites_Monitoring.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/Sites_Monitoring.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Plots/Article_Metrics_Plot.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Plots/Title_Metrics_Plot.png" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/statistical_analysis_1.py" beforeDir="false" afterPath="$PROJECT_DIR$/statistical_analysis_1.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -18,7 +13,7 @@
   <component name="CoverageDataManager">
     <SUITE FILE_PATH="coverage/Sites_Monitoring$article_content_spider_mongo_.coverage" NAME="article_content_spider(mongo) Coverage Results" MODIFIED="1556211052534" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/Git_Sites_Monitoring$article_content_spider_mongo_.coverage" NAME="article_content_spider(mongo) Coverage Results" MODIFIED="1555668841244" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
-    <SUITE FILE_PATH="coverage/Sites_Monitoring$statistical_analysis_1.coverage" NAME="statistical_analysis_1 Coverage Results" MODIFIED="1559816944962" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/Sites_Monitoring$statistical_analysis_1.coverage" NAME="statistical_analysis_1 Coverage Results" MODIFIED="1559824035257" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
   </component>
   <component name="DatabaseView">
     <option name="SHOW_INTERMEDIATE" value="true" />
@@ -39,8 +34,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/statistical_analysis_1.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="569">
-              <caret line="230" column="18" lean-forward="true" selection-start-line="230" selection-start-column="18" selection-end-line="230" selection-end-column="18" />
+            <state relative-caret-position="324">
+              <caret line="129" column="105" selection-start-line="129" selection-start-column="105" selection-end-line="129" selection-end-column="105" />
               <folding>
                 <element signature="e#18#49#0" expanded="true" />
               </folding>
@@ -83,6 +78,7 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -94,7 +90,6 @@
           <select />
         </subPane>
       </pane>
-      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -291,18 +286,19 @@
       <workItem from="1559549254685" duration="10774000" />
       <workItem from="1559635218067" duration="6576000" />
       <workItem from="1559812361258" duration="3685000" />
+      <workItem from="1559822237101" duration="1865000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="229195000" />
+    <option name="totallyTimeSpent" value="231060000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
     <editor active="true" />
     <layout>
       <window_info id="Favorites" order="0" side_tool="true" />
-      <window_info content_ui="combo" id="Project" order="1" visible="true" weight="0.27132195" />
+      <window_info content_ui="combo" id="Project" order="1" visible="true" weight="0.2739872" />
       <window_info id="Structure" order="2" side_tool="true" weight="0.24966443" />
       <window_info anchor="bottom" id="Database Changes" order="0" />
       <window_info anchor="bottom" id="Terminal" order="1" />
@@ -365,8 +361,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/statistical_analysis_1.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="569">
-          <caret line="230" column="18" lean-forward="true" selection-start-line="230" selection-start-column="18" selection-end-line="230" selection-end-column="18" />
+        <state relative-caret-position="324">
+          <caret line="129" column="105" selection-start-line="129" selection-start-column="105" selection-end-line="129" selection-end-column="105" />
           <folding>
             <element signature="e#18#49#0" expanded="true" />
           </folding>
