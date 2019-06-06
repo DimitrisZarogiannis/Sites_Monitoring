@@ -19,6 +19,7 @@ class StatisticalAnalysis:
     articles_conn = list()
     articles_count = 0
     term_freq = {}
+    #Metrics per blog
     metrics_data = list()
 
     # Find all article collections in the MongoDB
@@ -43,6 +44,9 @@ class StatisticalAnalysis:
             total_article_chars = int()
             total_article_words = int()
 
+            # Metrics per article collection
+            collection_metrics_data = list()
+
             for article in articles:
 
                 article_title = article['title']
@@ -62,6 +66,15 @@ class StatisticalAnalysis:
                 total_article_chars += article_chars_number
                 total_article_words += article_words_number
 
+                article_stats = [title_chars_number,title_words_number,
+                                 article_chars_number, article_words_number]
+
+
+                collection_metrics_data.append(article_stats)
+
+            #Create Histogram for every collection's article metrics
+            self.create_collection_histograms(collection,collection_metrics_data)
+
             # Get average metrics for the whole blog collection
             average_title_characters = int(total_title_characters / self.articles_count)
             average_title_words = int(total_title_words / self.articles_count)
@@ -72,6 +85,7 @@ class StatisticalAnalysis:
                      average_article_chars, average_article_words]
 
             self.metrics_data.append(stats)
+
 
     # Calculate number of articles per day
     def analyse_site_activity(self):
@@ -122,7 +136,7 @@ class StatisticalAnalysis:
                 except:
                     self.term_freq.update({word: 1})
 
-    # Create metrics histograms
+    # Create article/blogs metrics histograms
     def create_histograms(self):
         fig = plt.figure()
         ax1 = fig.add_subplot(2, 1, 1)
@@ -137,7 +151,7 @@ class StatisticalAnalysis:
         Average_title_chars = np.asarray(Average_title_chars)
         n, bins, patches = ax1.hist(Average_title_chars, histtype='bar', label=['Characters'])
         ax1.set_ylabel('Frequency')
-        ax1.set_xlabel('Average article title chars distribution')
+        ax1.set_xlabel('Average article title chars distribution / blogs')
         ax1.legend(loc="upper right")
 
         Average_title_words = list()
@@ -146,7 +160,7 @@ class StatisticalAnalysis:
         Average_title_words = np.asarray(Average_title_words)
         n, bins, patches = ax2.hist(Average_title_words, histtype='bar', label=['Words'], color='orange')
         ax2.set_ylabel('Frequency')
-        ax2.set_xlabel('Average article title words distribution')
+        ax2.set_xlabel('Average article title words distribution / blogs')
         ax2.legend(loc="upper right")
 
         Average_article_chars = list()
@@ -155,7 +169,7 @@ class StatisticalAnalysis:
         Average_article_chars = np.asarray(Average_article_chars)
         n, bins, patches = ax3.hist(Average_article_chars, histtype='bar', label=['Characters'])
         ax3.set_ylabel('Frequency')
-        ax3.set_xlabel('Average article chars distribution')
+        ax3.set_xlabel('Average article chars distribution / blogs')
         ax3.legend(loc="upper right")
 
         Average_article_words = list()
@@ -164,10 +178,58 @@ class StatisticalAnalysis:
         Average_article_words = np.asarray(Average_article_words)
         n, bins, patches = ax4.hist(Average_article_words, histtype='bar', label=['Words'], color='orange')
         ax4.set_ylabel('Frequency')
-        ax4.set_xlabel('Average article words distribution')
+        ax4.set_xlabel('Average article words distribution  / blogs')
         ax4.legend(loc="upper right")
 
         plt.show()
+
+    # Create article collection metrics histograms
+    def create_collection_histograms(self,collection,metricsdata):
+        fig = plt.figure()
+        ax1 = fig.add_subplot(2, 1, 1)
+        ax2 = fig.add_subplot(2, 1, 2)
+        fig2 = plt.figure()
+        ax3 = fig2.add_subplot(2, 1, 1)
+        ax4 = fig2.add_subplot(2, 1, 2)
+
+        Average_title_chars = list()
+        for listitem in metricsdata:
+            Average_title_chars.append(listitem[0])
+        Average_title_chars = np.asarray(Average_title_chars)
+        n, bins, patches = ax1.hist(Average_title_chars, histtype='bar', label=['Characters'])
+        ax1.set_ylabel('Frequency')
+        ax1.set_xlabel('Average article title chars distribution/articles\nCollection : {}'.format(collection))
+        ax1.legend(loc="upper right")
+
+        Average_title_words = list()
+        for listitem in metricsdata:
+            Average_title_words.append(listitem[1])
+        Average_title_words = np.asarray(Average_title_words)
+        n, bins, patches = ax2.hist(Average_title_words, histtype='bar', label=['Words'], color='orange')
+        ax2.set_ylabel('Frequency')
+        ax2.set_xlabel('Average article title words distribution/articles\nCollection : {}'.format(collection))
+        ax2.legend(loc="upper right")
+
+        Average_article_chars = list()
+        for listitem in metricsdata:
+            Average_article_chars.append(listitem[2])
+        Average_article_chars = np.asarray(Average_article_chars)
+        n, bins, patches = ax3.hist(Average_article_chars, histtype='bar', label=['Characters'])
+        ax3.set_ylabel('Frequency')
+        ax3.set_xlabel('Average article chars distribution/articles\nCollection : {}'.format(collection))
+        ax3.legend(loc="upper right")
+
+        Average_article_words = list()
+        for listitem in metricsdata:
+            Average_article_words.append(listitem[3])
+        Average_article_words = np.asarray(Average_article_words)
+        n, bins, patches = ax4.hist(Average_article_words, histtype='bar', label=['Words'], color='orange')
+        ax4.set_ylabel('Frequency')
+        ax4.set_xlabel('Average article words distribution/articles\nCollection : {}'.format(collection))
+        ax4.legend(loc="upper right")
+
+        plt.show()
+
 
 
 if __name__ == "__main__":

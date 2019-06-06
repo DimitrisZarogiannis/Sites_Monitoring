@@ -2,6 +2,11 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="4e328230-ec0f-47bf-ab15-9d59ae0f2bbe" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/Sites_Monitoring.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/Sites_Monitoring.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Plots/Article_Metrics_Plot.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Plots/Title_Metrics_Plot.png" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/statistical_analysis_1.py" beforeDir="false" afterPath="$PROJECT_DIR$/statistical_analysis_1.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -13,6 +18,7 @@
   <component name="CoverageDataManager">
     <SUITE FILE_PATH="coverage/Sites_Monitoring$article_content_spider_mongo_.coverage" NAME="article_content_spider(mongo) Coverage Results" MODIFIED="1556211052534" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/Git_Sites_Monitoring$article_content_spider_mongo_.coverage" NAME="article_content_spider(mongo) Coverage Results" MODIFIED="1555668841244" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/Sites_Monitoring$statistical_analysis_1.coverage" NAME="statistical_analysis_1 Coverage Results" MODIFIED="1559816944962" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
   </component>
   <component name="DatabaseView">
     <option name="SHOW_INTERMEDIATE" value="true" />
@@ -33,8 +39,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/statistical_analysis_1.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-2232">
-              <caret line="34" column="1" selection-start-line="34" selection-start-column="1" selection-end-line="34" selection-end-column="1" />
+            <state relative-caret-position="569">
+              <caret line="230" column="18" lean-forward="true" selection-start-line="230" selection-start-column="18" selection-end-line="230" selection-end-column="18" />
               <folding>
                 <element signature="e#18#49#0" expanded="true" />
               </folding>
@@ -77,7 +83,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -89,6 +94,7 @@
           <select />
         </subPane>
       </pane>
+      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -284,17 +290,19 @@
       <workItem from="1559290011095" duration="10086000" />
       <workItem from="1559549254685" duration="10774000" />
       <workItem from="1559635218067" duration="6576000" />
+      <workItem from="1559812361258" duration="3685000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="225510000" />
+    <option name="totallyTimeSpent" value="229195000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-7" y="-7" width="1550" height="838" extended-state="6" />
+    <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
+    <editor active="true" />
     <layout>
       <window_info id="Favorites" order="0" side_tool="true" />
-      <window_info content_ui="combo" id="Project" order="1" visible="true" weight="0.26845637" />
+      <window_info content_ui="combo" id="Project" order="1" visible="true" weight="0.27132195" />
       <window_info id="Structure" order="2" side_tool="true" weight="0.24966443" />
       <window_info anchor="bottom" id="Database Changes" order="0" />
       <window_info anchor="bottom" id="Terminal" order="1" />
@@ -304,7 +312,7 @@
       <window_info anchor="bottom" id="Docker" order="5" show_stripe_button="false" />
       <window_info anchor="bottom" id="Message" order="6" />
       <window_info anchor="bottom" id="Find" order="7" />
-      <window_info anchor="bottom" id="Run" order="8" sideWeight="0.4986577" weight="0.3248227" />
+      <window_info anchor="bottom" id="Run" order="8" sideWeight="0.4986577" weight="0.32394367" />
       <window_info anchor="bottom" id="Debug" order="9" weight="0.4" />
       <window_info anchor="bottom" id="Cvs" order="10" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="11" weight="0.4" />
@@ -312,7 +320,7 @@
       <window_info anchor="right" x="0" y="0" width="337" height="638" id="Documentation" order="0" side_tool="true" weight="0.3295302" />
       <window_info anchor="right" id="Database" order="1" weight="0.3295302" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="2" type="SLIDING" weight="0.4" />
-      <window_info anchor="right" id="SciView" order="3" weight="0.7114094" />
+      <window_info anchor="right" id="SciView" order="3" weight="0.7110874" />
       <window_info anchor="right" id="Ant Build" order="4" weight="0.25" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="5" weight="0.25" />
     </layout>
@@ -334,13 +342,7 @@
     <entry file="file://$PROJECT_DIR$/article_content_spider.py" />
     <entry file="file://$PROJECT_DIR$/article_content_spider(txt).py" />
     <entry file="file://$PROJECT_DIR$/article_content_selenium.py" />
-    <entry file="file://C:/Program Files (x86)/Python37-32/Lib/site-packages/selenium/webdriver/remote/errorhandler.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="189">
-          <caret line="241" selection-start-line="241" selection-end-line="241" />
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://C:/Program Files (x86)/Python37-32/Lib/site-packages/selenium/webdriver/remote/errorhandler.py" />
     <entry file="file://$PROJECT_DIR$/article_content_spider(mongo).py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="55200">
@@ -363,8 +365,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/statistical_analysis_1.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-2232">
-          <caret line="34" column="1" selection-start-line="34" selection-start-column="1" selection-end-line="34" selection-end-column="1" />
+        <state relative-caret-position="569">
+          <caret line="230" column="18" lean-forward="true" selection-start-line="230" selection-start-column="18" selection-end-line="230" selection-end-column="18" />
           <folding>
             <element signature="e#18#49#0" expanded="true" />
           </folding>
