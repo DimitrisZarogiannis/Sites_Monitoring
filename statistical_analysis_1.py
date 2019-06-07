@@ -2,6 +2,7 @@
 from pymongo import MongoClient
 import matplotlib.pyplot as plt
 import numpy as np
+from datetime import datetime
 import re
 
 # Simple statistical analysis class for the following metrics:
@@ -19,7 +20,7 @@ class StatisticalAnalysis:
     articles_conn = list()
     articles_count = 0
     term_freq = {}
-    #Metrics per blog
+    # Metrics per blog
     metrics_data = list()
 
     # Find all article collections in the MongoDB
@@ -69,10 +70,9 @@ class StatisticalAnalysis:
                 article_stats = [title_chars_number,title_words_number,
                                  article_chars_number, article_words_number]
 
-
                 collection_metrics_data.append(article_stats)
 
-            #Create Histogram for every collection's article metrics
+            # Create Histogram for every collection's article metrics
             self.create_collection_histograms(collection,collection_metrics_data)
 
             # Get average metrics for the whole blog collection
@@ -86,7 +86,6 @@ class StatisticalAnalysis:
 
             self.metrics_data.append(stats)
 
-
     # Calculate number of articles per day
     def analyse_site_activity(self):
         for collection in self.articles_conn:
@@ -95,12 +94,11 @@ class StatisticalAnalysis:
 
             for article in articles:
                 article_date = article['date']
-
+                article_date = re.sub(r"[^a-zA-Z0-9- ]", "", article_date)
                 try:
                     posts_on_date = int(dates_dict.get(article_date))
                     posts_on_date += 1
                     dates_dict.update({article_date: posts_on_date})
-
                 except:
                     dates_dict[article_date] = 1
 
@@ -127,7 +125,7 @@ class StatisticalAnalysis:
                 self.populate_term_freq_dict(words_list, genres_list)
 
         for key in self.term_freq:
-            self.term_freq[key] = (self.term_freq[key],round((self.term_freq[key]/total_articles)*100,2))
+            self.term_freq[key] = (self.term_freq[key], round((self.term_freq[key]/total_articles)*100, 2))
         self.genres_term_frequency.insert_one(self.term_freq)
 
     # Fill the term freq dictionary function
@@ -241,10 +239,11 @@ class StatisticalAnalysis:
 
         return total_articles
 
+
 if __name__ == "__main__":
     stat = StatisticalAnalysis()
     stat.find_all_article_collections()
     # stat.calculate_article_metrics()
     # stat.create_histograms()
-    # stat.analyse_site_activity()
-    stat.calculate_genres_frequency()
+    stat.analyse_site_activity()
+    # stat.calculate_genres_frequency()
