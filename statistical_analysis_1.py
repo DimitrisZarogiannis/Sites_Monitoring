@@ -2,7 +2,7 @@
 from pymongo import MongoClient
 import matplotlib.pyplot as plt
 import numpy as np
-from datetime import datetime
+import datetime
 import re
 
 # Simple statistical analysis class for the following metrics:
@@ -73,7 +73,7 @@ class StatisticalAnalysis:
                 collection_metrics_data.append(article_stats)
 
             # Create Histogram for every collection's article metrics
-            self.create_collection_histograms(collection,collection_metrics_data)
+            self.create_collection_histograms(collection, collection_metrics_data)
 
             # Get average metrics for the whole blog collection
             average_title_characters = int(total_title_characters / self.articles_count)
@@ -95,14 +95,100 @@ class StatisticalAnalysis:
             for article in articles:
                 article_date = article['date']
                 article_date = re.sub(r"[^a-zA-Z0-9- ]", "", article_date)
-                try:
-                    posts_on_date = int(dates_dict.get(article_date))
-                    posts_on_date += 1
-                    dates_dict.update({article_date: posts_on_date})
-                except:
-                    dates_dict[article_date] = 1
+                article_date = article_date.strip(' ')
+                if stat.checktype1(article_date):
+                    article_date = stat.checktype1(article_date)
+                elif stat.checktype2(article_date):
+                    article_date = stat.checktype2(article_date)
+                elif stat.checktype3(article_date):
+                    article_date = stat.checktype3(article_date)
+                elif stat.checktype4(article_date):
+                    article_date = stat.checktype4(article_date)
+                elif stat.checktype5(article_date):
+                    article_date = stat.checktype5(article_date)
+                if article_date:
+                    try:
+                        posts_on_date = int(dates_dict.get(article_date))
+                        posts_on_date += 1
+                        dates_dict.update({article_date: posts_on_date})
+                    except:
+                        dates_dict[article_date] = 1
+            if len(dates_dict) > 0:
+                self.blogs_activity.insert_one({'site_activity': [dates_dict, collection]})
 
-            self.blogs_activity.insert_one({'site_activity': [dates_dict, collection]})
+    # Check if date is of type MM DD YY
+    def checktype1(self, datestring):
+        regex = r'\w+\s\d+\s\d+'
+        match = re.match(regex, datestring)
+        if match:
+            try:
+                date = datetime.datetime.strptime(match.group(0), '%B %d %Y').date()
+                return str(date)
+            except:
+                date = datetime.datetime.strptime(match.group(0), '%b %d %Y').date()
+                return str(date)
+        else:
+            return None
+
+    # Check if date is of type DD MM YY
+    def checktype2(self, datestring):
+        regex = r'\d+\s\w+\s\d+'
+        match = re.match(regex, datestring)
+        if match:
+            try:
+                date = datetime.datetime.strptime(match.group(0), '%d %B %Y').date()
+                return str(date)
+            except:
+                return None
+        else:
+            return None
+
+    # Check if date is of type DDMMYY
+    def checktype3(self, datestring):
+        split_string = datestring[0:2] + ' ' + datestring[2:5] + ' ' + datestring[5:]
+        regex = r'\d+\s\w+\s\d+'
+        match = re.match(regex, split_string)
+        if match:
+            try:
+                date = datetime.datetime.strptime(match.group(0), '%d %b %Y').date()
+                return str(date)
+            except:
+                return None
+        else:
+            return None
+
+    # Check if date containts th,rd,nd,st
+    def checktype4(self, datestring):
+        date_endings = ['th', 'rd', 'nd', 'st']
+        regex = r'\w+\s\d+\w+\s\d+'
+        match = re.match(regex, datestring)
+        split_string = str(datestring).split(' ')
+        if match:
+            try:
+                for ending in date_endings:
+                    split_string[1] = str(split_string[1]).replace(ending, '')
+                datestring = ' '.join(split_string)
+                date = datetime.datetime.strptime(datestring, '%B %d %Y').date()
+                return str(date)
+            except:
+                print(match.group())
+                return None
+        else:
+            return None
+
+    # Check if date has no spaces and is of type ex. 05282019
+    def checktype5(self, datestring):
+        split_string = datestring[0:2] + ' ' + datestring[2:4] + ' ' + datestring[4:]
+        regex = r'\d+\s\d+\s\d+'
+        match = re.match(regex, split_string)
+        if match:
+            try:
+                date = datetime.datetime.strptime(match.group(0), '%m %d %Y').date()
+                return str(date)
+            except:
+                return None
+        else:
+            return None
 
     # Calculate the frequency of appearance for the different music genres
     def calculate_genres_frequency(self):
@@ -245,5 +331,9 @@ if __name__ == "__main__":
     stat.find_all_article_collections()
     # stat.calculate_article_metrics()
     # stat.create_histograms()
+    # if stat.checktype5('04282019'):
+    #     stat.checktype5('04282019')
+    # elif not stat.checktype5('04282019'):
+    #     print('None')
     stat.analyse_site_activity()
     # stat.calculate_genres_frequency()
