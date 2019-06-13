@@ -67,23 +67,25 @@ class StatisticalAnalysis:
                 total_article_chars += article_chars_number
                 total_article_words += article_words_number
 
-                article_stats = [title_chars_number,title_words_number,
+                article_stats = [title_chars_number, title_words_number,
                                  article_chars_number, article_words_number]
 
                 collection_metrics_data.append(article_stats)
 
-            # Create Histogram for every collection's article metrics
+            # Create Histogram for every collection's metrics/per article
             self.create_collection_histograms(collection, collection_metrics_data)
 
+            # average_title_characters = int(total_title_characters / self.articles_count)
+            # average_title_words = int(total_title_words / self.articles_count)
+            # average_article_chars = int(total_article_chars / self.articles_count)
+            # average_article_words = int(total_article_words / self.articles_count)
+            #
+            # stats = [average_title_characters, average_title_words,
+            #          average_article_chars, average_article_words]
             # Get average metrics for the whole blog collection
-            average_title_characters = int(total_title_characters / self.articles_count)
-            average_title_words = int(total_title_words / self.articles_count)
-            average_article_chars = int(total_article_chars / self.articles_count)
-            average_article_words = int(total_article_words / self.articles_count)
 
-            stats = [average_title_characters, average_title_words,
-                     average_article_chars, average_article_words]
-
+            stats = [total_title_characters, total_title_words,
+                     total_article_chars, total_article_words]
             self.metrics_data.append(stats)
 
     # Calculate number of articles per day
@@ -113,8 +115,61 @@ class StatisticalAnalysis:
                         dates_dict.update({article_date: posts_on_date})
                     except:
                         dates_dict[article_date] = 1
-            if len(dates_dict) > 0:
-                self.blogs_activity.insert_one({'site_activity': [dates_dict, collection]})
+            # if len(dates_dict) > 0:
+            #     self.blogs_activity.insert_one({'site_activity': [dates_dict, collection]})
+        self.create_timelines()
+
+    # Create latest month's blog activity timelines
+    def create_timelines(self):
+        activity_items = self.blogs_activity.find()
+        for ai in activity_items:
+            collection = ai['site_activity'][1]
+            activity_dict = ai['site_activity'][0]
+            dates_list = list(activity_dict.keys())
+            latest_year = self.find_latest_year(dates_list)
+            latest_month = self.find_latest_month(dates_list, latest_year)
+            print(collection)
+            timeline_data = self.find_timeline_data(dates_list, latest_month,
+                                                    latest_year, activity_dict)
+            print(timeline_data)
+
+    # Find collection's latest post year
+    def find_latest_year(self, dates_list):
+        latest_year = int()
+        try:
+            for post_date in dates_list:
+                post_year = int(post_date[0:4])
+                if post_year > latest_year:
+                    latest_year = post_year
+            return latest_year
+        except:
+            return None
+
+    # Find collection's latest post month
+    def find_latest_month(self, dates, lyear):
+        latest_month = int()
+        try:
+            for post_date in dates:
+                post_year = int(post_date[0:4])
+                post_month = int(post_date[5:7])
+                if post_year == lyear and post_month > latest_month:
+                    latest_month = post_month
+            return latest_month
+        except:
+            return None
+
+    # Find collection's latest month timeline data
+    def find_timeline_data(self, dates, month, year, activity):
+        timeline_dates = []
+        timeline_activity_data = []
+        for post_date in dates:
+            post_year = int(post_date[0:4])
+            post_month = int(post_date[5:7])
+            if post_year == year and post_month == month:
+                timeline_dates.append(post_date)
+        for date in timeline_dates:
+            timeline_activity_data.append((date, activity[date]))
+        return timeline_activity_data
 
     # Check if date is of type MM DD YY
     def checktype1(self, datestring):
@@ -171,7 +226,6 @@ class StatisticalAnalysis:
                 date = datetime.datetime.strptime(datestring, '%B %d %Y').date()
                 return str(date)
             except:
-                print(match.group())
                 return None
         else:
             return None
@@ -232,46 +286,46 @@ class StatisticalAnalysis:
         ax3 = fig2.add_subplot(2, 1, 1)
         ax4 = fig2.add_subplot(2, 1, 2)
 
-        Average_title_chars = list()
+        total_title_chars = list()
         for listitem in self.metrics_data:
-            Average_title_chars.append(listitem[0])
-        Average_title_chars = np.asarray(Average_title_chars)
-        n, bins, patches = ax1.hist(Average_title_chars, histtype='bar', label=['Characters'])
+            total_title_chars.append(listitem[0])
+        total_title_chars = np.asarray(total_title_chars)
+        n, bins, patches = ax1.hist(total_title_chars, histtype='bar', label=['Characters'])
         ax1.set_ylabel('Frequency')
-        ax1.set_xlabel('Average article title chars distribution / blogs')
+        ax1.set_xlabel('Total article title chars distribution / blogs')
         ax1.legend(loc="upper right")
 
-        Average_title_words = list()
+        total_title_words = list()
         for listitem in self.metrics_data:
-            Average_title_words.append(listitem[1])
-        Average_title_words = np.asarray(Average_title_words)
-        n, bins, patches = ax2.hist(Average_title_words, histtype='bar', label=['Words'], color='orange')
+            total_title_words.append(listitem[1])
+        total_title_words = np.asarray(total_title_words)
+        n, bins, patches = ax2.hist(total_title_words, histtype='bar', label=['Words'], color='orange')
         ax2.set_ylabel('Frequency')
-        ax2.set_xlabel('Average article title words distribution / blogs')
+        ax2.set_xlabel('Total article title words distribution / blogs')
         ax2.legend(loc="upper right")
 
-        Average_article_chars = list()
+        total_article_chars = list()
         for listitem in self.metrics_data:
-            Average_article_chars.append(listitem[2])
-        Average_article_chars = np.asarray(Average_article_chars)
-        n, bins, patches = ax3.hist(Average_article_chars, histtype='bar', label=['Characters'])
+            total_article_chars.append(listitem[2])
+        total_article_chars = np.asarray(total_article_chars)
+        n, bins, patches = ax3.hist(total_article_chars, histtype='bar', label=['Characters'])
         ax3.set_ylabel('Frequency')
-        ax3.set_xlabel('Average article chars distribution / blogs')
+        ax3.set_xlabel('Total article chars distribution / blogs')
         ax3.legend(loc="upper right")
 
-        Average_article_words = list()
+        total_article_words = list()
         for listitem in self.metrics_data:
-            Average_article_words.append(listitem[3])
-        Average_article_words = np.asarray(Average_article_words)
-        n, bins, patches = ax4.hist(Average_article_words, histtype='bar', label=['Words'], color='orange')
+            total_article_words.append(listitem[3])
+        total_article_words = np.asarray(total_article_words)
+        n, bins, patches = ax4.hist(total_article_words, histtype='bar', label=['Words'], color='orange')
         ax4.set_ylabel('Frequency')
-        ax4.set_xlabel('Average article words distribution  / blogs')
+        ax4.set_xlabel('Total article words distribution  / blogs')
         ax4.legend(loc="upper right")
 
         plt.show()
 
     # Create article collection metrics histograms
-    def create_collection_histograms(self,collection,metricsdata):
+    def create_collection_histograms(self, collection, metricsdata):
         fig = plt.figure()
         ax1 = fig.add_subplot(2, 1, 1)
         ax2 = fig.add_subplot(2, 1, 2)
@@ -279,40 +333,40 @@ class StatisticalAnalysis:
         ax3 = fig2.add_subplot(2, 1, 1)
         ax4 = fig2.add_subplot(2, 1, 2)
 
-        Average_title_chars = list()
+        Title_chars = list()
         for listitem in metricsdata:
-            Average_title_chars.append(listitem[0])
-        Average_title_chars = np.asarray(Average_title_chars)
-        n, bins, patches = ax1.hist(Average_title_chars, histtype='bar', label=['Characters'])
+            Title_chars.append(listitem[0])
+        Title_chars = np.asarray(Title_chars)
+        n, bins, patches = ax1.hist(Title_chars, histtype='bar', label=['Characters'])
         ax1.set_ylabel('Frequency')
-        ax1.set_xlabel('Average article title chars distribution/articles\nCollection : {}'.format(collection))
+        ax1.set_xlabel('Article title chars distribution/articles\nCollection : {}'.format(collection))
         ax1.legend(loc="upper right")
 
-        Average_title_words = list()
+        Title_words = list()
         for listitem in metricsdata:
-            Average_title_words.append(listitem[1])
-        Average_title_words = np.asarray(Average_title_words)
-        n, bins, patches = ax2.hist(Average_title_words, histtype='bar', label=['Words'], color='orange')
+            Title_words.append(listitem[1])
+        Average_title_words = np.asarray(Title_words)
+        n, bins, patches = ax2.hist(Title_words, histtype='bar', label=['Words'], color='orange')
         ax2.set_ylabel('Frequency')
-        ax2.set_xlabel('Average article title words distribution/articles\nCollection : {}'.format(collection))
+        ax2.set_xlabel('Article title words distribution/articles\nCollection : {}'.format(collection))
         ax2.legend(loc="upper right")
 
-        Average_article_chars = list()
+        Article_chars = list()
         for listitem in metricsdata:
-            Average_article_chars.append(listitem[2])
-        Average_article_chars = np.asarray(Average_article_chars)
-        n, bins, patches = ax3.hist(Average_article_chars, histtype='bar', label=['Characters'])
+            Article_chars.append(listitem[2])
+        Article_chars = np.asarray(Article_chars)
+        n, bins, patches = ax3.hist(Article_chars, histtype='bar', label=['Characters'])
         ax3.set_ylabel('Frequency')
-        ax3.set_xlabel('Average article chars distribution/articles\nCollection : {}'.format(collection))
+        ax3.set_xlabel('Article chars distribution/articles\nCollection : {}'.format(collection))
         ax3.legend(loc="upper right")
 
-        Average_article_words = list()
+        Article_words = list()
         for listitem in metricsdata:
-            Average_article_words.append(listitem[3])
-        Average_article_words = np.asarray(Average_article_words)
-        n, bins, patches = ax4.hist(Average_article_words, histtype='bar', label=['Words'], color='orange')
+            Article_words.append(listitem[3])
+        Article_words = np.asarray(Article_words)
+        n, bins, patches = ax4.hist(Article_words, histtype='bar', label=['Words'], color='orange')
         ax4.set_ylabel('Frequency')
-        ax4.set_xlabel('Average article words distribution/articles\nCollection : {}'.format(collection))
+        ax4.set_xlabel('Article words distribution/articles\nCollection : {}'.format(collection))
         ax4.legend(loc="upper right")
 
         plt.show()
@@ -322,7 +376,6 @@ class StatisticalAnalysis:
         for collection in self.articles_conn:
             articles = list(self.db.get_collection(collection).find())
             total_articles += len(articles)
-
         return total_articles
 
 
@@ -331,9 +384,5 @@ if __name__ == "__main__":
     stat.find_all_article_collections()
     # stat.calculate_article_metrics()
     # stat.create_histograms()
-    # if stat.checktype5('04282019'):
-    #     stat.checktype5('04282019')
-    # elif not stat.checktype5('04282019'):
-    #     print('None')
     stat.analyse_site_activity()
     # stat.calculate_genres_frequency()
