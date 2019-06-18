@@ -1,6 +1,7 @@
 # Import packages
 from pymongo import MongoClient
 import matplotlib.pyplot as plt
+import matplotlib
 import numpy as np
 import datetime
 import re
@@ -122,16 +123,39 @@ class StatisticalAnalysis:
     # Create latest month's blog activity timelines
     def create_timelines(self):
         activity_items = self.blogs_activity.find()
+        data = []
+        collections = []
+        collections_info = []
         for ai in activity_items:
-            collection = ai['site_activity'][1]
+            timeline_data = []
+            collections.append(ai['site_activity'][1])
             activity_dict = ai['site_activity'][0]
             dates_list = list(activity_dict.keys())
             latest_year = self.find_latest_year(dates_list)
-            latest_month = self.find_latest_month(dates_list, latest_year)
-            print(collection)
-            timeline_data = self.find_timeline_data(dates_list, latest_month,
-                                                    latest_year, activity_dict)
-            print(timeline_data)
+            latest_months = self.find_3_latest_months(dates_list, latest_year)
+            for month in latest_months:
+                timeline_data.append(sorted(self.find_timeline_data(dates_list, month,
+                                                                    latest_year, activity_dict), key=lambda x:x[0]))
+            data.append(timeline_data)
+            collections_info.append([latest_year, latest_months])
+
+        for d in data:
+            collection = collections[data.index(d)]
+            info = collections_info[data.index(d)]
+            fig = plt.figure()
+            ax = fig.add_subplot(111)
+            ax.set_xlim(1, 31)
+            plt.xlabel('Dates')
+            plt.ylabel('Number of Posts')
+            plt.grid()
+            for month in d:
+                x = [dt[0] for dt in month]
+                y = [dt[1] for dt in month]
+                ax.plot(x, y, '-8', label=str(info[1][d.index(month)]) + ' \\ '+str(info[0]))
+            plt.legend()
+            plt.title('Collection : {}'.format(collection))
+            plt.savefig(str(str(collection)+'.png'), dpi=300)
+        plt.show()
 
     # Find collection's latest post year
     def find_latest_year(self, dates_list):
@@ -146,15 +170,16 @@ class StatisticalAnalysis:
             return None
 
     # Find collection's latest post month
-    def find_latest_month(self, dates, lyear):
-        latest_month = int()
+    def find_3_latest_months(self, dates, lyear):
+        latest_months = list()
         try:
             for post_date in dates:
                 post_year = int(post_date[0:4])
                 post_month = int(post_date[5:7])
-                if post_year == lyear and post_month > latest_month:
-                    latest_month = post_month
-            return latest_month
+                if post_year == lyear and (post_month not in latest_months):
+                    latest_months.append(int(post_month))
+            latest_months.sort(reverse=True)
+            return latest_months[0:3]
         except:
             return None
 
@@ -168,7 +193,7 @@ class StatisticalAnalysis:
             if post_year == year and post_month == month:
                 timeline_dates.append(post_date)
         for date in timeline_dates:
-            timeline_activity_data.append((date, activity[date]))
+            timeline_activity_data.append((int(date[8:]), activity[date]))
         return timeline_activity_data
 
     # Check if date is of type MM DD YY
