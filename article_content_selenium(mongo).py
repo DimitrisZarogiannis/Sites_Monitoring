@@ -5,7 +5,6 @@ from pymongo import MongoClient
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
-from selenium.webdriver.common.action_chains import ActionChains
 import re
 import time
 
@@ -740,9 +739,9 @@ if __name__ == '__main__':
     # selenium_domain_1.parse()
     # selenium_domain_2 = ArticleSelenium2()
     # selenium_domain_2.parse()
-    # selenium_domain_3 = ArticleSelenium3()
-    # selenium_domain_3.parse()
+    selenium_domain_3 = ArticleSelenium3()
+    selenium_domain_3.parse()
     # selenium_domain_4 = ArticleSelenium4()
     # selenium_domain_4.parse()
-    selenium_domain_5 = ArticleSelenium5()
-    selenium_domain_5.parse()
+    # selenium_domain_5 = ArticleSelenium5()
+    # selenium_domain_5.parse()

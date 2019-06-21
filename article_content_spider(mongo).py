@@ -9,11 +9,11 @@ from scrapy.crawler import CrawlerProcess
 
 class ArticleSpider1(scrapy.Spider):
     name = "article"
-    allowed_domains = ['noisey.vice.com']
-    start_urls = ['https://noisey.vice.com/en_us/topic/noisey-news?page=1']
+    allowed_domains = ['www.vice.com']
+    start_urls = ['https://www.vice.com/en_us/topic/new-music?page=1']
     post_urls = []
     page_id = 2
-    core_link = 'https://noisey.vice.com/en_us/topic/noisey-news?page='
+    core_link = 'https://www.vice.com/en_us/topic/new-music?page='
     client = MongoClient('mongodb://localhost:27017')
     db = client['Articles_DB']
     articles = db.articles
@@ -210,8 +210,8 @@ class ArticleSpider4(scrapy.Spider):
                         if not (article_url in self.problematic_urls):
                             self.post_urls.append(article_url)
                             yield response.follow(article_url, callback=self.parse_article)
-                        else:
-                            self.new_content_flag = 0
+                    else:
+                        self.new_content_flag = 0
 
                 url_repo_id = local_item['_id']
                 self.url_repository.update_one({'_id': url_repo_id}, {'$set': {'post_urls_repo4': self.post_urls}})
@@ -873,11 +873,11 @@ class ArticleSpider13(scrapy.Spider):
 class ArticleSpider14(scrapy.Spider):
     name = "article"
     allowed_domains = ['noiseprn.com']
-    start_urls = ['http://noiseprn.com/']
+    start_urls = ['http://noiseprn.com/category/new-music/']
     post_urls = []
     page_id = 2
     new_content_flag = 1
-    core_link = 'http://noiseprn.com/page/'
+    core_link = 'http://noiseprn.com/category/new-music/page/'
     client = MongoClient('mongodb://localhost:27017')
     db = client['Articles_DB']
     articles = db.articles14
@@ -2796,7 +2796,7 @@ if __name__ == "__main__":
     # process.crawl(ArticleSpider32)
     # process.crawl(ArticleSpider33)
     # process.crawl(ArticleSpider34)
-    process.crawl(ArticleSpider35)
+    # process.crawl(ArticleSpider35)
     # process.crawl(ArticleSpider36)
     # process.crawl(ArticleSpider37)
     process.start()
