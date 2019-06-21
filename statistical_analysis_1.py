@@ -1,7 +1,6 @@
 # Import packages
 from pymongo import MongoClient
 import matplotlib.pyplot as plt
-import matplotlib
 import numpy as np
 import datetime
 import re
@@ -73,21 +72,7 @@ class StatisticalAnalysis:
 
                 collection_metrics_data.append(article_stats)
 
-            # Create Histogram for every collection's metrics/per article
-            self.create_collection_histograms(collection, collection_metrics_data)
-
-            # average_title_characters = int(total_title_characters / self.articles_count)
-            # average_title_words = int(total_title_words / self.articles_count)
-            # average_article_chars = int(total_article_chars / self.articles_count)
-            # average_article_words = int(total_article_words / self.articles_count)
-            #
-            # stats = [average_title_characters, average_title_words,
-            #          average_article_chars, average_article_words]
-            # Get average metrics for the whole blog collection
-
-            stats = [total_title_characters, total_title_words,
-                     total_article_chars, total_article_words]
-            self.metrics_data.append(stats)
+            self.metrics_data = self.metrics_data + collection_metrics_data
 
     # Calculate number of articles per day
     def analyse_site_activity(self):
@@ -278,8 +263,6 @@ class StatisticalAnalysis:
             if gen.endswith('\n'):
                 genres_list[index] = re.sub(r'[\n\r]+$', '', gen)
 
-        total_articles = self.count_articles()
-
         # Load all articles and calculate term appearance frequency
         for collection in self.articles_conn:
             articles = list(self.db.get_collection(collection).find())
@@ -290,7 +273,7 @@ class StatisticalAnalysis:
                 self.populate_term_freq_dict(words_list, genres_list)
 
         for key in self.term_freq:
-            self.term_freq[key] = (self.term_freq[key], round((self.term_freq[key]/total_articles)*100, 2))
+            self.term_freq[key] = (self.term_freq[key])
         self.genres_term_frequency.insert_one(self.term_freq)
 
     # Fill the term freq dictionary function
@@ -317,8 +300,9 @@ class StatisticalAnalysis:
         total_title_chars = np.asarray(total_title_chars)
         n, bins, patches = ax1.hist(total_title_chars, histtype='bar', label=['Characters'])
         ax1.set_ylabel('Frequency')
-        ax1.set_xlabel('Total article title chars distribution / blogs')
+        ax1.set_xlabel('Article title chars distribution')
         ax1.legend(loc="upper right")
+
 
         total_title_words = list()
         for listitem in self.metrics_data:
@@ -326,7 +310,7 @@ class StatisticalAnalysis:
         total_title_words = np.asarray(total_title_words)
         n, bins, patches = ax2.hist(total_title_words, histtype='bar', label=['Words'], color='orange')
         ax2.set_ylabel('Frequency')
-        ax2.set_xlabel('Total article title words distribution / blogs')
+        ax2.set_xlabel('Article title words distribution')
         ax2.legend(loc="upper right")
 
         total_article_chars = list()
@@ -335,7 +319,7 @@ class StatisticalAnalysis:
         total_article_chars = np.asarray(total_article_chars)
         n, bins, patches = ax3.hist(total_article_chars, histtype='bar', label=['Characters'])
         ax3.set_ylabel('Frequency')
-        ax3.set_xlabel('Total article chars distribution / blogs')
+        ax3.set_xlabel('Article chars distribution')
         ax3.legend(loc="upper right")
 
         total_article_words = list()
@@ -344,7 +328,7 @@ class StatisticalAnalysis:
         total_article_words = np.asarray(total_article_words)
         n, bins, patches = ax4.hist(total_article_words, histtype='bar', label=['Words'], color='orange')
         ax4.set_ylabel('Frequency')
-        ax4.set_xlabel('Total article words distribution  / blogs')
+        ax4.set_xlabel('Article words distribution')
         ax4.legend(loc="upper right")
 
         plt.show()
@@ -366,6 +350,7 @@ class StatisticalAnalysis:
         ax1.set_ylabel('Frequency')
         ax1.set_xlabel('Article title chars distribution/articles\nCollection : {}'.format(collection))
         ax1.legend(loc="upper right")
+        plt.savefig(str(str(collection) + '-a' + '.png'), dpi=300)
 
         Title_words = list()
         for listitem in metricsdata:
@@ -375,6 +360,7 @@ class StatisticalAnalysis:
         ax2.set_ylabel('Frequency')
         ax2.set_xlabel('Article title words distribution/articles\nCollection : {}'.format(collection))
         ax2.legend(loc="upper right")
+        plt.savefig(str(str(collection) + '-b' + '.png'), dpi=300)
 
         Article_chars = list()
         for listitem in metricsdata:
@@ -384,6 +370,7 @@ class StatisticalAnalysis:
         ax3.set_ylabel('Frequency')
         ax3.set_xlabel('Article chars distribution/articles\nCollection : {}'.format(collection))
         ax3.legend(loc="upper right")
+        plt.savefig(str(str(collection) + '-c' + '.png'), dpi=300)
 
         Article_words = list()
         for listitem in metricsdata:
@@ -393,6 +380,7 @@ class StatisticalAnalysis:
         ax4.set_ylabel('Frequency')
         ax4.set_xlabel('Article words distribution/articles\nCollection : {}'.format(collection))
         ax4.legend(loc="upper right")
+        plt.savefig(str(str(collection) + '-d' + '.png'), dpi=300)
 
         plt.show()
 
@@ -407,7 +395,7 @@ class StatisticalAnalysis:
 if __name__ == "__main__":
     stat = StatisticalAnalysis()
     stat.find_all_article_collections()
-    # stat.calculate_article_metrics()
-    # stat.create_histograms()
-    stat.analyse_site_activity()
-    # stat.calculate_genres_frequency()
+    #stat.calculate_article_metrics()
+    #stat.create_histograms()
+    # stat.analyse_site_activity()
+    stat.calculate_genres_frequency()
