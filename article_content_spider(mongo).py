@@ -1793,15 +1793,18 @@ class ArticleSpider25(scrapy.Spider):
 
         else:
             self.post_urls = local_item['post_urls_repo25']
-
             if self.new_content_flag == 1:
+                dates = response.xpath('//*/div/div/div[3]/span[1]/text()').extract()
+                titles = response.xpath('//*/ div /div/div[1]/h4/a/text()').extract()
+                self.dates_of_articles = list(map(lambda x, y: (x, y), titles, dates))
+                for article_info in self.dates_of_articles:
+                    self.list_of_dates.append(article_info)
                 for article_url in response.xpath(self.link_xpath).extract():
                     if not (article_url in self.post_urls):
                         self.post_urls.append(article_url)
                         yield response.follow(article_url, callback=self.parse_article)
                     else:
                         self.new_content_flag = 0
-
                 url_repo_id = local_item['_id']
                 self.url_repository.update_one({'_id': url_repo_id}, {'$set': {'post_urls_repo25': self.post_urls}})
                 next_page = requests.get(self.core_link + str(self.page_id))
@@ -2798,6 +2801,6 @@ if __name__ == "__main__":
     # process.crawl(ArticleSpider34)
     # process.crawl(ArticleSpider35)
     # process.crawl(ArticleSpider36)
-    # process.crawl(ArticleSpider37)
+    process.crawl(ArticleSpider37)
     process.start()
 

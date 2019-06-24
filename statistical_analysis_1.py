@@ -395,7 +395,7 @@ class StatisticalAnalysis:
 if __name__ == "__main__":
     stat = StatisticalAnalysis()
     stat.find_all_article_collections()
-    #stat.calculate_article_metrics()
-    #stat.create_histograms()
-    # stat.analyse_site_activity()
-    stat.calculate_genres_frequency()
+    # stat.calculate_article_metrics()
+    # stat.create_histograms()
+    stat.analyse_site_activity()
+    # stat.calculate_genres_frequency()
