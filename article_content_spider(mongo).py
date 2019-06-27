@@ -2316,7 +2316,7 @@ class ArticleSpider31(scrapy.Spider):
     def parse_article(self, response):
         title = response.xpath('//*/header/h1//text()').extract()
         date = response.xpath('//*/header/div/span/time[1]/text()').extract()
-        article = response.xpath('//*/div//p//text()').extract()
+        article = response.xpath('//*/div[@class = "entry-content"]//text()').extract()
         post_link = str(response)
         post_link = post_link.strip('<200 ')
         post_link = post_link.strip('>')
@@ -2795,12 +2795,12 @@ if __name__ == "__main__":
     # process.crawl(ArticleSpider28)
     # process.crawl(ArticleSpider29)
     # process.crawl(ArticleSpider30)
-    # process.crawl(ArticleSpider31)
+    process.crawl(ArticleSpider31)
     # process.crawl(ArticleSpider32)
     # process.crawl(ArticleSpider33)
     # process.crawl(ArticleSpider34)
     # process.crawl(ArticleSpider35)
     # process.crawl(ArticleSpider36)
-    process.crawl(ArticleSpider37)
+    # process.crawl(ArticleSpider37)
     process.start()
 

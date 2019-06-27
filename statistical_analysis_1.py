@@ -1,6 +1,7 @@
 # Import packages
 from pymongo import MongoClient
 import matplotlib.pyplot as plt
+plt.rcdefaults()
 import numpy as np
 import datetime
 import re
@@ -20,8 +21,8 @@ class StatisticalAnalysis:
     articles_conn = list()
     articles_count = 0
     term_freq = {}
-    # Metrics per blog
     metrics_data = list()
+    outliers = []
 
     # Find all article collections in the MongoDB
     def find_all_article_collections(self):
@@ -52,6 +53,7 @@ class StatisticalAnalysis:
 
                 article_title = article['title']
                 article_body = article['article']
+                link = article['post-link']
 
                 # Calculate number of characters/words per article title
                 title_chars_number = len(str(article_title).replace(' ', ''))
@@ -67,12 +69,32 @@ class StatisticalAnalysis:
                 total_article_chars += article_chars_number
                 total_article_words += article_words_number
 
+                # Find outlier articles
+                if article_chars_number > 6000:
+                    self.outliers.append([collection, link])
+
                 article_stats = [title_chars_number, title_words_number,
                                  article_chars_number, article_words_number]
 
                 collection_metrics_data.append(article_stats)
 
+            # Create Histogram for every collection's metrics/per article
+            # self.create_collection_histograms(collection, collection_metrics_data)
+
             self.metrics_data = self.metrics_data + collection_metrics_data
+
+        outlier_collections = {}
+        for item in self.outliers:
+            if item[0] in outlier_collections:
+                outlier_collections[item[0]] += 1
+            else:
+                outlier_collections[item[0]] = 1
+
+        # print(outlier_collections)
+
+        # for outlier_post in self.outliers:
+        #     if outlier_post[0] == 'articles5':
+        #         print(outlier_post)
 
     # Calculate number of articles per day
     def analyse_site_activity(self):
@@ -263,18 +285,44 @@ class StatisticalAnalysis:
             if gen.endswith('\n'):
                 genres_list[index] = re.sub(r'[\n\r]+$', '', gen)
 
-        # Load all articles and calculate term appearance frequency
+        # Load all collection's articles and calculate term appearance frequency
         for collection in self.articles_conn:
+            collection_tf_data = [0] * len(genres_list)
             articles = list(self.db.get_collection(collection).find())
 
             for article in articles:
                 article_body = article['article']
                 words_list = article_body.split(' ')
+                # Calculate genre's terms frequency for every collection
+                for word in words_list:
+                    if word in genres_list:
+                        index = genres_list.index(word)
+                        collection_tf_data[index] += 1
+
+                # Calculate terms total appearance frequencies
                 self.populate_term_freq_dict(words_list, genres_list)
 
-        for key in self.term_freq:
-            self.term_freq[key] = (self.term_freq[key])
-        self.genres_term_frequency.insert_one(self.term_freq)
+            # Create Bar Charts for every collection's term frequency data
+            genres = []
+            f_values = []
+            for tf in collection_tf_data:
+                if tf > 0:
+                    index = collection_tf_data.index(tf)
+                    genres.append(genres_list[index])
+                    f_values.append(tf)
+
+            y_pos = np.arange(len(genres))
+            plt.bar(y_pos, f_values, align='center', alpha=0.5)
+            plt.xticks(y_pos, genres, rotation=90)
+            plt.ylabel('Frequency')
+            plt.xlabel('Genres')
+            plt.title('Collection : {}'.format(collection))
+            plt.tight_layout()
+            plt.savefig(str(str(collection) + '_bc' + '.png'))
+            plt.show()
+
+        # Insert total genre term frequencies data for all the collections
+        # self.genres_term_frequency.insert_one(self.term_freq)
 
     # Fill the term freq dictionary function
     def populate_term_freq_dict(self, wordslist, termslist):
@@ -397,5 +445,5 @@ if __name__ == "__main__":
     stat.find_all_article_collections()
     # stat.calculate_article_metrics()
     # stat.create_histograms()
-    stat.analyse_site_activity()
-    # stat.calculate_genres_frequency()
+    # stat.analyse_site_activity()
+    stat.calculate_genres_frequency()
