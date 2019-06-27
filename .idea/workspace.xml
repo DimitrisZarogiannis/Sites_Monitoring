@@ -1,11 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="4e328230-ec0f-47bf-ab15-9d59ae0f2bbe" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/article_content_spider(mongo).py" beforeDir="false" afterPath="$PROJECT_DIR$/article_content_spider(mongo).py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/statistical_analysis_1.py" beforeDir="false" afterPath="$PROJECT_DIR$/statistical_analysis_1.py" afterDir="false" />
-    </list>
+    <list default="true" id="4e328230-ec0f-47bf-ab15-9d59ae0f2bbe" name="Default Changelist" comment="" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -36,8 +32,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/statistical_analysis_1.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-3216">
-              <caret line="143" column="29" selection-start-line="143" selection-start-column="16" selection-end-line="143" selection-end-column="29" />
+            <state relative-caret-position="164">
+              <caret line="312" lean-forward="true" selection-start-line="312" selection-end-line="312" />
               <folding>
                 <element signature="e#18#49#0" expanded="true" />
               </folding>
@@ -81,7 +77,7 @@
       </list>
     </option>
   </component>
-  <component name="ProjectFrameBounds" extendedState="7">
+  <component name="ProjectFrameBounds" extendedState="6">
     <option name="x" value="-10" />
     <option name="width" value="980" />
     <option name="height" value="525" />
@@ -314,16 +310,15 @@
       <workItem from="1561100856139" duration="9529000" />
       <workItem from="1561362151116" duration="10032000" />
       <workItem from="1561448993454" duration="5890000" />
-      <workItem from="1561620381779" duration="9481000" />
+      <workItem from="1561620381779" duration="9769000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="329790000" />
+    <option name="totallyTimeSpent" value="330078000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-7" y="-7" width="1550" height="838" extended-state="6" />
-    <editor active="true" />
     <layout>
       <window_info id="Favorites" order="0" side_tool="true" />
       <window_info content_ui="combo" id="Project" order="1" visible="true" weight="0.13691275" />
@@ -399,8 +394,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/statistical_analysis_1.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-3216">
-          <caret line="143" column="29" selection-start-line="143" selection-start-column="16" selection-end-line="143" selection-end-column="29" />
+        <state relative-caret-position="164">
+          <caret line="312" lean-forward="true" selection-start-line="312" selection-end-line="312" />
           <folding>
             <element signature="e#18#49#0" expanded="true" />
           </folding>
