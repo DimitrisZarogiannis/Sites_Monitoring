@@ -21,6 +21,7 @@ class StatisticalAnalysis:
     articles_conn = list()
     articles_count = 0
     term_freq = {}
+    terms_dates = []
     metrics_data = list()
     outliers = []
 
@@ -285,12 +286,29 @@ class StatisticalAnalysis:
             if gen.endswith('\n'):
                 genres_list[index] = re.sub(r'[\n\r]+$', '', gen)
 
+        self.terms_dates = [{} for _ in range(len(genres_list))]
+
         # Load all collection's articles and calculate term appearance frequency
         for collection in self.articles_conn:
             collection_tf_data = [0] * len(genres_list)
             articles = list(self.db.get_collection(collection).find())
 
             for article in articles:
+                article_date = article['date']
+                article_date = re.sub(r"[^a-zA-Z0-9- ]", "", article_date)
+                article_date = article_date.strip(' ')
+                if stat.checktype1(article_date):
+                    article_date = stat.checktype1(article_date)
+                elif stat.checktype2(article_date):
+                    article_date = stat.checktype2(article_date)
+                elif stat.checktype3(article_date):
+                    article_date = stat.checktype3(article_date)
+                elif stat.checktype4(article_date):
+                    article_date = stat.checktype4(article_date)
+                elif stat.checktype5(article_date):
+                    article_date = stat.checktype5(article_date)
+                else:
+                    article_date = None
                 article_body = article['article']
                 words_list = article_body.split(' ')
                 # Calculate genre's terms frequency for every collection
@@ -300,7 +318,10 @@ class StatisticalAnalysis:
                         collection_tf_data[index] += 1
 
                 # Calculate terms total appearance frequencies
-                self.populate_term_freq_dict(words_list, genres_list)
+                if article_date:
+                    self.populate_term_freq_dict(words_list, genres_list, article_date)
+                else:
+                    self.populate_term_freq_dict2(words_list, genres_list)
 
             # Create Bar Charts for every collection's term frequency data
             genres = []
@@ -322,10 +343,76 @@ class StatisticalAnalysis:
             plt.show()
 
         # Insert total genre term frequencies data for all the collections
-        # self.genres_term_frequency.insert_one(self.term_freq)
+        self.genres_term_frequency.insert_one(self.term_freq)
+
+        # Insert total genres tf time-series data for all collections // Create tf time-series diagrams
+        timeseries_data = list(map(lambda x, y: [x, y], genres_list, self.terms_dates))
+        self.genres_term_frequency.insert_one({'item': timeseries_data})
+        self.create_tf_timelines()
+
+    # Create Music-Genres TF time-series for the latest 3 months of data
+    def create_tf_timelines(self):
+        genres_data = self.genres_term_frequency.find()
+        timeseries_data = genres_data[1]['item']
+        plot_data = []
+        genres_info = []
+        genres = []
+        for genre_tf in timeseries_data:
+            genre_plot_data = []
+            genre = genre_tf[0]
+            dates_list = list(genre_tf[1].keys())
+            latest_year = self.find_latest_year(dates_list)
+            latest_months = self.find_3_latest_months(dates_list, latest_year)
+            for month in latest_months:
+                genre_plot_data.append(sorted(self.find_timeline_data(dates_list, month,
+                                                                    latest_year, genre_tf[1]), key=lambda x:x[0]))
+
+            plot_data.append(genre_plot_data)
+            genres.append(genre)
+            genres_info.append([latest_year, latest_months])
+
+        for d in plot_data:
+            genre = genres[plot_data.index(d)]
+            info = genres_info[plot_data.index(d)]
+            fig = plt.figure()
+            ax = fig.add_subplot(111)
+            ax.set_xlim(1, 31)
+            plt.xlabel('Dates')
+            plt.ylabel('Number of Posts')
+            plt.grid()
+            for month in d:
+                x = [dt[0] for dt in month]
+                y = [dt[1] for dt in month]
+                ax.plot(x, y, '-8', label=str(info[1][d.index(month)]) + ' \\ '+str(info[0]))
+            plt.legend()
+            plt.title('Genre Term : {}'.format(genre))
+            plt.savefig(str(str(genre)+'.png'), dpi=300)
+        plt.show()
 
     # Fill the term freq dictionary function
-    def populate_term_freq_dict(self, wordslist, termslist):
+    def populate_term_freq_dict(self, wordslist, termslist, date):
+        wordslist = list(dict.fromkeys(wordslist))
+        for word in wordslist:
+            if word in termslist:
+                term_index = termslist.index(word)
+                term_dates_dict = self.terms_dates[term_index]
+
+                try:
+                    posts_on_date = int(term_dates_dict.get(date))
+                    posts_on_date += 1
+                    term_dates_dict.update({date: posts_on_date})
+                except:
+                    term_dates_dict.update({date: 1})
+
+                self.terms_dates[term_index] = term_dates_dict
+
+                try:
+                    self.term_freq[word] += 1
+                except:
+                    self.term_freq.update({word: 1})
+
+    # Fill the term freq dictionary function
+    def populate_term_freq_dict2(self, wordslist, termslist):
         for word in wordslist:
             if word in termslist:
                 try:
@@ -445,5 +532,6 @@ if __name__ == "__main__":
     stat.find_all_article_collections()
     # stat.calculate_article_metrics()
     # stat.create_histograms()
+    stat.create_tf_timelines()
     # stat.analyse_site_activity()
-    stat.calculate_genres_frequency()
+    # stat.calculate_genres_frequency()
