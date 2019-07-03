@@ -5,6 +5,8 @@ plt.rcdefaults()
 import numpy as np
 import datetime
 import re
+from matplotlib.ticker import MaxNLocator
+import pendulum
 
 # Simple statistical analysis class for the following metrics:
 # 1) Number of characters per article title
@@ -204,6 +206,34 @@ class StatisticalAnalysis:
             timeline_activity_data.append((int(date[8:]), activity[date]))
         return timeline_activity_data
 
+    # Find collection's latest month timeline data by week number
+    def find_timeline_data_week(self, dates, month, year, activity):
+        timeline_dates = []
+        timeline_activity_data = []
+        for post_date in dates:
+            post_year = int(post_date[0:4])
+            post_month = int(post_date[5:7])
+            if post_year == year and post_month == month:
+                timeline_dates.append(post_date)
+        for date in timeline_dates:
+            dt = pendulum.parse(date)
+            week_number = dt.week_of_month
+            week_index = None
+            if len(timeline_activity_data) > 0:
+                for item in timeline_activity_data:
+                    if week_index is None:
+                        if week_number == int(item[0]):
+                            week_index = timeline_activity_data.index(item)
+                if week_index is not None:
+                    week_data = timeline_activity_data[week_index]
+                    week_data[1] += activity[date]
+                    timeline_activity_data[week_index] = week_data
+                else:
+                    timeline_activity_data.append([week_number, activity[date]])
+            else:
+                timeline_activity_data.append([week_number, activity[date]])
+        return timeline_activity_data
+
     # Check if date is of type MM DD YY
     def checktype1(self, datestring):
         regex = r'\w+\s\d+\s\d+'
@@ -324,30 +354,30 @@ class StatisticalAnalysis:
                     self.populate_term_freq_dict2(words_list, genres_list)
 
             # Create Bar Charts for every collection's term frequency data
-            genres = []
-            f_values = []
-            for tf in collection_tf_data:
-                if tf > 0:
-                    index = collection_tf_data.index(tf)
-                    genres.append(genres_list[index])
-                    f_values.append(tf)
-
-            y_pos = np.arange(len(genres))
-            plt.bar(y_pos, f_values, align='center', alpha=0.5)
-            plt.xticks(y_pos, genres, rotation=90)
-            plt.ylabel('Frequency')
-            plt.xlabel('Genres')
-            plt.title('Collection : {}'.format(collection))
-            plt.tight_layout()
-            plt.savefig(str(str(collection) + '_bc' + '.png'))
-            plt.show()
+            # genres = []
+            # f_values = []
+            # for tf in collection_tf_data:
+            #     if tf > 0:
+            #         index = collection_tf_data.index(tf)
+            #         genres.append(genres_list[index])
+            #         f_values.append(tf)
+            #
+            # y_pos = np.arange(len(genres))
+            # plt.bar(y_pos, f_values, align='center', alpha=0.5)
+            # plt.xticks(y_pos, genres, rotation=90)
+            # plt.ylabel('Frequency')
+            # plt.xlabel('Genres')
+            # plt.title('Collection : {}'.format(collection))
+            # plt.tight_layout()
+            # plt.savefig(str(str(collection) + '_bc' + '.png'))
+            # plt.show()
 
         # Insert total genre term frequencies data for all the collections
-        self.genres_term_frequency.insert_one(self.term_freq)
+        # self.genres_term_frequency.insert_one(self.term_freq)
 
         # Insert total genres tf time-series data for all collections // Create tf time-series diagrams
         timeseries_data = list(map(lambda x, y: [x, y], genres_list, self.terms_dates))
-        self.genres_term_frequency.insert_one({'item': timeseries_data})
+        # self.genres_term_frequency.insert_one({'item': timeseries_data})
         self.create_tf_timelines()
 
     # Create Music-Genres TF time-series for the latest 3 months of data
@@ -364,20 +394,23 @@ class StatisticalAnalysis:
             latest_year = self.find_latest_year(dates_list)
             latest_months = self.find_3_latest_months(dates_list, latest_year)
             for month in latest_months:
-                genre_plot_data.append(sorted(self.find_timeline_data(dates_list, month,
-                                                                    latest_year, genre_tf[1]), key=lambda x:x[0]))
+                genre_plot_data.append(sorted(self.find_timeline_data_week(dates_list, month,
+                                                                           latest_year, genre_tf[1]), key=lambda x:x[0]))
 
             plot_data.append(genre_plot_data)
             genres.append(genre)
             genres_info.append([latest_year, latest_months])
+
 
         for d in plot_data:
             genre = genres[plot_data.index(d)]
             info = genres_info[plot_data.index(d)]
             fig = plt.figure()
             ax = fig.add_subplot(111)
-            ax.set_xlim(1, 31)
-            plt.xlabel('Dates')
+            ax.set_xlim(1, 5)
+            ax.yaxis.set_major_locator(MaxNLocator(nbins=4, min_n_ticks=1, integer=True))
+            ax.xaxis.set_major_locator(MaxNLocator(nbins=4, min_n_ticks=1, integer=True))
+            plt.xlabel('Weeks')
             plt.ylabel('Number of Posts')
             plt.grid()
             for month in d:
@@ -387,7 +420,7 @@ class StatisticalAnalysis:
             plt.legend()
             plt.title('Genre Term : {}'.format(genre))
             plt.savefig(str(str(genre)+'.png'), dpi=300)
-        plt.show()
+        #plt.show()
 
     # Fill the term freq dictionary function
     def populate_term_freq_dict(self, wordslist, termslist, date):
@@ -532,6 +565,7 @@ if __name__ == "__main__":
     stat.find_all_article_collections()
     # stat.calculate_article_metrics()
     # stat.create_histograms()
+    #print(stat.count_articles())
     stat.create_tf_timelines()
     # stat.analyse_site_activity()
     # stat.calculate_genres_frequency()
