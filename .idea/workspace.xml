@@ -3,60 +3,8 @@
   <component name="ChangeListManager">
     <list default="true" id="4e328230-ec0f-47bf-ab15-9d59ae0f2bbe" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Plots/genres-tf/genres timelines/African.png" beforeDir="false" afterPath="$PROJECT_DIR$/Plots/genres-tf/genres timelines/African.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Plots/genres-tf/genres timelines/Alternative.png" beforeDir="false" afterPath="$PROJECT_DIR$/Plots/genres-tf/genres timelines/Alternative.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Plots/genres-tf/genres timelines/Ambient.png" beforeDir="false" afterPath="$PROJECT_DIR$/Plots/genres-tf/genres timelines/Ambient.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Plots/genres-tf/genres timelines/Americana.png" beforeDir="false" afterPath="$PROJECT_DIR$/Plots/genres-tf/genres timelines/Americana.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Plots/genres-tf/genres timelines/Bass.png" beforeDir="false" afterPath="$PROJECT_DIR$/Plots/genres-tf/genres timelines/Bass.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Plots/genres-tf/genres timelines/Blues.png" beforeDir="false" afterPath="$PROJECT_DIR$/Plots/genres-tf/genres timelines/Blues.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Plots/genres-tf/genres timelines/Breakbeat.png" beforeDir="false" afterPath="$PROJECT_DIR$/Plots/genres-tf/genres timelines/Breakbeat.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Plots/genres-tf/genres timelines/Children's Music.png" beforeDir="false" afterPath="$PROJECT_DIR$/Plots/genres-tf/genres timelines/Children's Music.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Plots/genres-tf/genres timelines/Christian.png" beforeDir="false" afterPath="$PROJECT_DIR$/Plots/genres-tf/genres timelines/Christian.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Plots/genres-tf/genres timelines/Christmas.png" beforeDir="false" afterPath="$PROJECT_DIR$/Plots/genres-tf/genres timelines/Christmas.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Plots/genres-tf/genres timelines/Classical.png" beforeDir="false" afterPath="$PROJECT_DIR$/Plots/genres-tf/genres timelines/Classical.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Plots/genres-tf/genres timelines/Country.png" beforeDir="false" afterPath="$PROJECT_DIR$/Plots/genres-tf/genres timelines/Country.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Plots/genres-tf/genres timelines/Dance.png" beforeDir="false" afterPath="$PROJECT_DIR$/Plots/genres-tf/genres timelines/Dance.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Plots/genres-tf/genres timelines/Dancehall.png" beforeDir="false" afterPath="$PROJECT_DIR$/Plots/genres-tf/genres timelines/Dancehall.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Plots/genres-tf/genres timelines/Disco.png" beforeDir="false" afterPath="$PROJECT_DIR$/Plots/genres-tf/genres timelines/Disco.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Plots/genres-tf/genres timelines/Downbeat.png" beforeDir="false" afterPath="$PROJECT_DIR$/Plots/genres-tf/genres timelines/Downbeat.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Plots/genres-tf/genres timelines/Dub.png" beforeDir="false" afterPath="$PROJECT_DIR$/Plots/genres-tf/genres timelines/Dub.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Plots/genres-tf/genres timelines/Dubstep.png" beforeDir="false" afterPath="$PROJECT_DIR$/Plots/genres-tf/genres timelines/Dubstep.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Plots/genres-tf/genres timelines/EDM.png" beforeDir="false" afterPath="$PROJECT_DIR$/Plots/genres-tf/genres timelines/EDM.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Plots/genres-tf/genres timelines/Electronic.png" beforeDir="false" afterPath="$PROJECT_DIR$/Plots/genres-tf/genres timelines/Electronic.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Plots/genres-tf/genres timelines/Electronica.png" beforeDir="false" afterPath="$PROJECT_DIR$/Plots/genres-tf/genres timelines/Electronica.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Plots/genres-tf/genres timelines/Experimental.png" beforeDir="false" afterPath="$PROJECT_DIR$/Plots/genres-tf/genres timelines/Experimental.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Plots/genres-tf/genres timelines/Folk.png" beforeDir="false" afterPath="$PROJECT_DIR$/Plots/genres-tf/genres timelines/Folk.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Plots/genres-tf/genres timelines/Folklore.png" beforeDir="false" afterPath="$PROJECT_DIR$/Plots/genres-tf/genres timelines/Folklore.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Plots/genres-tf/genres timelines/Funk.png" beforeDir="false" afterPath="$PROJECT_DIR$/Plots/genres-tf/genres timelines/Funk.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Plots/genres-tf/genres timelines/Garage.png" beforeDir="false" afterPath="$PROJECT_DIR$/Plots/genres-tf/genres timelines/Garage.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Plots/genres-tf/genres timelines/Hardcore.png" beforeDir="false" afterPath="$PROJECT_DIR$/Plots/genres-tf/genres timelines/Hardcore.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Plots/genres-tf/genres timelines/Hiphop.png" beforeDir="false" afterPath="$PROJECT_DIR$/Plots/genres-tf/genres timelines/Hiphop.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Plots/genres-tf/genres timelines/House.png" beforeDir="false" afterPath="$PROJECT_DIR$/Plots/genres-tf/genres timelines/House.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Plots/genres-tf/genres timelines/Indie.png" beforeDir="false" afterPath="$PROJECT_DIR$/Plots/genres-tf/genres timelines/Indie.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Plots/genres-tf/genres timelines/Industrial.png" beforeDir="false" afterPath="$PROJECT_DIR$/Plots/genres-tf/genres timelines/Industrial.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Plots/genres-tf/genres timelines/Inspirational.png" beforeDir="false" afterPath="$PROJECT_DIR$/Plots/genres-tf/genres timelines/Inspirational.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Plots/genres-tf/genres timelines/Instrumental.png" beforeDir="false" afterPath="$PROJECT_DIR$/Plots/genres-tf/genres timelines/Instrumental.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Plots/genres-tf/genres timelines/Jazz.png" beforeDir="false" afterPath="$PROJECT_DIR$/Plots/genres-tf/genres timelines/Jazz.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Plots/genres-tf/genres timelines/Jungle.png" beforeDir="false" afterPath="$PROJECT_DIR$/Plots/genres-tf/genres timelines/Jungle.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Plots/genres-tf/genres timelines/Karaoke.png" beforeDir="false" afterPath="$PROJECT_DIR$/Plots/genres-tf/genres timelines/Karaoke.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Plots/genres-tf/genres timelines/Latin.png" beforeDir="false" afterPath="$PROJECT_DIR$/Plots/genres-tf/genres timelines/Latin.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Plots/genres-tf/genres timelines/Lounge.png" beforeDir="false" afterPath="$PROJECT_DIR$/Plots/genres-tf/genres timelines/Lounge.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Plots/genres-tf/genres timelines/Mariachi.png" beforeDir="false" afterPath="$PROJECT_DIR$/Plots/genres-tf/genres timelines/Mariachi.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Plots/genres-tf/genres timelines/Metal.png" beforeDir="false" afterPath="$PROJECT_DIR$/Plots/genres-tf/genres timelines/Metal.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Plots/genres-tf/genres timelines/Musical.png" beforeDir="false" afterPath="$PROJECT_DIR$/Plots/genres-tf/genres timelines/Musical.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Plots/genres-tf/genres timelines/Opera.png" beforeDir="false" afterPath="$PROJECT_DIR$/Plots/genres-tf/genres timelines/Opera.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Plots/genres-tf/genres timelines/Pop.png" beforeDir="false" afterPath="$PROJECT_DIR$/Plots/genres-tf/genres timelines/Pop.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Plots/genres-tf/genres timelines/R&amp;B.png" beforeDir="false" afterPath="$PROJECT_DIR$/Plots/genres-tf/genres timelines/R&amp;B.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Plots/genres-tf/genres timelines/Reggae.png" beforeDir="false" afterPath="$PROJECT_DIR$/Plots/genres-tf/genres timelines/Reggae.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Plots/genres-tf/genres timelines/Reggaeton.png" beforeDir="false" afterPath="$PROJECT_DIR$/Plots/genres-tf/genres timelines/Reggaeton.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Plots/genres-tf/genres timelines/Rock.png" beforeDir="false" afterPath="$PROJECT_DIR$/Plots/genres-tf/genres timelines/Rock.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Plots/genres-tf/genres timelines/Rockabilly.png" beforeDir="false" afterPath="$PROJECT_DIR$/Plots/genres-tf/genres timelines/Rockabilly.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Plots/genres-tf/genres timelines/Salsa.png" beforeDir="false" afterPath="$PROJECT_DIR$/Plots/genres-tf/genres timelines/Salsa.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Plots/genres-tf/genres timelines/Samba.png" beforeDir="false" afterPath="$PROJECT_DIR$/Plots/genres-tf/genres timelines/Samba.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Plots/genres-tf/genres timelines/Soul.png" beforeDir="false" afterPath="$PROJECT_DIR$/Plots/genres-tf/genres timelines/Soul.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Plots/genres-tf/genres timelines/Soundtrack.png" beforeDir="false" afterPath="$PROJECT_DIR$/Plots/genres-tf/genres timelines/Soundtrack.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Plots/genres-tf/genres timelines/Surf.png" beforeDir="false" afterPath="$PROJECT_DIR$/Plots/genres-tf/genres timelines/Surf.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Plots/genres-tf/genres timelines/Tango.png" beforeDir="false" afterPath="$PROJECT_DIR$/Plots/genres-tf/genres timelines/Tango.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/chromedriver.exe" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/genre_list.txt" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/statistical_analysis_1.py" beforeDir="false" afterPath="$PROJECT_DIR$/statistical_analysis_1.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -89,8 +37,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/statistical_analysis_1.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="452">
-              <caret line="386" column="19" selection-start-line="386" selection-start-column="18" selection-end-line="386" selection-end-column="19" />
+            <state relative-caret-position="340">
+              <caret line="17" lean-forward="true" selection-start-line="17" selection-end-line="17" />
               <folding>
                 <element signature="e#18#49#0" expanded="true" />
               </folding>
@@ -150,7 +98,7 @@
     <property name="ASKED_SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/Plots" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../.." />
     <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
     <property name="nodejs_npm_path_reset_for_default_project" value="true" />
     <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
@@ -360,17 +308,19 @@
       <workItem from="1562054062728" duration="9794000" />
       <workItem from="1562144515103" duration="3379000" />
       <workItem from="1562148487900" duration="7098000" />
+      <workItem from="1562570603569" duration="18588000" />
+      <workItem from="1562607345541" duration="14424000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="360561000" />
+    <option name="totallyTimeSpent" value="393573000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-7" y="-7" width="1550" height="838" extended-state="6" />
     <layout>
       <window_info id="Favorites" order="0" side_tool="true" />
-      <window_info content_ui="combo" id="Project" order="1" visible="true" weight="0.14496644" />
+      <window_info content_ui="combo" id="Project" order="1" visible="true" weight="0.14899328" />
       <window_info id="Structure" order="2" side_tool="true" weight="0.24966443" />
       <window_info anchor="bottom" id="Database Changes" order="0" />
       <window_info anchor="bottom" id="Terminal" order="1" />
@@ -388,9 +338,9 @@
       <window_info anchor="right" x="0" y="0" width="337" height="638" id="Documentation" order="0" side_tool="true" weight="0.3295302" />
       <window_info anchor="right" id="Database" order="1" weight="0.3295302" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="2" type="SLIDING" weight="0.4" />
-      <window_info anchor="right" id="SciView" order="3" weight="0.67785233" />
-      <window_info anchor="right" id="Ant Build" order="4" weight="0.25" />
-      <window_info anchor="right" content_ui="combo" id="Hierarchy" order="5" weight="0.25" />
+      <window_info anchor="right" id="Ant Build" order="3" weight="0.25" />
+      <window_info anchor="right" content_ui="combo" id="Hierarchy" order="4" weight="0.25" />
+      <window_info anchor="right" id="SciView" order="5" weight="0.67785233" />
     </layout>
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -409,7 +359,7 @@
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/Sites_Monitoring$article_content_spider_mongo_.coverage" NAME="article_content_spider(mongo) Coverage Results" MODIFIED="1561622881643" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/Sites_Monitoring$article_content_spider_txt_.coverage" NAME="article_content_spider(txt) Coverage Results" MODIFIED="1554968776761" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
-    <SUITE FILE_PATH="coverage/Sites_Monitoring$statistical_analysis_1.coverage" NAME="statistical_analysis_1 Coverage Results" MODIFIED="1562155502712" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/Sites_Monitoring$statistical_analysis_1.coverage" NAME="statistical_analysis_1 Coverage Results" MODIFIED="1562671512335" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/Sites_Monitoring$test.coverage" NAME="test Coverage Results" MODIFIED="1554795483324" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$USER_HOME$/PycharmProjects/testmong" />
     <SUITE FILE_PATH="coverage/Git_Sites_Monitoring$article_content_spider_mongo_.coverage" NAME="article_content_spider(mongo) Coverage Results" MODIFIED="1556189448330" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/Sites_Monitoring$article_content_selenium_mongo_.coverage" NAME="article_content_selenium(mongo) Coverage Results" MODIFIED="1561107574110" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
@@ -431,22 +381,22 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/statistical_analysis_1.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="452">
-          <caret line="386" column="19" selection-start-line="386" selection-start-column="18" selection-end-line="386" selection-end-column="19" />
-          <folding>
-            <element signature="e#18#49#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/article_content_spider(mongo).py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="44960">
           <caret line="2252" selection-start-line="2252" selection-end-line="2252" />
           <folding>
             <element signature="e#0#13#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/statistical_analysis_1.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="340">
+          <caret line="17" lean-forward="true" selection-start-line="17" selection-end-line="17" />
+          <folding>
+            <element signature="e#18#49#0" expanded="true" />
           </folding>
         </state>
       </provider>

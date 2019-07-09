@@ -8,6 +8,8 @@ import re
 from matplotlib.ticker import MaxNLocator
 import pendulum
 
+plt.style.use('seaborn')
+
 # Simple statistical analysis class for the following metrics:
 # 1) Number of characters per article title
 # 2) Number of words per article title
@@ -24,6 +26,7 @@ class StatisticalAnalysis:
     articles_count = 0
     term_freq = {}
     terms_dates = []
+    genre_posts_no = 0
     metrics_data = list()
     outliers = []
 
@@ -207,7 +210,7 @@ class StatisticalAnalysis:
         return timeline_activity_data
 
     # Find collection's latest month timeline data by week number
-    def find_timeline_data_week(self, dates, month, year, activity):
+    def find_timeline_data_2(self, dates, month, year, activity):
         timeline_dates = []
         timeline_activity_data = []
         for post_date in dates:
@@ -216,22 +219,7 @@ class StatisticalAnalysis:
             if post_year == year and post_month == month:
                 timeline_dates.append(post_date)
         for date in timeline_dates:
-            dt = pendulum.parse(date)
-            week_number = dt.week_of_month
-            week_index = None
-            if len(timeline_activity_data) > 0:
-                for item in timeline_activity_data:
-                    if week_index is None:
-                        if week_number == int(item[0]):
-                            week_index = timeline_activity_data.index(item)
-                if week_index is not None:
-                    week_data = timeline_activity_data[week_index]
-                    week_data[1] += activity[date]
-                    timeline_activity_data[week_index] = week_data
-                else:
-                    timeline_activity_data.append([week_number, activity[date]])
-            else:
-                timeline_activity_data.append([week_number, activity[date]])
+            timeline_activity_data.append([date, activity[date]])
         return timeline_activity_data
 
     # Check if date is of type MM DD YY
@@ -347,11 +335,14 @@ class StatisticalAnalysis:
                         index = genres_list.index(word)
                         collection_tf_data[index] += 1
 
+                # Calculates the number of posts with at least 1 genre-term
+                self.find_posts_mentioning_genres(words_list, genres_list)
+
                 # Calculate terms total appearance frequencies
                 if article_date:
                     self.populate_term_freq_dict(words_list, genres_list, article_date)
-                else:
-                    self.populate_term_freq_dict2(words_list, genres_list)
+
+                self.populate_term_freq_dict2(words_list, genres_list)
 
             # Create Bar Charts for every collection's term frequency data
             # genres = []
@@ -377,8 +368,10 @@ class StatisticalAnalysis:
 
         # Insert total genres tf time-series data for all collections // Create tf time-series diagrams
         timeseries_data = list(map(lambda x, y: [x, y], genres_list, self.terms_dates))
-        # self.genres_term_frequency.insert_one({'item': timeseries_data})
-        self.create_tf_timelines()
+        self.genres_term_frequency.insert_one({'item': timeseries_data})
+        # self.create_tf_timelines()
+
+        print('Number of posts containing at least 1 genre term: {}'.format(self.genre_posts_no))
 
     # Create Music-Genres TF time-series for the latest 3 months of data
     def create_tf_timelines(self):
@@ -392,35 +385,114 @@ class StatisticalAnalysis:
             genre = genre_tf[0]
             dates_list = list(genre_tf[1].keys())
             latest_year = self.find_latest_year(dates_list)
-            latest_months = self.find_3_latest_months(dates_list, latest_year)
+            latest_months = sorted(self.find_3_latest_months(dates_list, latest_year), reverse=False)
             for month in latest_months:
-                genre_plot_data.append(sorted(self.find_timeline_data_week(dates_list, month,
-                                                                           latest_year, genre_tf[1]), key=lambda x:x[0]))
-
-            plot_data.append(genre_plot_data)
-            genres.append(genre)
-            genres_info.append([latest_year, latest_months])
-
+                genre_plot_data.append(sorted(self.find_timeline_data_2(dates_list, month,
+                                                                        latest_year, genre_tf[1]), key=lambda x:x[0]))
+            genre_plot_data = self.td_concat(genre_plot_data)
+            if len(genre_plot_data) > 0:
+                plot_data.append(genre_plot_data)
+                genres.append(genre)
+                genres_info.append([latest_year, latest_months])
 
         for d in plot_data:
             genre = genres[plot_data.index(d)]
             info = genres_info[plot_data.index(d)]
+            year = info[0]
+            months_numbers = info[1]
+            months = list()
+            months_weeks = list()
+            plot_range = list()
+            if len(months_numbers) > 0:
+                for m in months_numbers:
+                    month_obj = datetime.datetime(2019, int(m), 5)
+                    month_name = month_obj.strftime('%b')
+                    months.append(month_name)
+
+            for month in months_numbers:
+                weeks = self.year_weeks(year, month)
+                for week in weeks:
+                    plot_range.append(week)
+                months_weeks.append(weeks)
+
             fig = plt.figure()
             ax = fig.add_subplot(111)
-            ax.set_xlim(1, 5)
-            ax.yaxis.set_major_locator(MaxNLocator(nbins=4, min_n_ticks=1, integer=True))
-            ax.xaxis.set_major_locator(MaxNLocator(nbins=4, min_n_ticks=1, integer=True))
-            plt.xlabel('Weeks')
+            ax.set_xlim(plot_range[0], plot_range[-1])
+            ax.yaxis.set_major_locator(MaxNLocator(nbins=10, min_n_ticks=1, integer=True))
+            ax.xaxis.set_major_locator(MaxNLocator(nbins=15, min_n_ticks=1, integer=True))
+            plt.xlabel('Weeks of year')
             plt.ylabel('Number of Posts')
-            plt.grid()
-            for month in d:
-                x = [dt[0] for dt in month]
-                y = [dt[1] for dt in month]
-                ax.plot(x, y, '-8', label=str(info[1][d.index(month)]) + ' \\ '+str(info[0]))
-            plt.legend()
-            plt.title('Genre Term : {}'.format(genre))
-            plt.savefig(str(str(genre)+'.png'), dpi=300)
-        #plt.show()
+            plt.setp(ax.get_xticklabels(), rotation=45)
+            x = [int(dt[0]) for dt in d]
+            y = [dt[1] for dt in d]
+            ax.plot(x, y, '-8')
+            x_ticks = list()
+            for mw in months_weeks:
+                tick = sum(mw)/len(mw)
+                x_ticks.append(int(tick))
+            ax.set_xticks(x_ticks, minor=True)
+            ax.tick_params(which='minor', length=0, labelsize=12, pad=25)
+            ax.tick_params(which='major', length=0)
+            ax.set_xticklabels(months, minor=True)
+            plt.title('Genre Term : {}\n Months : {} / {}'.format(genre, ', '.join(months), year))
+            plt.savefig(str(str(genre)+'.png'),bbox_inches='tight')
+        plt.show()
+
+    # Concatenate the time-series data for every month /  Returns total terms appearance data per week of the year
+    def td_concat(self, plotdata):
+        total_data = list()
+        week_data = list()
+        for md in plotdata:
+            for dlist in md:
+                dt = pendulum.parse(dlist[0])
+                new_list = [dt, dlist[1]]
+                total_data.append(new_list)
+        for dt in total_data:
+            week = self.same_week(dt, total_data)
+            week_data.append(week)
+        for item in week_data:
+            while week_data.count(item) > 1:
+                week_data.remove(item)
+        return week_data
+
+    # Sums all the terms-appearances for a given week
+    def same_week(self, date1, datelist):
+        week_days = []
+        counter = int()
+        woy = dt1 = date1[0].week_of_year
+        for date2 in datelist:
+            dt2 = date2[0].week_of_year
+            dt1 = date1[0].week_of_year
+            if dt2 is dt1:
+                week_days.append(date2)
+        for dd in week_days:
+            counter += dd[1]
+        week_data = (woy, counter)
+        return week_data
+
+    # Find the numbers for all the weeks for a given year
+    def year_weeks(self, year, month):
+        _, start, _ = datetime.datetime(year, month, 1).isocalendar()
+        for d in (31, 30, 29, 28):
+            try:
+                _, end, _ = datetime.datetime(year, month, d).isocalendar()
+                break
+            except ValueError:  # skip attempts with bad dates
+                continue
+        if start > 50:  # spillover from previous year
+            return [start] + list(range(1, end + 1))
+        else:
+            return list(range(start, end + 1))
+
+    # Calculates the number of posts with at least 1 genre-term
+    def find_posts_mentioning_genres(self, wordslist, termslist):
+        wordslist = list(dict.fromkeys(wordslist))
+        for word in wordslist:
+            if word in termslist:
+                self.genre_posts_no += 1
+                break
+            else:
+                pass
 
     # Fill the term freq dictionary function
     def populate_term_freq_dict(self, wordslist, termslist, date):
@@ -438,11 +510,6 @@ class StatisticalAnalysis:
                     term_dates_dict.update({date: 1})
 
                 self.terms_dates[term_index] = term_dates_dict
-
-                try:
-                    self.term_freq[word] += 1
-                except:
-                    self.term_freq.update({word: 1})
 
     # Fill the term freq dictionary function
     def populate_term_freq_dict2(self, wordslist, termslist):
@@ -565,7 +632,7 @@ if __name__ == "__main__":
     stat.find_all_article_collections()
     # stat.calculate_article_metrics()
     # stat.create_histograms()
-    #print(stat.count_articles())
+    # print(stat.count_articles())
     stat.create_tf_timelines()
     # stat.analyse_site_activity()
     # stat.calculate_genres_frequency()
