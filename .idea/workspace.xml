@@ -2,9 +2,44 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="4e328230-ec0f-47bf-ab15-9d59ae0f2bbe" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/chromedriver.exe" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/genre_list.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Plots/genres-tf/bar charts/articles10_bc.png" beforeDir="false" afterPath="$PROJECT_DIR$/Plots/genres-tf/bar charts/articles10_bc.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Plots/genres-tf/bar charts/articles11_bc.png" beforeDir="false" afterPath="$PROJECT_DIR$/Plots/genres-tf/bar charts/articles11_bc.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Plots/genres-tf/bar charts/articles12_bc.png" beforeDir="false" afterPath="$PROJECT_DIR$/Plots/genres-tf/bar charts/articles12_bc.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Plots/genres-tf/bar charts/articles13_bc.png" beforeDir="false" afterPath="$PROJECT_DIR$/Plots/genres-tf/bar charts/articles13_bc.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Plots/genres-tf/bar charts/articles14_bc.png" beforeDir="false" afterPath="$PROJECT_DIR$/Plots/genres-tf/bar charts/articles14_bc.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Plots/genres-tf/bar charts/articles15_bc.png" beforeDir="false" afterPath="$PROJECT_DIR$/Plots/genres-tf/bar charts/articles15_bc.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Plots/genres-tf/bar charts/articles16_bc.png" beforeDir="false" afterPath="$PROJECT_DIR$/Plots/genres-tf/bar charts/articles16_bc.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Plots/genres-tf/bar charts/articles17_bc.png" beforeDir="false" afterPath="$PROJECT_DIR$/Plots/genres-tf/bar charts/articles17_bc.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Plots/genres-tf/bar charts/articles18_bc.png" beforeDir="false" afterPath="$PROJECT_DIR$/Plots/genres-tf/bar charts/articles18_bc.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Plots/genres-tf/bar charts/articles19_bc.png" beforeDir="false" afterPath="$PROJECT_DIR$/Plots/genres-tf/bar charts/articles19_bc.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Plots/genres-tf/bar charts/articles20_bc.png" beforeDir="false" afterPath="$PROJECT_DIR$/Plots/genres-tf/bar charts/articles20_bc.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Plots/genres-tf/bar charts/articles21_bc.png" beforeDir="false" afterPath="$PROJECT_DIR$/Plots/genres-tf/bar charts/articles21_bc.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Plots/genres-tf/bar charts/articles22_bc.png" beforeDir="false" afterPath="$PROJECT_DIR$/Plots/genres-tf/bar charts/articles22_bc.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Plots/genres-tf/bar charts/articles23_bc.png" beforeDir="false" afterPath="$PROJECT_DIR$/Plots/genres-tf/bar charts/articles23_bc.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Plots/genres-tf/bar charts/articles24_bc.png" beforeDir="false" afterPath="$PROJECT_DIR$/Plots/genres-tf/bar charts/articles24_bc.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Plots/genres-tf/bar charts/articles25_bc.png" beforeDir="false" afterPath="$PROJECT_DIR$/Plots/genres-tf/bar charts/articles25_bc.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Plots/genres-tf/bar charts/articles26_bc.png" beforeDir="false" afterPath="$PROJECT_DIR$/Plots/genres-tf/bar charts/articles26_bc.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Plots/genres-tf/bar charts/articles27_bc.png" beforeDir="false" afterPath="$PROJECT_DIR$/Plots/genres-tf/bar charts/articles27_bc.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Plots/genres-tf/bar charts/articles28_bc.png" beforeDir="false" afterPath="$PROJECT_DIR$/Plots/genres-tf/bar charts/articles28_bc.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Plots/genres-tf/bar charts/articles29_bc.png" beforeDir="false" afterPath="$PROJECT_DIR$/Plots/genres-tf/bar charts/articles29_bc.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Plots/genres-tf/bar charts/articles2_bc.png" beforeDir="false" afterPath="$PROJECT_DIR$/Plots/genres-tf/bar charts/articles2_bc.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Plots/genres-tf/bar charts/articles30_bc.png" beforeDir="false" afterPath="$PROJECT_DIR$/Plots/genres-tf/bar charts/articles30_bc.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Plots/genres-tf/bar charts/articles31_bc.png" beforeDir="false" afterPath="$PROJECT_DIR$/Plots/genres-tf/bar charts/articles31_bc.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Plots/genres-tf/bar charts/articles32_bc.png" beforeDir="false" afterPath="$PROJECT_DIR$/Plots/genres-tf/bar charts/articles32_bc.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Plots/genres-tf/bar charts/articles33_bc.png" beforeDir="false" afterPath="$PROJECT_DIR$/Plots/genres-tf/bar charts/articles33_bc.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Plots/genres-tf/bar charts/articles34_bc.png" beforeDir="false" afterPath="$PROJECT_DIR$/Plots/genres-tf/bar charts/articles34_bc.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Plots/genres-tf/bar charts/articles35_bc.png" beforeDir="false" afterPath="$PROJECT_DIR$/Plots/genres-tf/bar charts/articles35_bc.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Plots/genres-tf/bar charts/articles36_bc.png" beforeDir="false" afterPath="$PROJECT_DIR$/Plots/genres-tf/bar charts/articles36_bc.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Plots/genres-tf/bar charts/articles37_bc.png" beforeDir="false" afterPath="$PROJECT_DIR$/Plots/genres-tf/bar charts/articles37_bc.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Plots/genres-tf/bar charts/articles39_bc.png" beforeDir="false" afterPath="$PROJECT_DIR$/Plots/genres-tf/bar charts/articles39_bc.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Plots/genres-tf/bar charts/articles40_bc.png" beforeDir="false" afterPath="$PROJECT_DIR$/Plots/genres-tf/bar charts/articles40_bc.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Plots/genres-tf/bar charts/articles4_bc.png" beforeDir="false" afterPath="$PROJECT_DIR$/Plots/genres-tf/bar charts/articles4_bc.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Plots/genres-tf/bar charts/articles5_bc.png" beforeDir="false" afterPath="$PROJECT_DIR$/Plots/genres-tf/bar charts/articles5_bc.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Plots/genres-tf/bar charts/articles6_bc.png" beforeDir="false" afterPath="$PROJECT_DIR$/Plots/genres-tf/bar charts/articles6_bc.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Plots/genres-tf/bar charts/articles7_bc.png" beforeDir="false" afterPath="$PROJECT_DIR$/Plots/genres-tf/bar charts/articles7_bc.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Plots/genres-tf/bar charts/articles8_bc.png" beforeDir="false" afterPath="$PROJECT_DIR$/Plots/genres-tf/bar charts/articles8_bc.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Plots/genres-tf/bar charts/articles9_bc.png" beforeDir="false" afterPath="$PROJECT_DIR$/Plots/genres-tf/bar charts/articles9_bc.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Plots/genres-tf/bar charts/articles_bc.png" beforeDir="false" afterPath="$PROJECT_DIR$/Plots/genres-tf/bar charts/articles_bc.png" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/statistical_analysis_1.py" beforeDir="false" afterPath="$PROJECT_DIR$/statistical_analysis_1.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -32,13 +67,16 @@
     <expand />
     <select />
   </component>
+  <component name="FavoritesManager">
+    <favorites_list name="Sites_Monitoring" />
+  </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/statistical_analysis_1.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="340">
-              <caret line="17" lean-forward="true" selection-start-line="17" selection-end-line="17" />
+            <state relative-caret-position="24">
+              <caret line="322" column="64" lean-forward="true" selection-start-line="322" selection-start-column="64" selection-end-line="322" selection-end-column="64" />
               <folding>
                 <element signature="e#18#49#0" expanded="true" />
               </folding>
@@ -80,7 +118,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -92,6 +129,7 @@
           <select />
         </subPane>
       </pane>
+      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -310,17 +348,18 @@
       <workItem from="1562148487900" duration="7098000" />
       <workItem from="1562570603569" duration="18588000" />
       <workItem from="1562607345541" duration="14424000" />
+      <workItem from="1562747120953" duration="8538000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="393573000" />
+    <option name="totallyTimeSpent" value="402111000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-7" y="-7" width="1550" height="838" extended-state="6" />
     <layout>
-      <window_info id="Favorites" order="0" side_tool="true" />
-      <window_info content_ui="combo" id="Project" order="1" visible="true" weight="0.14899328" />
+      <window_info id="Favorites" order="0" sideWeight="0.50208336" side_tool="true" weight="0.15100671" />
+      <window_info content_ui="combo" id="Project" order="1" sideWeight="0.49791667" visible="true" weight="0.15100671" />
       <window_info id="Structure" order="2" side_tool="true" weight="0.24966443" />
       <window_info anchor="bottom" id="Database Changes" order="0" />
       <window_info anchor="bottom" id="Terminal" order="1" />
@@ -359,7 +398,7 @@
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/Sites_Monitoring$article_content_spider_mongo_.coverage" NAME="article_content_spider(mongo) Coverage Results" MODIFIED="1561622881643" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/Sites_Monitoring$article_content_spider_txt_.coverage" NAME="article_content_spider(txt) Coverage Results" MODIFIED="1554968776761" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
-    <SUITE FILE_PATH="coverage/Sites_Monitoring$statistical_analysis_1.coverage" NAME="statistical_analysis_1 Coverage Results" MODIFIED="1562671512335" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/Sites_Monitoring$statistical_analysis_1.coverage" NAME="statistical_analysis_1 Coverage Results" MODIFIED="1562755669733" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/Sites_Monitoring$test.coverage" NAME="test Coverage Results" MODIFIED="1554795483324" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$USER_HOME$/PycharmProjects/testmong" />
     <SUITE FILE_PATH="coverage/Git_Sites_Monitoring$article_content_spider_mongo_.coverage" NAME="article_content_spider(mongo) Coverage Results" MODIFIED="1556189448330" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/Sites_Monitoring$article_content_selenium_mongo_.coverage" NAME="article_content_selenium(mongo) Coverage Results" MODIFIED="1561107574110" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
@@ -393,8 +432,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/statistical_analysis_1.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="340">
-          <caret line="17" lean-forward="true" selection-start-line="17" selection-end-line="17" />
+        <state relative-caret-position="24">
+          <caret line="322" column="64" lean-forward="true" selection-start-line="322" selection-start-column="64" selection-end-line="322" selection-end-column="64" />
           <folding>
             <element signature="e#18#49#0" expanded="true" />
           </folding>

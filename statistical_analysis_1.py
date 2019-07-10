@@ -15,6 +15,8 @@ plt.style.use('seaborn')
 # 2) Number of words per article title
 # 3) Number of characters per article
 # 4) Number of words per article
+# 5) Genres terms frequency
+# 6) Sites activity monitoring
 
 
 class StatisticalAnalysis:
@@ -302,7 +304,7 @@ class StatisticalAnalysis:
         for gen in genres_list:
             index = genres_list.index(gen)
             if gen.endswith('\n'):
-                genres_list[index] = re.sub(r'[\n\r]+$', '', gen)
+                genres_list[index] = re.sub(r'[\n\r]+$', '', gen).lower()
 
         self.terms_dates = [{} for _ in range(len(genres_list))]
 
@@ -328,7 +330,9 @@ class StatisticalAnalysis:
                 else:
                     article_date = None
                 article_body = article['article']
+                article_body = re.sub(r'[^\w\d\s]+', ' ', article_body)
                 words_list = article_body.split(' ')
+                words_list = [str(w).lower() for w in words_list]
                 # Calculate genre's terms frequency for every collection
                 for word in words_list:
                     if word in genres_list:
@@ -345,30 +349,30 @@ class StatisticalAnalysis:
                 self.populate_term_freq_dict2(words_list, genres_list)
 
             # Create Bar Charts for every collection's term frequency data
-            # genres = []
-            # f_values = []
-            # for tf in collection_tf_data:
-            #     if tf > 0:
-            #         index = collection_tf_data.index(tf)
-            #         genres.append(genres_list[index])
-            #         f_values.append(tf)
-            #
-            # y_pos = np.arange(len(genres))
-            # plt.bar(y_pos, f_values, align='center', alpha=0.5)
-            # plt.xticks(y_pos, genres, rotation=90)
-            # plt.ylabel('Frequency')
-            # plt.xlabel('Genres')
-            # plt.title('Collection : {}'.format(collection))
-            # plt.tight_layout()
-            # plt.savefig(str(str(collection) + '_bc' + '.png'))
-            # plt.show()
+            genres = []
+            f_values = []
+            for tf in collection_tf_data:
+                if tf > 0:
+                    index = collection_tf_data.index(tf)
+                    genres.append(genres_list[index])
+                    f_values.append(tf)
+
+            y_pos = np.arange(len(genres))
+            plt.bar(y_pos, f_values, align='center', alpha=0.5)
+            plt.xticks(y_pos, genres, rotation=90)
+            plt.ylabel('Frequency')
+            plt.xlabel('Genres')
+            plt.title('Collection : {}'.format(collection))
+            plt.tight_layout()
+            plt.savefig(str(str(collection) + '_bc' + '.png'))
+            plt.show()
 
         # Insert total genre term frequencies data for all the collections
         # self.genres_term_frequency.insert_one(self.term_freq)
 
         # Insert total genres tf time-series data for all collections // Create tf time-series diagrams
-        timeseries_data = list(map(lambda x, y: [x, y], genres_list, self.terms_dates))
-        self.genres_term_frequency.insert_one({'item': timeseries_data})
+        # timeseries_data = list(map(lambda x, y: [x, y], genres_list, self.terms_dates))
+        # self.genres_term_frequency.insert_one({'item': timeseries_data})
         # self.create_tf_timelines()
 
         print('Number of posts containing at least 1 genre term: {}'.format(self.genre_posts_no))
@@ -435,8 +439,8 @@ class StatisticalAnalysis:
             ax.tick_params(which='major', length=0)
             ax.set_xticklabels(months, minor=True)
             plt.title('Genre Term : {}\n Months : {} / {}'.format(genre, ', '.join(months), year))
-            plt.savefig(str(str(genre)+'.png'),bbox_inches='tight')
-        plt.show()
+            plt.savefig(str(str(genre)+'.png'), bbox_inches='tight')
+        # plt.show()
 
     # Concatenate the time-series data for every month /  Returns total terms appearance data per week of the year
     def td_concat(self, plotdata):
@@ -455,7 +459,7 @@ class StatisticalAnalysis:
                 week_data.remove(item)
         return week_data
 
-    # Sums all the terms-appearances for a given week
+    # Finds and saves all the terms-appearances for a given week
     def same_week(self, date1, datelist):
         week_days = []
         counter = int()
