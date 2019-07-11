@@ -98,11 +98,7 @@ class StatisticalAnalysis:
             else:
                 outlier_collections[item[0]] = 1
 
-        # print(outlier_collections)
-
-        # for outlier_post in self.outliers:
-        #     if outlier_post[0] == 'articles5':
-        #         print(outlier_post)
+        print(outlier_collections)
 
     # Calculate number of articles per day
     def analyse_site_activity(self):
@@ -312,6 +308,8 @@ class StatisticalAnalysis:
         for collection in self.articles_conn:
             collection_tf_data = [0] * len(genres_list)
             articles = list(self.db.get_collection(collection).find())
+            count = len(articles)
+            terms_dict = dict()
 
             for article in articles:
                 article_date = article['date']
@@ -346,29 +344,40 @@ class StatisticalAnalysis:
                 if article_date:
                     self.populate_term_freq_dict(words_list, genres_list, article_date)
 
-                self.populate_term_freq_dict2(words_list, genres_list)
+                self.populate_term_freq_dict2(words_list, genres_list, terms_dict)
+
+            # Normalization of all the genre terms counts
+            terms_dict = {k: v / count for k, v in terms_dict.items()}
+
+            for k, v in terms_dict.items():
+                try:
+                    self.term_freq[k] += round(v, 2)
+                except:
+                    self.term_freq.update({k: round(v, 2)})
 
             # Create Bar Charts for every collection's term frequency data
-            genres = []
-            f_values = []
-            for tf in collection_tf_data:
-                if tf > 0:
-                    index = collection_tf_data.index(tf)
-                    genres.append(genres_list[index])
-                    f_values.append(tf)
-
-            y_pos = np.arange(len(genres))
-            plt.bar(y_pos, f_values, align='center', alpha=0.5)
-            plt.xticks(y_pos, genres, rotation=90)
-            plt.ylabel('Frequency')
-            plt.xlabel('Genres')
-            plt.title('Collection : {}'.format(collection))
-            plt.tight_layout()
-            plt.savefig(str(str(collection) + '_bc' + '.png'))
-            plt.show()
+            # genres = []
+            # f_values = []
+            # for tf in collection_tf_data:
+            #     if tf > 0:
+            #         index = collection_tf_data.index(tf)
+            #         genres.append(genres_list[index])
+            #         f_values.append(tf)
+            #
+            # y_pos = np.arange(len(genres))
+            # plt.bar(y_pos, f_values, align='center', alpha=0.5)
+            # plt.xticks(y_pos, genres, rotation=90)
+            # plt.ylabel('Frequency')
+            # plt.xlabel('Genres')
+            # plt.title('Collection : {}'.format(collection))
+            # plt.tight_layout()
+            # plt.savefig(str(str(collection) + '_bc' + '.png'))
+            # plt.show()
 
         # Insert total genre term frequencies data for all the collections
-        # self.genres_term_frequency.insert_one(self.term_freq)
+        # self.genres_term_frequency.insert_one({'item1': self.term_freq})
+
+        # self.create_normalized_bc()
 
         # Insert total genres tf time-series data for all collections // Create tf time-series diagrams
         # timeseries_data = list(map(lambda x, y: [x, y], genres_list, self.terms_dates))
@@ -376,6 +385,32 @@ class StatisticalAnalysis:
         # self.create_tf_timelines()
 
         print('Number of posts containing at least 1 genre term: {}'.format(self.genre_posts_no))
+
+    # Create TF Bar-Chart from the total dataset terms data
+    def create_normalized_bc(self):
+        genres_data = self.genres_term_frequency.find()
+        bc_data = dict()
+        for item in genres_data:
+            try:
+                bc_data = item['item1']
+            except:
+                continue
+
+        genres = list(dict(bc_data).keys())
+        norm_values = list()
+
+        for genre in genres:
+            norm_values.append(round(bc_data[genre], 2))
+
+        y_pos = np.arange(len(genres))
+        plt.bar(y_pos, norm_values, align='center', alpha=0.5)
+        plt.xticks(y_pos, genres, rotation=90)
+        plt.ylabel('Frequency')
+        plt.xlabel('Genres')
+        plt.title('Articles Dataset')
+        plt.tight_layout()
+        plt.savefig('dataset_terms_bc' + '.png')
+        plt.show()
 
     # Create Music-Genres TF time-series for the latest 3 months of data
     def create_tf_timelines(self):
@@ -439,8 +474,8 @@ class StatisticalAnalysis:
             ax.tick_params(which='major', length=0)
             ax.set_xticklabels(months, minor=True)
             plt.title('Genre Term : {}\n Months : {} / {}'.format(genre, ', '.join(months), year))
-            plt.savefig(str(str(genre)+'.png'), bbox_inches='tight')
-        # plt.show()
+            # plt.savefig(str(str(genre)+'.png'), bbox_inches='tight')
+        plt.show()
 
     # Concatenate the time-series data for every month /  Returns total terms appearance data per week of the year
     def td_concat(self, plotdata):
@@ -463,7 +498,7 @@ class StatisticalAnalysis:
     def same_week(self, date1, datelist):
         week_days = []
         counter = int()
-        woy = dt1 = date1[0].week_of_year
+        woy = date1[0].week_of_year
         for date2 in datelist:
             dt2 = date2[0].week_of_year
             dt1 = date1[0].week_of_year
@@ -516,13 +551,13 @@ class StatisticalAnalysis:
                 self.terms_dates[term_index] = term_dates_dict
 
     # Fill the term freq dictionary function
-    def populate_term_freq_dict2(self, wordslist, termslist):
+    def populate_term_freq_dict2(self, wordslist, termslist, termdict):
         for word in wordslist:
             if word in termslist:
                 try:
-                    self.term_freq[word] += 1
+                    termdict[word] += 1
                 except:
-                    self.term_freq.update({word: 1})
+                    termdict.update({word: 1})
 
     # Create article/blogs metrics histograms
     def create_histograms(self):
@@ -638,5 +673,6 @@ if __name__ == "__main__":
     # stat.create_histograms()
     # print(stat.count_articles())
     stat.create_tf_timelines()
+    # stat.create_normalized_bc()
     # stat.analyse_site_activity()
     # stat.calculate_genres_frequency()
