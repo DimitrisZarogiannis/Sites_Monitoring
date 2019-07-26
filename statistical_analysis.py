@@ -1,4 +1,5 @@
 # Import packages
+from __future__ import unicode_literals, print_function
 from pymongo import MongoClient
 import matplotlib.pyplot as plt
 plt.rcdefaults()
@@ -7,8 +8,18 @@ import datetime
 import re
 from matplotlib.ticker import MaxNLocator
 import pendulum
+import json
 
 plt.style.use('seaborn')
+
+# Imports to train Spacy's NER Model
+import plac
+import random
+from pathlib import Path
+import spacy
+from spacy.util import minibatch, compounding
+import os
+
 
 # Simple statistical analysis class for the following metrics:
 # 1) Number of characters per article title
@@ -87,7 +98,7 @@ class StatisticalAnalysis:
                 collection_metrics_data.append(article_stats)
 
             # Create Histogram for every collection's metrics/per article
-            # self.create_collection_histograms(collection, collection_metrics_data)
+            self.create_collection_histograms(collection, collection_metrics_data)
 
             self.metrics_data = self.metrics_data + collection_metrics_data
 
@@ -98,7 +109,7 @@ class StatisticalAnalysis:
             else:
                 outlier_collections[item[0]] = 1
 
-        print(outlier_collections)
+        print('Collections with outliers are : {}'.format(outlier_collections))
 
     # Calculate number of articles per day
     def analyse_site_activity(self):
@@ -356,38 +367,39 @@ class StatisticalAnalysis:
                     self.term_freq.update({k: round(v, 2)})
 
             # Create Bar Charts for every collection's term frequency data
-            # genres = []
-            # f_values = []
-            # for tf in collection_tf_data:
-            #     if tf > 0:
-            #         index = collection_tf_data.index(tf)
-            #         genres.append(genres_list[index])
-            #         f_values.append(tf)
-            #
-            # y_pos = np.arange(len(genres))
-            # plt.bar(y_pos, f_values, align='center', alpha=0.5)
-            # plt.xticks(y_pos, genres, rotation=90)
-            # plt.ylabel('Frequency')
-            # plt.xlabel('Genres')
-            # plt.title('Collection : {}'.format(collection))
-            # plt.tight_layout()
-            # plt.savefig(str(str(collection) + '_bc' + '.png'))
-            # plt.show()
+            genres = []
+            f_values = []
+            for tf in collection_tf_data:
+                if tf > 0:
+                    index = collection_tf_data.index(tf)
+                    genres.append(genres_list[index])
+                    f_values.append(tf)
+
+            y_pos = np.arange(len(genres))
+            plt.bar(y_pos, f_values, align='center', alpha=0.5)
+            plt.xticks(y_pos, genres, rotation=90)
+            plt.ylabel('Frequency')
+            plt.xlabel('Genres')
+            plt.title('Collection : {}'.format(collection))
+            plt.tight_layout()
+            plt.savefig(str(str(collection) + '_bc' + '.png'))
+            plt.show()
 
         # Insert total genre term frequencies data for all the collections
-        # self.genres_term_frequency.insert_one({'item1': self.term_freq})
+        self.genres_term_frequency.insert_one({'item1': self.term_freq})
 
-        # self.create_normalized_bc()
+        self.create_normalized_bc()
 
         # Insert total genres tf time-series data for all collections // Create tf time-series diagrams
-        # timeseries_data = list(map(lambda x, y: [x, y], genres_list, self.terms_dates))
-        # self.genres_term_frequency.insert_one({'item': timeseries_data})
-        # self.create_tf_timelines()
+        timeseries_data = list(map(lambda x, y: [x, y], genres_list, self.terms_dates))
+        self.genres_term_frequency.insert_one({'item': timeseries_data})
+        self.create_tf_timelines()
 
         print('Number of posts containing at least 1 genre term: {}'.format(self.genre_posts_no))
 
     # Create TF Bar-Chart from the total dataset terms data
     def create_normalized_bc(self):
+        collect = len(self.articles_conn)
         genres_data = self.genres_term_frequency.find()
         bc_data = dict()
         for item in genres_data:
@@ -400,7 +412,7 @@ class StatisticalAnalysis:
         norm_values = list()
 
         for genre in genres:
-            norm_values.append(round(bc_data[genre], 2))
+            norm_values.append(round(bc_data[genre]/collect, 2))
 
         y_pos = np.arange(len(genres))
         plt.bar(y_pos, norm_values, align='center', alpha=0.5)
@@ -474,7 +486,7 @@ class StatisticalAnalysis:
             ax.tick_params(which='major', length=0)
             ax.set_xticklabels(months, minor=True)
             plt.title('Genre Term : {}\n Months : {} / {}'.format(genre, ', '.join(months), year))
-            # plt.savefig(str(str(genre)+'.png'), bbox_inches='tight')
+            plt.savefig(str(str(genre)+'.png'), bbox_inches='tight')
         plt.show()
 
     # Concatenate the time-series data for every month /  Returns total terms appearance data per week of the year
@@ -658,12 +670,117 @@ class StatisticalAnalysis:
 
         plt.show()
 
+    # Count total dataset articles
     def count_articles(self):
         total_articles = int()
         for collection in self.articles_conn:
             articles = list(self.db.get_collection(collection).find())
             total_articles += len(articles)
         return total_articles
+
+    # Format the EDML entity linking data to the required format by Spacy
+    def format_traindata(self):
+        tdata = []
+        file_id = 1
+        while file_id <= 13009:
+            with open(f"C:\\Users\\Dimitris_Zaro\\Desktop\\Projects\\Sites_Monitoring\\elmd2\\json ({file_id}).json") \
+                      as json_file:
+                data = json.load(json_file)
+                for item in data:
+                    if len(item['entities']) > 0:
+                        for ent in item['entities']:
+                            if ent['category'] == 'Artist':
+                                td = (item['text'], {'entities': [(ent['startChar'], ent['endChar'], ent['category'])]})
+                                tdata.append(td)
+                            if ent['category'] == 'Album':
+                                td = (item['text'], {'entities': [(ent['startChar'], ent['endChar'], ent['category'])]})
+                                tdata.append(td)
+            file_id += 1
+        random.shuffle(tdata)
+        return tdata
+
+    # Load the trained NER model
+    def load_NER(self):
+        dir_path = os.path.dirname(os.path.realpath(__file__))+'\\ner'
+        nlp2 = spacy.load(dir_path)
+        # test the trained model
+        test_text = ""
+        doc = nlp2(test_text)
+        print("Entities in '%s'" % test_text)
+        if len(doc.ents) > 0:
+            for ent in doc.ents:
+                print(ent.label_, ent.text)
+        else:
+            print('No entities found.')
+
+
+# Training the NER Model for the new "Artist" entity
+@plac.annotations(
+    model=("Model name. Defaults to blank 'en' model.", "option", "m", str),
+    new_model_name=("New model name for model meta.", "option", "nm", str),
+    output_dir=("Optional output directory", "option", "o", Path),
+    n_iter=("Number of training iterations", "option", "n", int),
+)
+def main(model=None, new_model_name="Music Data", output_dir=os.path.dirname(os.path.realpath(__file__))+'\\ner', n_iter=5):
+    LABEL_1 = 'Artist'
+    LABEL_2 = 'Album'
+    stat = StatisticalAnalysis()
+    TRAIN_DATA = stat.format_traindata()
+    """Set up the pipeline and entity recognizer, and train the new entity."""
+    random.seed(0)
+    if model is not None:
+        nlp = spacy.load(model)  # load existing spaCy model
+        print("Loaded model '%s'" % model)
+    else:
+        nlp = spacy.blank("en")  # create blank Language class
+        print("Created blank 'en' model")
+    # Add entity recognizer to model if it's not in the pipeline
+    # nlp.create_pipe works for built-ins that are registered with spaCy
+    if "ner" not in nlp.pipe_names:
+        ner = nlp.create_pipe("ner")
+        nlp.add_pipe(ner)
+    # otherwise, get it, so we can add labels to it
+    else:
+        ner = nlp.get_pipe("ner")
+
+    ner.add_label(LABEL_1)  # add new entity label to entity recognizer
+    ner.add_label(LABEL_2)  # add new entity label to entity recognizer
+    if model is None:
+        optimizer = nlp.begin_training()
+    else:
+        optimizer = nlp.resume_training()
+    move_names = list(ner.move_names)
+    # get names of other pipes to disable them during training
+    other_pipes = [pipe for pipe in nlp.pipe_names if pipe != "ner"]
+
+    with nlp.disable_pipes(*other_pipes):  # only train NER
+        sizes = compounding(1.0, 4.0, 1.001)
+        # batch up the examples using spaCy's minibatch
+        for itn in range(n_iter):
+            random.shuffle(TRAIN_DATA)
+            batches = minibatch(TRAIN_DATA, size=sizes)
+            losses = {}
+            for batch in batches:
+                texts, annotations = zip(*batch)
+                nlp.update(texts, annotations, sgd=optimizer, drop=0.35, losses=losses)
+            print("Losses", losses)
+
+    # test the trained model
+    test_text = "House pioneer Larry Heard is reportedly releasing" \
+                " a new album early next year, according to Resident Advisor."
+    doc = nlp(test_text)
+    print("Entities in '%s'" % test_text)
+    for ent in doc.ents:
+        print(ent.label_, ent.text)
+
+    # save model to output directory
+    if output_dir is not None:
+        output_dir = Path(output_dir)
+        if not output_dir.exists():
+            output_dir.mkdir()
+        nlp.meta["name"] = new_model_name  # rename model
+        nlp.to_disk(output_dir)
+        print("Saved model to", output_dir)
 
 
 if __name__ == "__main__":
@@ -672,7 +789,10 @@ if __name__ == "__main__":
     # stat.calculate_article_metrics()
     # stat.create_histograms()
     # print(stat.count_articles())
-    stat.create_tf_timelines()
+    # stat.create_tf_timelines()
     # stat.create_normalized_bc()
     # stat.analyse_site_activity()
     # stat.calculate_genres_frequency()
+    # artists_train = stat.format_traindata()
+    plac.call(main)
+    # stat.load_NER()
