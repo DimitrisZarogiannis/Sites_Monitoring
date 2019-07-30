@@ -28,6 +28,7 @@ import os
 # 4) Number of words per article
 # 5) Genres terms frequency
 # 6) Sites activity monitoring
+# 7) NER for "Artist" classes
 
 
 class StatisticalAnalysis:
@@ -42,6 +43,7 @@ class StatisticalAnalysis:
     genre_posts_no = 0
     metrics_data = list()
     outliers = []
+    entities = {}
 
     # Find all article collections in the MongoDB
     def find_all_article_collections(self):
@@ -683,35 +685,44 @@ class StatisticalAnalysis:
         tdata = []
         file_id = 1
         while file_id <= 13009:
-            with open(f"C:\\Users\\Dimitris_Zaro\\Desktop\\Projects\\Sites_Monitoring\\elmd2\\json ({file_id}).json") \
+            with open(os.path.dirname(os.path.realpath(__file__)) + f"\\elmd2\\json ({file_id}).json") \
                       as json_file:
                 data = json.load(json_file)
                 for item in data:
+                    text = item['text']
+                    ent_list = []
                     if len(item['entities']) > 0:
                         for ent in item['entities']:
                             if ent['category'] == 'Artist':
-                                td = (item['text'], {'entities': [(ent['startChar'], ent['endChar'], ent['category'])]})
-                                tdata.append(td)
-                            if ent['category'] == 'Album':
-                                td = (item['text'], {'entities': [(ent['startChar'], ent['endChar'], ent['category'])]})
-                                tdata.append(td)
+                                tup = (ent['startChar'], ent['endChar'], ent['category'])
+                                ent_list.append(tup)
+                        td = (text, {'entities': ent_list})
+                        tdata.append(td)
             file_id += 1
         random.shuffle(tdata)
-        return tdata
+        return tdata[:5000]
 
     # Load the trained NER model
     def load_NER(self):
         dir_path = os.path.dirname(os.path.realpath(__file__))+'\\ner'
-        nlp2 = spacy.load(dir_path)
-        # test the trained model
-        test_text = ""
-        doc = nlp2(test_text)
-        print("Entities in '%s'" % test_text)
-        if len(doc.ents) > 0:
-            for ent in doc.ents:
-                print(ent.label_, ent.text)
-        else:
-            print('No entities found.')
+        nlp = spacy.load(dir_path)
+
+        for collection in self.articles_conn:
+            articles = list(self.db.get_collection(collection).find())
+            for article in articles:
+                article = article['article']
+                doc = nlp(article)
+                if len(doc.ents) > 0:
+                    for ent in doc.ents:
+                        if ent.label_ == 'Artist':
+                            try:
+                                entity_count = int(self.entities.get(ent.text))
+                                entity_count += 1
+                                self.entities.update({ent.text: entity_count})
+                            except:
+                                self.entities[ent.text] = 1
+        print(len(self.entities))
+        print(self.entities)
 
 
 # Training the NER Model for the new "Artist" entity
@@ -721,9 +732,8 @@ class StatisticalAnalysis:
     output_dir=("Optional output directory", "option", "o", Path),
     n_iter=("Number of training iterations", "option", "n", int),
 )
-def main(model=None, new_model_name="Music Data", output_dir=os.path.dirname(os.path.realpath(__file__))+'\\ner', n_iter=5):
+def main(model=None, new_model_name="Music Data", output_dir=os.path.dirname(os.path.realpath(__file__))+'\\ner', n_iter=10):
     LABEL_1 = 'Artist'
-    LABEL_2 = 'Album'
     stat = StatisticalAnalysis()
     TRAIN_DATA = stat.format_traindata()
     """Set up the pipeline and entity recognizer, and train the new entity."""
@@ -744,7 +754,7 @@ def main(model=None, new_model_name="Music Data", output_dir=os.path.dirname(os.
         ner = nlp.get_pipe("ner")
 
     ner.add_label(LABEL_1)  # add new entity label to entity recognizer
-    ner.add_label(LABEL_2)  # add new entity label to entity recognizer
+
     if model is None:
         optimizer = nlp.begin_training()
     else:
@@ -767,7 +777,7 @@ def main(model=None, new_model_name="Music Data", output_dir=os.path.dirname(os.
 
     # test the trained model
     test_text = "House pioneer Larry Heard is reportedly releasing" \
-                " a new album early next year, according to Resident Advisor."
+                " a new album early next year, according to resident advisor."
     doc = nlp(test_text)
     print("Entities in '%s'" % test_text)
     for ent in doc.ents:
@@ -793,6 +803,5 @@ if __name__ == "__main__":
     # stat.create_normalized_bc()
     # stat.analyse_site_activity()
     # stat.calculate_genres_frequency()
-    # artists_train = stat.format_traindata()
-    plac.call(main)
-    # stat.load_NER()
+    # plac.call(main)
+    stat.load_NER()
