@@ -9,6 +9,9 @@ import re
 from matplotlib.ticker import MaxNLocator
 import pendulum
 import json
+import spotipy
+from spotipy.oauth2 import SpotifyClientCredentials
+
 
 plt.style.use('seaborn')
 
@@ -687,7 +690,7 @@ class StatisticalAnalysis:
     def format_traindata(self):
         tdata = []
         file_id = 1
-        while file_id <= 13009:
+        while file_id <= 699:
             with open(os.path.dirname(os.path.realpath(__file__)) + f"\\elmd2\\json ({file_id}).json") \
                       as json_file:
                 data = json.load(json_file)
@@ -709,6 +712,12 @@ class StatisticalAnalysis:
     def load_NER(self):
         dir_path = os.path.dirname(os.path.realpath(__file__))+'\\ner'
         nlp = spacy.load(dir_path)
+
+        client_id = '59a82995075f42d391d043a01435062d'
+        client_secret = 'c1152351e58646cbb4d2ebd41f04c6f1'
+        client_credentials_manager = SpotifyClientCredentials(client_id=client_id, client_secret=client_secret)
+        sp = spotipy.Spotify(client_credentials_manager=client_credentials_manager)
+
         # test_set = list()
 
         # Test and use NER model on the collected music articles dataset
@@ -727,12 +736,17 @@ class StatisticalAnalysis:
                 if len(doc.ents) > 0:
                     for ent in doc.ents:
                         if ent.label_ == 'Artist':
-                            try:
-                                entity_count = int(self.entities.get(ent.text))
-                                entity_count += 1
-                                self.entities.update({ent.text: entity_count})
-                            except:
-                                self.entities[ent.text] = 1
+                            spotify_verify = sp.search(ent.text,type = 'artist')
+                            if len(spotify_verify['artists']['items']) > 0:
+                                try:
+                                    entity_count = int(self.entities.get(ent.text))
+                                    entity_count += 1
+                                    self.entities.update({ent.text: entity_count})
+                                except:
+                                    self.entities[ent.text] = 1
+                            else:
+                                continue
+                break
         print(self.entities)
         print(len(self.entities))
 
