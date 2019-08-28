@@ -718,25 +718,19 @@ class StatisticalAnalysis:
         client_credentials_manager = SpotifyClientCredentials(client_id=client_id, client_secret=client_secret)
         sp = spotipy.Spotify(client_credentials_manager=client_credentials_manager)
 
-        # test_set = list()
-
         # Test and use NER model on the collected music articles dataset
         for collection in self.articles_conn:
             articles = list(self.db.get_collection(collection).find())
-            # random.shuffle(articles)
-            # articles = articles[0:5]
-        #     test_set.append(articles[0]['article'])
-        # for text in test_set:
-        #     doc = nlp(text)
-        #     print(f'Article: {text}\nEntities: {doc.ents}')
-        #
+
             for article in articles:
                 article = article['article']
                 doc = nlp(article)
                 if len(doc.ents) > 0:
+                    print(doc.ents)
                     for ent in doc.ents:
                         if ent.label_ == 'Artist':
-                            spotify_verify = sp.search(ent.text,type = 'artist')
+                            spotify_verify = sp.search(ent.text,type = 'artist', limit = 30)
+                            # Verify extracted entity could be refering to an artist
                             if len(spotify_verify['artists']['items']) > 0:
                                 try:
                                     entity_count = int(self.entities.get(ent.text))
@@ -746,7 +740,6 @@ class StatisticalAnalysis:
                                     self.entities[ent.text] = 1
                             else:
                                 continue
-                break
         print(self.entities)
         print(len(self.entities))
 
@@ -867,6 +860,6 @@ if __name__ == "__main__":
     # stat.analyse_site_activity()
     # stat.calculate_genres_frequency()
     # plac.call(main)
-    data = stat.format_traindata()
-    # stat.load_NER()
-    print(stat.evaluate(data))
+    # data = stat.format_traindata()
+    stat.load_NER()
+    # print(stat.evaluate(data))
