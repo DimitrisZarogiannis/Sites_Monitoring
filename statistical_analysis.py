@@ -705,8 +705,9 @@ class StatisticalAnalysis:
                         td = (text, {'entities': ent_list})
                         tdata.append(td)
             file_id += 1
+        random.seed(75)
         random.shuffle(tdata)
-        return tdata[:5000]
+        return tdata[:1000]
 
     # Load the trained NER model
     def load_NER(self):
@@ -726,7 +727,6 @@ class StatisticalAnalysis:
                 article = article['article']
                 doc = nlp(article)
                 if len(doc.ents) > 0:
-                    print(doc.ents)
                     for ent in doc.ents:
                         if ent.label_ == 'Artist':
                             spotify_verify = sp.search(ent.text,type = 'artist', limit = 30)
@@ -743,14 +743,25 @@ class StatisticalAnalysis:
         print(self.entities)
         print(len(self.entities))
 
-    # Calculate Precision - Recall - F1 scores
+    # Calculate Precision - Recall - F1 scores on the test set
     def evaluate(self, test_set):
         dir_path = os.path.dirname(os.path.realpath(__file__)) + '\\ner'
         ner_model = spacy.load(dir_path)
         scorer = Scorer()
         test_size = len(test_set)
         test_scores = [0, 0, 0]
+        client_id = '59a82995075f42d391d043a01435062d'
+        client_secret = 'c1152351e58646cbb4d2ebd41f04c6f1'
+        client_credentials_manager = SpotifyClientCredentials(client_id=client_id, client_secret=client_secret)
+        sp = spotipy.Spotify(client_credentials_manager=client_credentials_manager)
         for input_, annot in test_set:
+            for tup in annot['entities']:
+                ent = input_[tup[0]:tup[1]]
+                spotify_verify = sp.search(ent, type='artist', limit=30)
+                if len(spotify_verify['artists']['items']) > 0:
+                    continue
+                else:
+                    annot['entities'].remove(tup)
             doc_gold_text = ner_model.make_doc(input_)
             gold = GoldParse(doc_gold_text, entities=annot['entities'])
             pred_value = ner_model(input_)
@@ -860,6 +871,6 @@ if __name__ == "__main__":
     # stat.analyse_site_activity()
     # stat.calculate_genres_frequency()
     # plac.call(main)
-    # data = stat.format_traindata()
-    stat.load_NER()
-    # print(stat.evaluate(data))
+    data = stat.format_traindata()
+    # stat.load_NER()
+    print(stat.evaluate(data))
