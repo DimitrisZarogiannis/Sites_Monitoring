@@ -755,16 +755,20 @@ class StatisticalAnalysis:
         client_credentials_manager = SpotifyClientCredentials(client_id=client_id, client_secret=client_secret)
         sp = spotipy.Spotify(client_credentials_manager=client_credentials_manager)
         for input_, annot in test_set:
-            for tup in annot['entities']:
-                ent = input_[tup[0]:tup[1]]
-                spotify_verify = sp.search(ent, type='artist', limit=30)
+            doc_gold_text= ner_model.make_doc(input_)
+            gold = GoldParse(doc_gold_text, entities=annot['entities'])
+            pred_value = ner_model(input_)
+            ents_list = list(pred_value.ents)
+            print(ents_list)
+            for ent in ents_list:
+                ent_name = ent.text
+                spotify_verify = sp.search(ent_name, type='artist', limit=30)
                 if len(spotify_verify['artists']['items']) > 0:
                     continue
                 else:
-                    annot['entities'].remove(tup)
-            doc_gold_text = ner_model.make_doc(input_)
-            gold = GoldParse(doc_gold_text, entities=annot['entities'])
-            pred_value = ner_model(input_)
+                    ents_list.remove(ent)
+            pred_value.ents = tuple(ents_list)
+            print(pred_value.ents)
             scorer.score(pred_value, gold)
             result = scorer.scores
             res_list = [result['ents_p'], result['ents_r'], result['ents_f']]
