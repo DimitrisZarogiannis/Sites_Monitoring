@@ -9,6 +9,9 @@ import re
 from matplotlib.ticker import MaxNLocator
 import pendulum
 import json
+import spotipy
+from spotipy.oauth2 import SpotifyClientCredentials
+
 
 plt.style.use('seaborn')
 
@@ -19,6 +22,8 @@ from pathlib import Path
 import spacy
 from spacy.util import minibatch, compounding
 import os
+from spacy.gold import GoldParse
+from spacy.scorer import Scorer
 
 
 # Simple statistical analysis class for the following metrics:
@@ -36,6 +41,7 @@ class StatisticalAnalysis:
     db = client['Articles_DB']
     genres_term_frequency = db.genres
     blogs_activity = db.blogs_activity
+    ent_db = db.entities
     articles_conn = list()
     articles_count = 0
     term_freq = {}
@@ -684,7 +690,7 @@ class StatisticalAnalysis:
     def format_traindata(self):
         tdata = []
         file_id = 1
-        while file_id <= 13009:
+        while file_id <= 699:
             with open(os.path.dirname(os.path.realpath(__file__)) + f"\\elmd2\\json ({file_id}).json") \
                       as json_file:
                 data = json.load(json_file)
@@ -699,31 +705,76 @@ class StatisticalAnalysis:
                         td = (text, {'entities': ent_list})
                         tdata.append(td)
             file_id += 1
+        random.seed(75)
         random.shuffle(tdata)
-        return tdata[:5000]
+        return tdata[:1000]
 
     # Load the trained NER model
     def load_NER(self):
         dir_path = os.path.dirname(os.path.realpath(__file__))+'\\ner'
         nlp = spacy.load(dir_path)
 
+        client_id = '59a82995075f42d391d043a01435062d'
+        client_secret = 'c1152351e58646cbb4d2ebd41f04c6f1'
+        client_credentials_manager = SpotifyClientCredentials(client_id=client_id, client_secret=client_secret)
+        sp = spotipy.Spotify(client_credentials_manager=client_credentials_manager)
+
+        # Test and use NER model on the collected music articles dataset
         for collection in self.articles_conn:
             articles = list(self.db.get_collection(collection).find())
+
             for article in articles:
                 article = article['article']
                 doc = nlp(article)
                 if len(doc.ents) > 0:
                     for ent in doc.ents:
                         if ent.label_ == 'Artist':
-                            try:
-                                entity_count = int(self.entities.get(ent.text))
-                                entity_count += 1
-                                self.entities.update({ent.text: entity_count})
-                            except:
-                                self.entities[ent.text] = 1
-        print(len(self.entities))
+                            spotify_verify = sp.search(ent.text,type = 'artist', limit = 30)
+                            # Verify extracted entity could be refering to an artist
+                            if len(spotify_verify['artists']['items']) > 0:
+                                try:
+                                    entity_count = int(self.entities.get(ent.text))
+                                    entity_count += 1
+                                    self.entities.update({ent.text: entity_count})
+                                except:
+                                    self.entities[ent.text] = 1
+                            else:
+                                continue
         print(self.entities)
+        print(len(self.entities))
 
+    # Calculate Precision - Recall - F1 scores on the test set
+    def evaluate(self, test_set):
+        dir_path = os.path.dirname(os.path.realpath(__file__)) + '\\ner'
+        ner_model = spacy.load(dir_path)
+        scorer = Scorer()
+        test_size = len(test_set)
+        test_scores = [0, 0, 0]
+        client_id = '59a82995075f42d391d043a01435062d'
+        client_secret = 'c1152351e58646cbb4d2ebd41f04c6f1'
+        client_credentials_manager = SpotifyClientCredentials(client_id=client_id, client_secret=client_secret)
+        sp = spotipy.Spotify(client_credentials_manager=client_credentials_manager)
+        for input_, annot in test_set:
+            doc_gold_text= ner_model.make_doc(input_)
+            gold = GoldParse(doc_gold_text, entities=annot['entities'])
+            pred_value = ner_model(input_)
+            ents_list = list(pred_value.ents)
+            print(ents_list)
+            for ent in ents_list:
+                ent_name = ent.text
+                spotify_verify = sp.search(ent_name, type='artist', limit=30)
+                if len(spotify_verify['artists']['items']) > 0:
+                    continue
+                else:
+                    ents_list.remove(ent)
+            pred_value.ents = tuple(ents_list)
+            print(pred_value.ents)
+            scorer.score(pred_value, gold)
+            result = scorer.scores
+            res_list = [result['ents_p'], result['ents_r'], result['ents_f']]
+            test_scores = [test_scores[i] + res_list[i] for i in range(len(test_scores))]
+        test_scores = [round(test_scores[i] / test_size, 2) for i in range(len(test_scores))]
+        return test_scores
 
 # Training the NER Model for the new "Artist" entity
 @plac.annotations(
@@ -735,7 +786,9 @@ class StatisticalAnalysis:
 def main(model=None, new_model_name="Music Data", output_dir=os.path.dirname(os.path.realpath(__file__))+'\\ner', n_iter=10):
     LABEL_1 = 'Artist'
     stat = StatisticalAnalysis()
-    TRAIN_DATA = stat.format_traindata()
+    data = stat.format_traindata()
+    TEST_DATA = data[0:1000]
+    TRAIN_DATA = data[1000:]
     """Set up the pipeline and entity recognizer, and train the new entity."""
     random.seed(0)
     if model is not None:
@@ -775,14 +828,6 @@ def main(model=None, new_model_name="Music Data", output_dir=os.path.dirname(os.
                 nlp.update(texts, annotations, sgd=optimizer, drop=0.35, losses=losses)
             print("Losses", losses)
 
-    # test the trained model
-    test_text = "House pioneer Larry Heard is reportedly releasing" \
-                " a new album early next year, according to resident advisor."
-    doc = nlp(test_text)
-    print("Entities in '%s'" % test_text)
-    for ent in doc.ents:
-        print(ent.label_, ent.text)
-
     # save model to output directory
     if output_dir is not None:
         output_dir = Path(output_dir)
@@ -791,6 +836,32 @@ def main(model=None, new_model_name="Music Data", output_dir=os.path.dirname(os.
         nlp.meta["name"] = new_model_name  # rename model
         nlp.to_disk(output_dir)
         print("Saved model to", output_dir)
+
+    # test the trained model
+    accuracy_score = int()
+
+    # Calculate accuracy score
+    for td in TEST_DATA:
+        test_text = td[0]
+        real_ents = list(td[1]['entities'])
+        test_score = int()
+        doc = nlp(test_text)
+        for ent in doc.ents:
+            tup = (ent.start_char, ent.end_char, ent.label_)
+            if tup in real_ents:
+                test_score += 1
+
+        if len(doc.ents) > 0:
+            accuracy_score += test_score / len(doc.ents)
+
+    accuracy_score = accuracy_score / 1000
+    print(f'Accuracy metric score is {accuracy_score}')
+
+    # Calculate Precision-Recall scores
+    results = stat.evaluate(TEST_DATA)
+    print(f'Precision metric score is {results[0]} ')
+    print(f'Recall accuracy metric score is {results[1]} ')
+    print(f'F1 accuracy metric score is {results[2]} ')
 
 
 if __name__ == "__main__":
@@ -804,4 +875,6 @@ if __name__ == "__main__":
     # stat.analyse_site_activity()
     # stat.calculate_genres_frequency()
     # plac.call(main)
-    stat.load_NER()
+    data = stat.format_traindata()
+    # stat.load_NER()
+    print(stat.evaluate(data))
