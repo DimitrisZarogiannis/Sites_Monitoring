@@ -868,6 +868,8 @@ class DatasetAnalysis:
         df_upcoming = df_current
         df_upcoming['Popularity_Growth'] = df_upcoming.apply(lambda x: self.find_popularity_change(x['Entities'],x['Normalized Score'],df_previous),axis=1)
         df_upcoming.sort_values(by=['Popularity_Growth'], ascending=False ,inplace = True)
+        df_upcoming.dropna(inplace=True)
+        df_upcoming.to_csv(os.path.dirname(os.path.realpath(__file__)) + f'\\ner_final\\{current_month}_{year}.csv', index = False)
         print(df_upcoming.head(20))
 
 
@@ -973,4 +975,4 @@ if __name__ == "__main__":
     # for month in range(4, 6):
     #     data.get_NER_score(os.path.dirname(os.path.realpath(__file__))+f'\\ner\\results\\{month}_19.csv', month, 2019)
     # Get trending emergent artists for a selected month based on historical scoring data
-    data.get_emergent_artists(3,5,2019)
+    data.get_emergent_artists(3,4,2019)
