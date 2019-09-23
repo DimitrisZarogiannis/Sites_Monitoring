@@ -24,19 +24,20 @@ from spacy.util import minibatch, compounding
 import os
 from spacy.gold import GoldParse
 from spacy.scorer import Scorer
+import pandas as pd
+import ast
 
-
-# Simple statistical analysis class for the following metrics:
+# Simple dataset statistical analysis class for:
 # 1) Number of characters per article title
 # 2) Number of words per article title
 # 3) Number of characters per article
 # 4) Number of words per article
 # 5) Genres terms frequency
 # 6) Sites activity monitoring
-# 7) NER for "Artist" entity
+# 7) NER for "Artist" entities
 
 
-class StatisticalAnalysis:
+class DatasetAnalysis:
     client = MongoClient('mongodb://localhost:27017')
     db = client['Articles_DB']
     genres_term_frequency = db.genres
@@ -129,16 +130,16 @@ class StatisticalAnalysis:
                 article_date = article['date']
                 article_date = re.sub(r"[^a-zA-Z0-9- ]", "", article_date)
                 article_date = article_date.strip(' ')
-                if stat.checktype1(article_date):
-                    article_date = stat.checktype1(article_date)
-                elif stat.checktype2(article_date):
-                    article_date = stat.checktype2(article_date)
-                elif stat.checktype3(article_date):
-                    article_date = stat.checktype3(article_date)
-                elif stat.checktype4(article_date):
-                    article_date = stat.checktype4(article_date)
-                elif stat.checktype5(article_date):
-                    article_date = stat.checktype5(article_date)
+                if self.checktype1(article_date):
+                    article_date = self.checktype1(article_date)
+                elif self.checktype2(article_date):
+                    article_date = self.checktype2(article_date)
+                elif self.checktype3(article_date):
+                    article_date = self.checktype3(article_date)
+                elif self.checktype4(article_date):
+                    article_date = self.checktype4(article_date)
+                elif self.checktype5(article_date):
+                    article_date = self.checktype5(article_date)
                 if article_date:
                     try:
                         posts_on_date = int(dates_dict.get(article_date))
@@ -146,8 +147,8 @@ class StatisticalAnalysis:
                         dates_dict.update({article_date: posts_on_date})
                     except:
                         dates_dict[article_date] = 1
-            # if len(dates_dict) > 0:
-            #     self.blogs_activity.insert_one({'site_activity': [dates_dict, collection]})
+            if len(dates_dict) > 0:
+                self.blogs_activity.insert_one({'site_activity': [dates_dict, collection]})
         self.create_timelines()
 
     # Create latest month's blog activity timelines
@@ -334,16 +335,16 @@ class StatisticalAnalysis:
                 article_date = article['date']
                 article_date = re.sub(r"[^a-zA-Z0-9- ]", "", article_date)
                 article_date = article_date.strip(' ')
-                if stat.checktype1(article_date):
-                    article_date = stat.checktype1(article_date)
-                elif stat.checktype2(article_date):
-                    article_date = stat.checktype2(article_date)
-                elif stat.checktype3(article_date):
-                    article_date = stat.checktype3(article_date)
-                elif stat.checktype4(article_date):
-                    article_date = stat.checktype4(article_date)
-                elif stat.checktype5(article_date):
-                    article_date = stat.checktype5(article_date)
+                if self.checktype1(article_date):
+                    article_date = self.checktype1(article_date)
+                elif self.checktype2(article_date):
+                    article_date = self.checktype2(article_date)
+                elif self.checktype3(article_date):
+                    article_date = self.checktype3(article_date)
+                elif self.checktype4(article_date):
+                    article_date = self.checktype4(article_date)
+                elif self.checktype5(article_date):
+                    article_date = self.checktype5(article_date)
                 else:
                     article_date = None
                 article_body = article['article']
@@ -708,8 +709,8 @@ class StatisticalAnalysis:
         random.shuffle(tdata)
         return tdata[:1000]
 
-    # Load the trained NER model
-    def load_NER(self, article_data):
+    # Load the trained NER model and use it on the article data for a selected month
+    def load_NER(self, article_df):
         dir_path = os.path.dirname(os.path.realpath(__file__))+'\\ner'
         nlp = spacy.load(dir_path)
 
@@ -719,29 +720,83 @@ class StatisticalAnalysis:
         sp = spotipy.Spotify(client_credentials_manager=client_credentials_manager)
 
         # Test and use NER model on the collected music articles dataset
-        print(f'Number of articles for this month: {len(article_data)}')
-        for article in article_data:
-            doc = nlp(article)
+        print(f'Number of articles for this month: {len(article_df.index)}')
+        article_df['Entities'] = self.use_ner(nlp, article_df['Article'], sp)
+        return article_df
+
+    # Calculate entites popularity score
+    def get_NER_score(self, entity_file, month, year):
+        file_df = pd.read_csv(entity_file)
+        total_collections = len(file_df['Collection'].value_counts())
+        entities_series = file_df['Entities'].tolist()
+        articles_collections = file_df['Collection'].tolist()
+        entities_list = [ast.literal_eval(x) for x in entities_series]
+        counts = {}
+        ent_collection_data = {}
+        for index in range(0, len(entities_list)):
+            data = entities_list[index]
+            for entity in data:
+                try:
+                    c = int(counts.get(entity))
+                    c += 1
+                    counts.update({entity: c})
+                except:
+                    counts.update({entity: 1})
+                try:
+                    entity_collection = articles_collections[index]
+                    collection_list = list(ent_collection_data.get(entity))
+                    if entity_collection not in collection_list:
+                        collection_list.append(entity_collection)
+                    ent_collection_data.update({entity: collection_list})
+                except:
+                    entity_collection = articles_collections[index]
+                    collection_list = [entity_collection]
+                    ent_collection_data.update({entity: collection_list})
+        appearances = [round((len(v)/total_collections)*100, 2) for k, v in ent_collection_data.items()]
+        count_values = [v for k, v in counts.items()]
+        scores_dict = {'Entities': list(counts.keys()), 'Counts': count_values, 'Appearance_Percent':  appearances}
+        score_df = pd.DataFrame.from_dict(scores_dict)
+        score_df['Popularity'] = score_df.apply(lambda x: self.calculate_score(x.Counts, x.Appearance_Percent), axis=1)
+        score_df['Normalized Score'] = self.normalize_score(score_df['Popularity'])
+        score_df = score_df.sort_values(by=['Normalized Score'], ascending=False)
+        score_df.to_csv(os.path.dirname(os.path.realpath(__file__)) + f'\\ner_scores\\{month}_{year}.csv',
+                                  index=False)
+
+    def calculate_score(self, counts,  appearances):
+        score = counts * appearances
+        return score
+
+    def normalize_score(self, popularity):
+        max_score = popularity.max()
+        min_score = popularity.min()
+        normalized = popularity.apply(lambda x: (x-min_score) / (max_score-min_score))
+        return normalized
+
+    def use_ner(self, nlp, article_series, spotify):
+        articles = article_series.to_list()
+        entities = []
+        for article_text in articles:
+            doc = nlp(article_text)
             if len(doc.ents) > 0:
-                for ent in doc.ents:
+                ents_list = list(doc.ents)
+                for ent in ents_list:
                     if ent.label_ == 'Artist':
-                        try:
-                            spotify_verify = sp.search(ent.text, type='artist', limit=30)
-                        except:
-                            return self.entities
-                        # Verify extracted entity could be referring to an artist using Spotify API Filter
+                        ent_name = ent.text
+                        spotify_verify = spotify.search(ent_name, type='artist', limit=30)
                         if len(spotify_verify['artists']['items']) > 0:
-                            try:
-                                self.entities[ent.text] += 1
-                            except:
-                                self.entities[ent.text] = 1
-                        else:
                             continue
-        return self.entities
+                        else:
+                            ents_list.remove(ent)
+                article_entities = [ent.text for ent in ents_list]
+                entities.append(article_entities)
+            else:
+                entities.append([None])
+        return entities
 
     # Find articles from all the collections for a specific month/year
     def find_articles(self, month, year):
         articles_for_month = []
+        articles_collections = []
         for collection in self.articles_conn:
             articles = list(self.db.get_collection(collection).find())
             for article in articles:
@@ -749,25 +804,28 @@ class StatisticalAnalysis:
                 article_date = article['date']
                 article_date = re.sub(r"[^a-zA-Z0-9- ]", "", article_date)
                 article_date = article_date.strip(' ')
-                if stat.checktype1(article_date):
-                    article_date = stat.checktype1(article_date)
-                elif stat.checktype2(article_date):
-                    article_date = stat.checktype2(article_date)
-                elif stat.checktype3(article_date):
-                    article_date = stat.checktype3(article_date)
-                elif stat.checktype4(article_date):
-                    article_date = stat.checktype4(article_date)
-                elif stat.checktype5(article_date):
-                    article_date = stat.checktype5(article_date)
+                if self.checktype1(article_date):
+                    article_date = self.checktype1(article_date)
+                elif self.checktype2(article_date):
+                    article_date = self.checktype2(article_date)
+                elif self.checktype3(article_date):
+                    article_date = self.checktype3(article_date)
+                elif self.checktype4(article_date):
+                    article_date = self.checktype4(article_date)
+                elif self.checktype5(article_date):
+                    article_date = self.checktype5(article_date)
                 else:
                     article_date = None
                 if article_date:
                     dt = pendulum.parse(article_date, strict=False)
                     if dt.month == month and dt.year == year:
                         articles_for_month.append(article_text)
+                        articles_collections.append(collection)
                 else:
                     continue
-        return articles_for_month
+        data = {'Article': articles_for_month, 'Collection': articles_collections}
+        df = pd.DataFrame(data)
+        return df
 
     # Calculate Precision - Recall - F1 scores on the test set
     def evaluate(self, test_set):
@@ -803,6 +861,28 @@ class StatisticalAnalysis:
         test_scores = [round(test_scores[i] / test_size, 2) for i in range(len(test_scores))]
         return test_scores
 
+    # Get the most emergent trending artists for a selected month based on historical scoring data
+    def get_emergent_artists(self, previous_month, current_month, year):
+        df_current = pd.read_csv(os.path.dirname(os.path.realpath(__file__)) + f'\\ner_scores\\{current_month}_{year}.csv')
+        df_previous = pd.read_csv(os.path.dirname(os.path.realpath(__file__)) + f'\\ner_scores\\{previous_month}_{year}.csv')
+        df_upcoming = df_current
+        df_upcoming['Popularity_Growth'] = df_upcoming.apply(lambda x: self.find_popularity_change(x['Entities'],x['Normalized Score'],df_previous),axis=1)
+        df_upcoming.sort_values(by=['Popularity_Growth'], ascending=False ,inplace = True)
+        print(df_upcoming.head(20))
+
+
+    # Compare popularity score values over different months
+    def find_popularity_change(self, entity, current , prevdf):
+        row = prevdf.loc[prevdf['Entities'] == entity]
+        if not row.empty:
+            prev_score = row['Normalized Score']
+            pop_change = current - prev_score
+            return float(round(pop_change,5))
+        else:
+            pop_change = current
+            return float(round(pop_change,5))
+
+
 # Training the NER Model for the new "Artist" entity
 @plac.annotations(
     model=("Model name. Defaults to blank 'en' model.", "option", "m", str),
@@ -812,7 +892,7 @@ class StatisticalAnalysis:
 )
 def main(model=None, new_model_name="Music Data", output_dir=os.path.dirname(os.path.realpath(__file__))+'\\ner', n_iter=10):
     LABEL_1 = 'Artist'
-    stat = StatisticalAnalysis()
+    stat = DatasetAnalysis()
     data = stat.format_traindata()
     TEST_DATA = data[0:1000]
     TRAIN_DATA = data[1000:]
@@ -873,17 +953,24 @@ def main(model=None, new_model_name="Music Data", output_dir=os.path.dirname(os.
 
 
 if __name__ == "__main__":
-    stat = StatisticalAnalysis()
-    stat.find_all_article_collections()
-    # stat.calculate_article_metrics()
-    # stat.create_histograms()
-    # print(stat.count_articles())
-    # stat.create_tf_timelines()
-    # stat.create_normalized_bc()
-    # stat.analyse_site_activity()
-    # stat.calculate_genres_frequency()
+    data = DatasetAnalysis()
+    data.find_all_article_collections()
+    # data.calculate_article_metrics()
+    # data.create_histograms()
+    # print(data.count_articles())
+    # data.create_tf_timelines()
+    # data.create_normalized_bc()
+    # data.analyse_site_activity()
+    # data.calculate_genres_frequency()
     # plac.call(main)
-    # data = stat.format_traindata()
-    # print(stat.evaluate(data))
-    articles_ner = stat.find_articles(6, 2019)
-    print(stat.load_NER(articles_ner))
+    # data = data.format_traindata()
+    # Extract entities for selected months and export them to a csv file
+    # for month in range(4, 6):
+    #     articles_ner = data.find_articles(month, 2019)
+    #     data.load_NER(articles_ner).to_csv(os.path.dirname(os.path.realpath(__file__))+f'\\ner\\results\\{month}_19.csv',
+    #     index=False)
+    # Calculate NER scores and save monthly ranking to csv files
+    # for month in range(4, 6):
+    #     data.get_NER_score(os.path.dirname(os.path.realpath(__file__))+f'\\ner\\results\\{month}_19.csv', month, 2019)
+    # Get trending emergent artists for a selected month based on historical scoring data
+    data.get_emergent_artists(3,5,2019)
