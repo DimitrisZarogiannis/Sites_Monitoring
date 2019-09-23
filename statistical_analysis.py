@@ -33,7 +33,7 @@ from spacy.scorer import Scorer
 # 4) Number of words per article
 # 5) Genres terms frequency
 # 6) Sites activity monitoring
-# 7) NER for "Artist" classes
+# 7) NER for "Artist" entity
 
 
 class StatisticalAnalysis:
@@ -597,7 +597,6 @@ class StatisticalAnalysis:
         ax1.set_xlabel('Article title chars distribution')
         ax1.legend(loc="upper right")
 
-
         total_title_words = list()
         for listitem in self.metrics_data:
             total_title_words.append(listitem[1])
@@ -690,7 +689,7 @@ class StatisticalAnalysis:
     def format_traindata(self):
         tdata = []
         file_id = 1
-        while file_id <= 699:
+        while file_id <= 13009:
             with open(os.path.dirname(os.path.realpath(__file__)) + f"\\elmd2\\json ({file_id}).json") \
                       as json_file:
                 data = json.load(json_file)
@@ -705,12 +704,12 @@ class StatisticalAnalysis:
                         td = (text, {'entities': ent_list})
                         tdata.append(td)
             file_id += 1
-        random.seed(75)
+        random.seed(35)
         random.shuffle(tdata)
         return tdata[:1000]
 
     # Load the trained NER model
-    def load_NER(self):
+    def load_NER(self, article_data):
         dir_path = os.path.dirname(os.path.realpath(__file__))+'\\ner'
         nlp = spacy.load(dir_path)
 
@@ -720,28 +719,55 @@ class StatisticalAnalysis:
         sp = spotipy.Spotify(client_credentials_manager=client_credentials_manager)
 
         # Test and use NER model on the collected music articles dataset
+        print(f'Number of articles for this month: {len(article_data)}')
+        for article in article_data:
+            doc = nlp(article)
+            if len(doc.ents) > 0:
+                for ent in doc.ents:
+                    if ent.label_ == 'Artist':
+                        try:
+                            spotify_verify = sp.search(ent.text, type='artist', limit=30)
+                        except:
+                            return self.entities
+                        # Verify extracted entity could be referring to an artist using Spotify API Filter
+                        if len(spotify_verify['artists']['items']) > 0:
+                            try:
+                                self.entities[ent.text] += 1
+                            except:
+                                self.entities[ent.text] = 1
+                        else:
+                            continue
+        return self.entities
+
+    # Find articles from all the collections for a specific month/year
+    def find_articles(self, month, year):
+        articles_for_month = []
         for collection in self.articles_conn:
             articles = list(self.db.get_collection(collection).find())
-
             for article in articles:
-                article = article['article']
-                doc = nlp(article)
-                if len(doc.ents) > 0:
-                    for ent in doc.ents:
-                        if ent.label_ == 'Artist':
-                            spotify_verify = sp.search(ent.text,type = 'artist', limit = 30)
-                            # Verify extracted entity could be refering to an artist
-                            if len(spotify_verify['artists']['items']) > 0:
-                                try:
-                                    entity_count = int(self.entities.get(ent.text))
-                                    entity_count += 1
-                                    self.entities.update({ent.text: entity_count})
-                                except:
-                                    self.entities[ent.text] = 1
-                            else:
-                                continue
-        print(self.entities)
-        print(len(self.entities))
+                article_text = article['article']
+                article_date = article['date']
+                article_date = re.sub(r"[^a-zA-Z0-9- ]", "", article_date)
+                article_date = article_date.strip(' ')
+                if stat.checktype1(article_date):
+                    article_date = stat.checktype1(article_date)
+                elif stat.checktype2(article_date):
+                    article_date = stat.checktype2(article_date)
+                elif stat.checktype3(article_date):
+                    article_date = stat.checktype3(article_date)
+                elif stat.checktype4(article_date):
+                    article_date = stat.checktype4(article_date)
+                elif stat.checktype5(article_date):
+                    article_date = stat.checktype5(article_date)
+                else:
+                    article_date = None
+                if article_date:
+                    dt = pendulum.parse(article_date, strict=False)
+                    if dt.month == month and dt.year == year:
+                        articles_for_month.append(article_text)
+                else:
+                    continue
+        return articles_for_month
 
     # Calculate Precision - Recall - F1 scores on the test set
     def evaluate(self, test_set):
@@ -755,7 +781,8 @@ class StatisticalAnalysis:
         client_credentials_manager = SpotifyClientCredentials(client_id=client_id, client_secret=client_secret)
         sp = spotipy.Spotify(client_credentials_manager=client_credentials_manager)
         for input_, annot in test_set:
-            doc_gold_text= ner_model.make_doc(input_)
+            print(input_, annot)
+            doc_gold_text = ner_model.make_doc(input_)
             gold = GoldParse(doc_gold_text, entities=annot['entities'])
             pred_value = ner_model(input_)
             ents_list = list(pred_value.ents)
@@ -837,26 +864,7 @@ def main(model=None, new_model_name="Music Data", output_dir=os.path.dirname(os.
         nlp.to_disk(output_dir)
         print("Saved model to", output_dir)
 
-    # test the trained model
-    accuracy_score = int()
-
-    # Calculate accuracy score
-    for td in TEST_DATA:
-        test_text = td[0]
-        real_ents = list(td[1]['entities'])
-        test_score = int()
-        doc = nlp(test_text)
-        for ent in doc.ents:
-            tup = (ent.start_char, ent.end_char, ent.label_)
-            if tup in real_ents:
-                test_score += 1
-
-        if len(doc.ents) > 0:
-            accuracy_score += test_score / len(doc.ents)
-
-    accuracy_score = accuracy_score / 1000
-    print(f'Accuracy metric score is {accuracy_score}')
-
+    # Test the trained model
     # Calculate Precision-Recall scores
     results = stat.evaluate(TEST_DATA)
     print(f'Precision metric score is {results[0]} ')
@@ -875,6 +883,7 @@ if __name__ == "__main__":
     # stat.analyse_site_activity()
     # stat.calculate_genres_frequency()
     # plac.call(main)
-    data = stat.format_traindata()
-    # stat.load_NER()
-    print(stat.evaluate(data))
+    # data = stat.format_traindata()
+    # print(stat.evaluate(data))
+    articles_ner = stat.find_articles(6, 2019)
+    print(stat.load_NER(articles_ner))
