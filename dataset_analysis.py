@@ -61,6 +61,8 @@ class DatasetAnalysis:
             collections.remove('genres')
         if 'blogs_activity' in collections:
             collections.remove('blogs_activity')
+        if 'export' in collections:
+            collections.remove('blogs_activity')
         self.articles_conn = collections
 
     # Calculate the desired article metrics
