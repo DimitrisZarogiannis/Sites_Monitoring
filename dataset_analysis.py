@@ -889,6 +889,20 @@ class DatasetAnalysis:
         else:
             pop_change = current
             return float(round(pop_change, 5))
+        
+    # Merge collections article data function
+    def export_dataset(self):
+        export = []
+        if len(self.articles_conn) > 0:
+            for collection in self.articles_conn:
+                export_collection = self.db.get_collection(collection).find()
+                for article in export_collection:
+                    export.append(article)
+            print(f'Number of articles in the dataset : {len(export)}.')
+            for json_item in export:
+                self.export_data.insert_one(json_item)
+        else:
+            pass
 
 # Training the NER Model for the new "Artist" entity
 @plac.annotations(
@@ -962,6 +976,7 @@ def main(model=None, new_model_name="Music Data", output_dir=os.path.dirname(os.
 if __name__ == "__main__":
     data = DatasetAnalysis()
     data.find_all_article_collections()
+    data.export_dataset()
     # data.calculate_article_metrics()
     # data.create_histograms()
     # print(data.count_articles())
