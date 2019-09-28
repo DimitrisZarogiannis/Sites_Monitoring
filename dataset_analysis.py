@@ -51,6 +51,7 @@ class DatasetAnalysis:
     metrics_data = list()
     outliers = []
     entities = {}
+    export_data = db.export
 
     # Find all article collections in the MongoDB
     def find_all_article_collections(self):
