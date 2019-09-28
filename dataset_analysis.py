@@ -724,7 +724,7 @@ class DatasetAnalysis:
         article_df['Entities'] = self.use_ner(nlp, article_df['Article'], sp)
         return article_df
 
-    # Calculate entites popularity score
+    # Calculate entities popularity score
     def get_NER_score(self, entity_file, month, year):
         file_df = pd.read_csv(entity_file)
         total_collections = len(file_df['Collection'].value_counts())
@@ -760,18 +760,21 @@ class DatasetAnalysis:
         score_df['Normalized Score'] = self.normalize_score(score_df['Popularity'])
         score_df = score_df.sort_values(by=['Normalized Score'], ascending=False)
         score_df.to_csv(os.path.dirname(os.path.realpath(__file__)) + f'\\ner_scores\\{month}_{year}.csv',
-                                  index=False)
+                        index=False)
 
+    # Calculate popularity score
     def calculate_score(self, counts,  appearances):
         score = counts * appearances
         return score
 
+    # Normalize popularity scores to range 0:1
     def normalize_score(self, popularity):
         max_score = popularity.max()
         min_score = popularity.min()
         normalized = popularity.apply(lambda x: (x-min_score) / (max_score-min_score))
         return normalized
 
+    # Use the NER model to extract entities for articles of a given month each time
     def use_ner(self, nlp, article_series, spotify):
         articles = article_series.to_list()
         entities = []
@@ -866,24 +869,24 @@ class DatasetAnalysis:
         df_current = pd.read_csv(os.path.dirname(os.path.realpath(__file__)) + f'\\ner_scores\\{current_month}_{year}.csv')
         df_previous = pd.read_csv(os.path.dirname(os.path.realpath(__file__)) + f'\\ner_scores\\{previous_month}_{year}.csv')
         df_upcoming = df_current
-        df_upcoming['Popularity_Growth'] = df_upcoming.apply(lambda x: self.find_popularity_change(x['Entities'],x['Normalized Score'],df_previous),axis=1)
-        df_upcoming.sort_values(by=['Popularity_Growth'], ascending=False ,inplace = True)
+        df_upcoming['Popularity_Growth'] = df_upcoming.apply(lambda x: self.find_popularity_change(x['Entities'],
+                                                                                                   x['Normalized Score']
+                                                                                                   , df_previous), axis=1)
+        df_upcoming.sort_values(by=['Popularity_Growth'], ascending=False, inplace=True)
         df_upcoming.dropna(inplace=True)
-        df_upcoming.to_csv(os.path.dirname(os.path.realpath(__file__)) + f'\\ner_final\\{current_month}_{year}.csv', index = False)
+        df_upcoming.to_csv(os.path.dirname(os.path.realpath(__file__)) + f'\\ner_final\\{current_month}_{year}.csv', index=False)
         print(df_upcoming.head(20))
 
-
     # Compare popularity score values over different months
-    def find_popularity_change(self, entity, current , prevdf):
+    def find_popularity_change(self, entity, current, prevdf):
         row = prevdf.loc[prevdf['Entities'] == entity]
         if not row.empty:
             prev_score = row['Normalized Score']
             pop_change = current - prev_score
-            return float(round(pop_change,5))
+            return float(round(pop_change, 5))
         else:
             pop_change = current
-            return float(round(pop_change,5))
-
+            return float(round(pop_change, 5))
 
 # Training the NER Model for the new "Artist" entity
 @plac.annotations(
@@ -965,14 +968,13 @@ if __name__ == "__main__":
     # data.analyse_site_activity()
     # data.calculate_genres_frequency()
     # plac.call(main)
-    # data = data.format_traindata()
     # Extract entities for selected months and export them to a csv file
-    # for month in range(4, 6):
+    # for month in range(2, 3):
     #     articles_ner = data.find_articles(month, 2019)
     #     data.load_NER(articles_ner).to_csv(os.path.dirname(os.path.realpath(__file__))+f'\\ner\\results\\{month}_19.csv',
-    #     index=False)
+    #                                        index=False)
     # Calculate NER scores and save monthly ranking to csv files
-    # for month in range(4, 6):
+    # for month in range(5, 6):
     #     data.get_NER_score(os.path.dirname(os.path.realpath(__file__))+f'\\ner\\results\\{month}_19.csv', month, 2019)
     # Get trending emergent artists for a selected month based on historical scoring data
-    data.get_emergent_artists(3,4,2019)
+    # data.get_emergent_artists(3, 5, 2019)
